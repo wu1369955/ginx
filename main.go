@@ -13,6 +13,8 @@ import (
 
 	"github.com/wu136995/ginx/internal/api/middlewares"
 	"github.com/wu136995/ginx/internal/api/routes"
+	"github.com/wu136995/ginx/internal/data"
+	"github.com/wu136995/ginx/internal/data/storage"
 
 	"github.com/gin-gonic/gin"
 	"github.com/wu136995/ginx/internal/config"
@@ -38,6 +40,35 @@ func main() {
 	if err != nil {
 		log.Fatalf("迁移数据库表结构失败: %v", err)
 	}
+
+	// 初始化冷热分离存储
+	log.Println("初始化冷热分离存储...")
+
+	// 创建热存储（内存存储）
+	hotStorage := storage.NewMemoryStorage()
+
+	// 创建冷存储（文件存储）
+	coldStoragePath := config.AppConfig.Data.ColdStoragePath
+	coldStorage, err := storage.NewFileStorage(coldStoragePath)
+	if err != nil {
+		log.Fatalf("创建冷存储失败: %v", err)
+	}
+
+	// 创建数据迁移服务
+	migrator := migration.NewMigrator(
+		hotStorage,
+		coldStorage,
+		config.AppConfig.Data.HotThreshold,
+		config.AppConfig.Data.ColdThreshold,
+		time.Duration(config.AppConfig.Data.MigrateInterval)*time.Second,
+	)
+
+	// 创建数据访问器
+	dataAccessor := data.NewAccessor(hotStorage, coldStorage)
+
+	// 启动数据迁移服务
+	migrateCtx, migrateCancel := context.WithCancel(context.Background())
+	migrator.Start(migrateCtx)
 
 	// 设置Gin模式
 	if config.AppConfig.Server.Environment == "production" {
@@ -85,6 +116,10 @@ func main() {
 	if err := srv.Shutdown(ctx); err != nil {
 		log.Fatalf("服务器强制关闭: %v", err)
 	}
+
+	// 停止数据迁移服务
+	log.Println("正在停止数据迁移服务...")
+	migrateCancel()
 
 	// 关闭数据库连接
 	log.Println("正在关闭数据库连接...")

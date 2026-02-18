@@ -1,19 +1,22 @@
 server:
   port: "8080"
-  environment: "development"
-  readTimeout: 10
-  writeTimeout: 10
+
+database:
+  driver: "mysql"
+  host: "localhost"
+  port: "3306"
+  username: "root"
+  password: "123456"
+  dbname: "ginx"
+  charset: "utf8mb4"
 
 jwt:
   secret: "your-secret-key"
   expireHours: 24
 
-database:
-  host: "localhost"
-  port: "3306"
-  user: "root"
-  password: "123456"
-  dbname: "hotgo"
-  charset: "utf8mb4"
-  parseTime: true
-  loc: "Local"
+# 数据配置（新增）
+data:
+  hotThreshold: 3600  # 热数据阈值（秒）- 1小时
+  coldThreshold: 86400  # 冷数据阈值（秒）- 24小时
+  migrateInterval: 300  # 迁移检查间隔（秒）- 5分钟
+  coldStoragePath: "./cold_data"  # 冷存储路径
