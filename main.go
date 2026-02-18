@@ -14,6 +14,7 @@ import (
 	"github.com/wu136995/ginx/internal/api/middlewares"
 	"github.com/wu136995/ginx/internal/api/routes"
 	"github.com/wu136995/ginx/internal/data"
+	"github.com/wu136995/ginx/internal/data/migration"
 	"github.com/wu136995/ginx/internal/data/storage"
 
 	"github.com/gin-gonic/gin"
@@ -24,7 +25,7 @@ import (
 
 func main() {
 	// 加载配置
-	err := config.LoadConfig("")
+	err := config.LoadConfig()
 	if err != nil {
 		log.Fatalf("加载配置失败: %v", err)
 	}
@@ -48,7 +49,7 @@ func main() {
 	hotStorage := storage.NewMemoryStorage()
 
 	// 创建冷存储（文件存储）
-	coldStoragePath := config.AppConfig.Data.ColdStoragePath
+	coldStoragePath := config.GetAppConfig().Data.ColdStoragePath
 	coldStorage, err := storage.NewFileStorage(coldStoragePath)
 	if err != nil {
 		log.Fatalf("创建冷存储失败: %v", err)
@@ -58,20 +59,21 @@ func main() {
 	migrator := migration.NewMigrator(
 		hotStorage,
 		coldStorage,
-		config.AppConfig.Data.HotThreshold,
-		config.AppConfig.Data.ColdThreshold,
-		time.Duration(config.AppConfig.Data.MigrateInterval)*time.Second,
+		config.GetAppConfig().Data.HotThreshold,
+		config.GetAppConfig().Data.ColdThreshold,
+		time.Duration(config.GetAppConfig().Data.MigrateInterval)*time.Second,
 	)
 
 	// 创建数据访问器
-	dataAccessor := data.NewAccessor(hotStorage, coldStorage)
+	// 创建数据访问器（后续业务逻辑使用）
+	_ = data.NewAccessor(hotStorage, coldStorage)
 
 	// 启动数据迁移服务
 	migrateCtx, migrateCancel := context.WithCancel(context.Background())
 	migrator.Start(migrateCtx)
 
 	// 设置Gin模式
-	if config.AppConfig.Server.Environment == "production" {
+	if config.GetAppConfig().Server.Environment == "production" {
 		gin.SetMode(gin.ReleaseMode)
 	} else {
 		gin.SetMode(gin.DebugMode)
@@ -88,7 +90,7 @@ func main() {
 	routes.SetupRoutes(router)
 
 	// 创建HTTP服务器
-	port := config.AppConfig.Server.Port
+	port := config.GetAppConfig().Server.Port
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%s", port),
 		Handler: router,

@@ -37,7 +37,7 @@ func Auth() gin.HandlerFunc {
 		tokenString := parts[1]
 
 		// 从配置中获取JWT密钥
-		jwtSecret := config.AppConfig.JWT.Secret
+		jwtSecret := config.GetAppConfig().JWT.Secret
 
 		// 验证token
 		claims, err := utils.ParseToken(tokenString, jwtSecret)

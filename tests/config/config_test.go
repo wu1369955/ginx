@@ -8,13 +8,13 @@ import (
 
 // TestLoadConfig 测试加载配置
 func TestLoadConfig(t *testing.T) {
-	err := config.LoadConfig("")
+	err := config.LoadConfig()
 	if err != nil {
 		t.Errorf("LoadConfig failed: %v", err)
 	}
 
 	// 验证默认配置
-	cfg := config.GetConfig()
+	cfg := config.GetAppConfig()
 	if cfg.Server.Port != "8080" {
 		t.Errorf("Expected server port 8080, got %s", cfg.Server.Port)
 	}
@@ -27,7 +27,7 @@ func TestLoadConfig(t *testing.T) {
 		t.Errorf("Expected database host localhost, got %s", cfg.Database.Host)
 	}
 
-	if cfg.Database.Port != "5432" {
-		t.Errorf("Expected database port 5432, got %s", cfg.Database.Port)
+	if cfg.Database.Port != "3306" {
+		t.Errorf("Expected database port 3306, got %s", cfg.Database.Port)
 	}
 }

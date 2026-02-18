@@ -15,12 +15,12 @@ var DB *gorm.DB
 
 // Connect 连接数据库
 func Connect() error {
-	cfg := config.GetConfig()
-	dbConfig := cfg.Database
+	config.LoadConfig()
+	dbConfig := config.GetAppConfig().Database
 
 	// 构建DSN
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=%t&loc=%s",
-		dbConfig.User, dbConfig.Password, dbConfig.Host, dbConfig.Port, dbConfig.DBName, dbConfig.Charset, dbConfig.ParseTime, dbConfig.Loc)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s",
+		dbConfig.Username, dbConfig.Password, dbConfig.Host, dbConfig.Port, dbConfig.DBName, dbConfig.Charset)
 
 	// 配置GORM
 	gormConfig := &gorm.Config{

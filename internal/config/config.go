@@ -16,7 +16,8 @@ type AppConfig struct {
 
 // 服务器配置
 type ServerConfig struct {
-	Port string `mapstructure:"port"`
+	Port        string `mapstructure:"port"`
+	Environment string `mapstructure:"environment"` // 新增环境配置
 }
 
 // 数据库配置
@@ -38,19 +39,20 @@ type JWTConfig struct {
 
 // 数据配置（新增）
 type DataConfig struct {
-	HotThreshold  int64         `mapstructure:"hotThreshold"`  // 热数据阈值（秒）
-	ColdThreshold int64         `mapstructure:"coldThreshold"` // 冷数据阈值（秒）
+	HotThreshold    int64         `mapstructure:"hotThreshold"`    // 热数据阈值（秒）
+	ColdThreshold   int64         `mapstructure:"coldThreshold"`   // 冷数据阈值（秒）
 	MigrateInterval time.Duration `mapstructure:"migrateInterval"` // 迁移检查间隔
-	ColdStoragePath string       `mapstructure:"coldStoragePath"` // 冷存储路径
+	ColdStoragePath string        `mapstructure:"coldStoragePath"` // 冷存储路径
 }
 
 // 全局配置实例
-var AppConfig AppConfig
+var appConfig AppConfig
 
 // 加载配置
 func LoadConfig() error {
 	// 设置默认值
 	viper.SetDefault("server.port", "8080")
+	viper.SetDefault("server.environment", "development")
 	viper.SetDefault("database.driver", "mysql")
 	viper.SetDefault("database.host", "localhost")
 	viper.SetDefault("database.port", "3306")
@@ -61,7 +63,7 @@ func LoadConfig() error {
 	viper.SetDefault("jwt.secret", "your-secret-key")
 	viper.SetDefault("jwt.expireHours", 24)
 	// 新增数据配置默认值
-	viper.SetDefault("data.hotThreshold", 3600)  // 1小时
+	viper.SetDefault("data.hotThreshold", 3600)   // 1小时
 	viper.SetDefault("data.coldThreshold", 86400) // 24小时
 	viper.SetDefault("data.migrateInterval", 300) // 5分钟
 	viper.SetDefault("data.coldStoragePath", "./cold_data")
@@ -79,9 +81,13 @@ func LoadConfig() error {
 	}
 
 	// 解析配置
-	if err := viper.Unmarshal(&AppConfig); err != nil {
+	if err := viper.Unmarshal(&appConfig); err != nil {
 		return err
 	}
 
 	return nil
+}
+
+func GetAppConfig() AppConfig {
+	return appConfig
 }
