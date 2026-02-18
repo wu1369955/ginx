@@ -1,0 +1,19 @@
+server:
+  port: "8080"
+  environment: "development"
+  readTimeout: 10
+  writeTimeout: 10
+
+jwt:
+  secret: "your-secret-key"
+  expireHours: 24
+
+database:
+  host: "localhost"
+  port: "3306"
+  user: "root"
+  password: "123456"
+  dbname: "hotgo"
+  charset: "utf8mb4"
+  parseTime: true
+  loc: "Local"
