@@ -114,13 +114,13 @@ func main() {
 	middlewares.SetupMiddlewares(router)
 
 	// 初始化处理器
-	userHandler, salesHandler, inventoryHandler, purchaseHandler, financeHandler, productionHandler, crmHandler := initializeHandlersByModule(*module)
+	userHandler, salesHandler, inventoryHandler, purchaseHandler, financeHandler, productionHandler, hrHandler, crmHandler := initializeHandlersByModule(*module)
 
 	// // 设置Swagger路由
 	// router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// 设置路由
-	setupRoutesByModule(router, *module, userHandler, salesHandler, inventoryHandler, purchaseHandler, financeHandler, productionHandler, crmHandler)
+	setupRoutesByModule(router, *module, userHandler, salesHandler, inventoryHandler, purchaseHandler, financeHandler, productionHandler, hrHandler, crmHandler)
 
 	// 创建HTTP服务器
 	port := config.GetAppConfig().Server.Port
@@ -166,7 +166,7 @@ func main() {
 }
 
 // initializeHandlersByModule 根据指定模块初始化处理器
-func initializeHandlersByModule(module string) (*handlers.UserHandler, *handlers.SalesHandler, *handlers.InventoryHandler, *handlers.PurchaseHandler, *handlers.FinanceHandler, *handlers.ProductionHandler, *handlers.CRMHandler) {
+func initializeHandlersByModule(module string) (*handlers.UserHandler, *handlers.SalesHandler, *handlers.InventoryHandler, *handlers.PurchaseHandler, *handlers.FinanceHandler, *handlers.ProductionHandler, *handlers.HRHandler, *handlers.CRMHandler) {
 	// 初始化所有服务
 	userService := services.NewUserService()
 	salesService := services.NewSalesService()
@@ -174,7 +174,7 @@ func initializeHandlersByModule(module string) (*handlers.UserHandler, *handlers
 	purchaseService := services.NewPurchaseService()
 	financeService := services.NewFinanceService()
 	productionService := services.NewProductionService()
-	// hrService := services.NewHRService()
+	hrService := services.NewHRService()
 	crmService := services.NewCRMService()
 
 	// 初始化所有处理器
@@ -184,34 +184,34 @@ func initializeHandlersByModule(module string) (*handlers.UserHandler, *handlers
 	purchaseHandler := handlers.NewPurchaseHandler(purchaseService)
 	financeHandler := handlers.NewFinanceHandler(financeService)
 	productionHandler := handlers.NewProductionHandler(productionService)
-	// hrHandler := handlers.NewHRHandler(hrService)
+	hrHandler := handlers.NewHRHandler(hrService)
 	crmHandler := handlers.NewCRMHandler(crmService)
 
 	// 根据模块返回处理器
 	switch module {
 	case "user":
-		return userHandler, nil, nil, nil, nil, nil, nil
+		return userHandler, nil, nil, nil, nil, nil, nil, nil
 	case "sales":
-		return userHandler, salesHandler, nil, nil, nil, nil, nil
+		return userHandler, salesHandler, nil, nil, nil, nil, nil, nil
 	case "inventory":
-		return userHandler, nil, inventoryHandler, nil, nil, nil, nil
+		return userHandler, nil, inventoryHandler, nil, nil, nil, nil, nil
 	case "purchase":
-		return userHandler, nil, nil, purchaseHandler, nil, nil, nil
+		return userHandler, nil, nil, purchaseHandler, nil, nil, nil, nil
 	case "finance":
-		return userHandler, nil, nil, nil, financeHandler, nil, nil
+		return userHandler, nil, nil, nil, financeHandler, nil, nil, nil
 	case "production":
-		return userHandler, nil, nil, nil, nil, productionHandler, nil
-	// case "hr":
-	// 	return userHandler, nil, nil, nil, nil, nil, hrHandler, nil
+		return userHandler, nil, nil, nil, nil, productionHandler, nil, nil
+	case "hr":
+		return userHandler, nil, nil, nil, nil, nil, hrHandler, nil
 	case "crm":
-		return userHandler, nil, nil, nil, nil, nil, crmHandler
+		return userHandler, nil, nil, nil, nil, nil, nil, crmHandler
 	default: // all
-		return userHandler, salesHandler, inventoryHandler, purchaseHandler, financeHandler, productionHandler, crmHandler
+		return userHandler, salesHandler, inventoryHandler, purchaseHandler, financeHandler, productionHandler, hrHandler, crmHandler
 	}
 }
 
 // setupRoutesByModule 根据指定模块设置路由
-func setupRoutesByModule(router *gin.Engine, module string, userHandler *handlers.UserHandler, salesHandler *handlers.SalesHandler, inventoryHandler *handlers.InventoryHandler, purchaseHandler *handlers.PurchaseHandler, financeHandler *handlers.FinanceHandler, productionHandler *handlers.ProductionHandler, crmHandler *handlers.CRMHandler) {
+func setupRoutesByModule(router *gin.Engine, module string, userHandler *handlers.UserHandler, salesHandler *handlers.SalesHandler, inventoryHandler *handlers.InventoryHandler, purchaseHandler *handlers.PurchaseHandler, financeHandler *handlers.FinanceHandler, productionHandler *handlers.ProductionHandler, hrHandler *handlers.HRHandler, crmHandler *handlers.CRMHandler) {
 	// 公共路由组
 	public := router.Group("/")
 	{
@@ -239,8 +239,8 @@ func setupRoutesByModule(router *gin.Engine, module string, userHandler *handler
 		routes.SetupFinanceRoutes(router, financeHandler)
 	case "production":
 		routes.SetupProductionRoutes(router, productionHandler)
-	// case "hr":
-	// 	routes.SetupHRRoutes(router, hrHandler)
+	case "hr":
+		routes.SetupHRRoutes(router, hrHandler)
 	case "crm":
 		routes.SetupCRMRoutes(router, crmHandler)
 	default: // all
@@ -249,7 +249,7 @@ func setupRoutesByModule(router *gin.Engine, module string, userHandler *handler
 		routes.SetupPurchaseRoutes(router, purchaseHandler)
 		routes.SetupFinanceRoutes(router, financeHandler)
 		routes.SetupProductionRoutes(router, productionHandler)
-		// routes.SetupHRRoutes(router, hrHandler)
+		routes.SetupHRRoutes(router, hrHandler)
 		routes.SetupCRMRoutes(router, crmHandler)
 	}
 }

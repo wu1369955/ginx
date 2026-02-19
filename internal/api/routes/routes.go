@@ -7,7 +7,7 @@ import (
 )
 
 // SetupRoutes 设置路由
-func SetupRoutes(router *gin.Engine, userHandler *handlers.UserHandler, salesHandler *handlers.SalesHandler, inventoryHandler *handlers.InventoryHandler, purchaseHandler *handlers.PurchaseHandler, financeHandler *handlers.FinanceHandler, productionHandler *handlers.ProductionHandler, crmHandler *handlers.CRMHandler) {
+func SetupRoutes(router *gin.Engine, userHandler *handlers.UserHandler, salesHandler *handlers.SalesHandler, inventoryHandler *handlers.InventoryHandler, purchaseHandler *handlers.PurchaseHandler, financeHandler *handlers.FinanceHandler, productionHandler *handlers.ProductionHandler, hrHandler *handlers.HRHandler, crmHandler *handlers.CRMHandler) {
 	// 公共路由组
 	public := router.Group("/")
 	{
@@ -33,8 +33,8 @@ func SetupRoutes(router *gin.Engine, userHandler *handlers.UserHandler, salesHan
 	SetupFinanceRoutes(router, financeHandler)
 	// 生产模块路由
 	SetupProductionRoutes(router, productionHandler)
-	// // 人力资源模块路由
-	// SetupHRRoutes(router, hrHandler)
+	// 人力资源模块路由
+	SetupHRRoutes(router, hrHandler)
 	// CRM模块路由
 	SetupCRMRoutes(router, crmHandler)
 }
