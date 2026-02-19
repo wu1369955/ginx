@@ -132,6 +132,27 @@ go build -o ginx main.go
 docker-compose up -d
 ```
 
+#### 分模块启动
+
+项目支持分模块启动，可以通过 `-module` 参数指定要启动的模块：
+
+```bash
+# 启动所有模块
+go run main.go -module all
+
+# 启动单个模块（例如HR模块）
+go run main.go -module hr
+
+# 启动其他模块
+go run main.go -module user      # 用户模块
+go run main.go -module sales     # 销售模块
+go run main.go -module inventory # 库存模块
+go run main.go -module purchase  # 采购模块
+go run main.go -module finance   # 财务模块
+go run main.go -module production # 生产模块
+go run main.go -module crm       # CRM模块
+```
+
 ### 5. 访问 API
 
 项目启动后，可通过以下地址访问 API：
