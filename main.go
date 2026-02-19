@@ -1,7 +1,28 @@
+// @title ERP系统API文档
+// @version 1.0
+// @description ERP系统API文档
+// @termsOfService http://swagger.io/terms/
+//
+// @contact.name API Support
+// @contact.url http://www.example.com/support
+// @contact.email support@example.com
+//
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+//
+// @host localhost:8080
+// @BasePath /
+// @schemes http https
+//
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
+
 package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"net/http"
 	"os"
@@ -11,19 +32,25 @@ import (
 
 	"log"
 
+	"github.com/gin-gonic/gin"
+	"github.com/wu136995/ginx/internal/api/handlers"
 	"github.com/wu136995/ginx/internal/api/middlewares"
 	"github.com/wu136995/ginx/internal/api/routes"
+	"github.com/wu136995/ginx/internal/config"
 	"github.com/wu136995/ginx/internal/data"
 	"github.com/wu136995/ginx/internal/data/migration"
 	"github.com/wu136995/ginx/internal/data/storage"
-
-	"github.com/gin-gonic/gin"
-	"github.com/wu136995/ginx/internal/config"
 	"github.com/wu136995/ginx/internal/database"
 	"github.com/wu136995/ginx/internal/models"
+	"github.com/wu136995/ginx/internal/services"
+	// _ "github.com/wu136995/ginx/docs"
 )
 
 func main() {
+	// 解析命令行参数
+	module := flag.String("module", "all", "指定要启动的模块，可选值: all, user, sales, inventory, purchase, finance, production, hr, crm")
+	flag.Parse()
+
 	// 加载配置
 	err := config.LoadConfig()
 	if err != nil {
@@ -86,8 +113,14 @@ func main() {
 	// 设置中间件
 	middlewares.SetupMiddlewares(router)
 
+	// 初始化处理器
+	userHandler, salesHandler, inventoryHandler, purchaseHandler, financeHandler, productionHandler, crmHandler := initializeHandlersByModule(*module)
+
+	// // 设置Swagger路由
+	// router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	// 设置路由
-	routes.SetupRoutes(router)
+	setupRoutesByModule(router, *module, userHandler, salesHandler, inventoryHandler, purchaseHandler, financeHandler, productionHandler, crmHandler)
 
 	// 创建HTTP服务器
 	port := config.GetAppConfig().Server.Port
@@ -98,7 +131,7 @@ func main() {
 
 	// 启动服务器（非阻塞）
 	go func() {
-		log.Printf("服务器启动在 http://localhost:%s", port)
+		log.Printf("服务器启动在 http://localhost:%s，模块: %s", port, *module)
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("启动服务器失败: %v", err)
 		}
@@ -130,4 +163,93 @@ func main() {
 	}
 
 	log.Println("服务器已退出")
+}
+
+// initializeHandlersByModule 根据指定模块初始化处理器
+func initializeHandlersByModule(module string) (*handlers.UserHandler, *handlers.SalesHandler, *handlers.InventoryHandler, *handlers.PurchaseHandler, *handlers.FinanceHandler, *handlers.ProductionHandler, *handlers.CRMHandler) {
+	// 初始化所有服务
+	userService := services.NewUserService()
+	salesService := services.NewSalesService()
+	inventoryService := services.NewInventoryService()
+	purchaseService := services.NewPurchaseService()
+	financeService := services.NewFinanceService()
+	productionService := services.NewProductionService()
+	// hrService := services.NewHRService()
+	crmService := services.NewCRMService()
+
+	// 初始化所有处理器
+	userHandler := handlers.NewUserHandler(userService)
+	salesHandler := handlers.NewSalesHandler(salesService)
+	inventoryHandler := handlers.NewInventoryHandler(inventoryService)
+	purchaseHandler := handlers.NewPurchaseHandler(purchaseService)
+	financeHandler := handlers.NewFinanceHandler(financeService)
+	productionHandler := handlers.NewProductionHandler(productionService)
+	// hrHandler := handlers.NewHRHandler(hrService)
+	crmHandler := handlers.NewCRMHandler(crmService)
+
+	// 根据模块返回处理器
+	switch module {
+	case "user":
+		return userHandler, nil, nil, nil, nil, nil, nil
+	case "sales":
+		return userHandler, salesHandler, nil, nil, nil, nil, nil
+	case "inventory":
+		return userHandler, nil, inventoryHandler, nil, nil, nil, nil
+	case "purchase":
+		return userHandler, nil, nil, purchaseHandler, nil, nil, nil
+	case "finance":
+		return userHandler, nil, nil, nil, financeHandler, nil, nil
+	case "production":
+		return userHandler, nil, nil, nil, nil, productionHandler, nil
+	// case "hr":
+	// 	return userHandler, nil, nil, nil, nil, nil, hrHandler, nil
+	case "crm":
+		return userHandler, nil, nil, nil, nil, nil, crmHandler
+	default: // all
+		return userHandler, salesHandler, inventoryHandler, purchaseHandler, financeHandler, productionHandler, crmHandler
+	}
+}
+
+// setupRoutesByModule 根据指定模块设置路由
+func setupRoutesByModule(router *gin.Engine, module string, userHandler *handlers.UserHandler, salesHandler *handlers.SalesHandler, inventoryHandler *handlers.InventoryHandler, purchaseHandler *handlers.PurchaseHandler, financeHandler *handlers.FinanceHandler, productionHandler *handlers.ProductionHandler, crmHandler *handlers.CRMHandler) {
+	// 公共路由组
+	public := router.Group("/")
+	{
+		// 健康检查
+		public.GET("/health", handlers.HealthCheck)
+	}
+
+	// 需要认证的路由组
+	protected := router.Group("/")
+	protected.Use(middlewares.Auth())
+	{
+		// 用户信息
+		protected.GET("/user/info", userHandler.GetUserInfo)
+	}
+
+	// 根据模块设置路由
+	switch module {
+	case "sales":
+		routes.SetupSalesRoutes(router, salesHandler)
+	case "inventory":
+		routes.SetupInventoryRoutes(router, inventoryHandler)
+	case "purchase":
+		routes.SetupPurchaseRoutes(router, purchaseHandler)
+	case "finance":
+		routes.SetupFinanceRoutes(router, financeHandler)
+	case "production":
+		routes.SetupProductionRoutes(router, productionHandler)
+	// case "hr":
+	// 	routes.SetupHRRoutes(router, hrHandler)
+	case "crm":
+		routes.SetupCRMRoutes(router, crmHandler)
+	default: // all
+		routes.SetupSalesRoutes(router, salesHandler)
+		routes.SetupInventoryRoutes(router, inventoryHandler)
+		routes.SetupPurchaseRoutes(router, purchaseHandler)
+		routes.SetupFinanceRoutes(router, financeHandler)
+		routes.SetupProductionRoutes(router, productionHandler)
+		// routes.SetupHRRoutes(router, hrHandler)
+		routes.SetupCRMRoutes(router, crmHandler)
+	}
 }
