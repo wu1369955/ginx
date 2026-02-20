@@ -82,8 +82,8 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 
 	// 调用service方法
 	user := &models.User{
-		Name:  req["name"].(string),
-		Email: req["email"].(string),
+		Username: req["username"].(string),
+		Email:    req["email"].(string),
 		// 其他字段映射
 	}
 
@@ -114,8 +114,8 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/user [put]
 func (h *UserHandler) UpdateUser(c *gin.Context) {
-	// 从上下文中获取用户ID
-	userID, exists := c.Get("userID")
+	// 检查是否已认证
+	_, exists := c.Get("userID")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"code":    401,
@@ -138,9 +138,8 @@ func (h *UserHandler) UpdateUser(c *gin.Context) {
 
 	// 调用service方法
 	user := &models.User{
-		ID:    userID.(string),
-		Name:  req["name"].(string),
-		Email: req["email"].(string),
+		Username: req["username"].(string),
+		Email:    req["email"].(string),
 		// 其他字段映射
 	}
 

@@ -17,33 +17,40 @@ type GetWarehouseListRequest struct {
 
 // LocationResponse 库位响应
 type LocationResponse struct {
-	ID            string  `json:"id"`
-	Code          string  `json:"code"`
-	Name          string  `json:"name"`
-	Capacity      int     `json:"capacity"`
-	UsedCapacity  int     `json:"usedCapacity"`
-	Description   string  `json:"description,omitempty"`
+	ID           string    `json:"id"`
+	WarehouseID  string    `json:"warehouse_id"`
+	Code         string    `json:"code"`
+	Name         string    `json:"name"`
+	Type         string    `json:"type"`
+	Capacity     float64   `json:"capacity"`
+	UsedCapacity float64   `json:"usedCapacity"`
+	Status       string    `json:"status"`
+	Description  string    `json:"description,omitempty"`
+	CreatedBy    string    `json:"createdBy"`
+	CreatedAt    time.Time `json:"createdAt"`
+	UpdatedBy    string    `json:"updatedBy"`
+	UpdatedAt    time.Time `json:"updatedAt"`
 }
 
 // WarehouseResponse 仓库响应
 type WarehouseResponse struct {
-	ID            string             `json:"id"`
-	Code          string             `json:"code"`
-	Name          string             `json:"name"`
-	Type          string             `json:"type"`
-	Address       string             `json:"address"`
-	Region        string             `json:"region"`
-	Contact       string             `json:"contact"`
-	Phone         string             `json:"phone"`
-	Description   string             `json:"description,omitempty"`
-	Capacity      int                `json:"capacity,omitempty"`
-	UsedCapacity  int                `json:"usedCapacity,omitempty"`
-	Status        string             `json:"status"`
-	Locations     []LocationResponse `json:"locations,omitempty"`
-	CreatedBy     string             `json:"createdBy"`
-	CreatedAt     time.Time          `json:"createdAt"`
-	UpdatedBy     string             `json:"updatedBy"`
-	UpdatedAt     time.Time          `json:"updatedAt"`
+	ID           string             `json:"id"`
+	Code         string             `json:"code"`
+	Name         string             `json:"name"`
+	Type         string             `json:"type"`
+	Address      string             `json:"address"`
+	Region       string             `json:"region"`
+	Contact      string             `json:"contact"`
+	Phone        string             `json:"phone"`
+	Description  string             `json:"description,omitempty"`
+	Capacity     int                `json:"capacity,omitempty"`
+	UsedCapacity int                `json:"usedCapacity,omitempty"`
+	Status       string             `json:"status"`
+	Locations    []LocationResponse `json:"locations,omitempty"`
+	CreatedBy    string             `json:"createdBy"`
+	CreatedAt    time.Time          `json:"createdAt"`
+	UpdatedBy    string             `json:"updatedBy"`
+	UpdatedAt    time.Time          `json:"updatedAt"`
 }
 
 // CreateWarehouseRequest 创建仓库请求
@@ -77,10 +84,13 @@ type UpdateWarehouseRequest struct {
 
 // AddWarehouseLocationRequest 添加库位请求
 type AddWarehouseLocationRequest struct {
-	Code        string `json:"code" binding:"required"`
-	Name        string `json:"name" binding:"required"`
-	Capacity    int    `json:"capacity" binding:"required,min=1"`
-	Description string `json:"description" binding:"omitempty"`
+	Code        string  `json:"code" binding:"required"`
+	Name        string  `json:"name" binding:"required"`
+	Type        string  `json:"type" binding:"required"`
+	Capacity    float64 `json:"capacity" binding:"required,min=0"`
+	Status      string  `json:"status" binding:"required"`
+	Description string  `json:"description" binding:"omitempty"`
+	CreatedBy   string  `json:"createdBy" binding:"required"`
 }
 
 // 物料管理相关
@@ -99,58 +109,42 @@ type GetItemListRequest struct {
 
 // ItemResponse 物料响应
 type ItemResponse struct {
-	ID           string    `json:"id"`
-	ItemNo       string    `json:"itemNo"`
-	Name         string    `json:"name"`
-	SKU          string    `json:"sku"`
-	Category     string    `json:"category"`
-	Specification string    `json:"specification"`
-	Unit         string    `json:"unit"`
-	Description  string    `json:"description,omitempty"`
-	Weight       float64   `json:"weight,omitempty"`
-	Volume       float64   `json:"volume,omitempty"`
-	MinStock     int       `json:"minStock,omitempty"`
-	MaxStock     int       `json:"maxStock,omitempty"`
-	ReorderPoint int       `json:"reorderPoint,omitempty"`
-	LeadTime     int       `json:"leadTime,omitempty"`
-	Status       string    `json:"status"`
-	CreatedBy    string    `json:"createdBy"`
-	CreatedAt    time.Time `json:"createdAt"`
-	UpdatedBy    string    `json:"updatedBy"`
-	UpdatedAt    time.Time `json:"updatedAt"`
+	ID          string    `json:"id"`
+	ItemNo      string    `json:"itemNo"`
+	Name        string    `json:"name"`
+	Description string    `json:"description,omitempty"`
+	CategoryID  string    `json:"category_id"`
+	Unit        string    `json:"unit"`
+	Type        string    `json:"type"`
+	Status      string    `json:"status"`
+	CreatedBy   string    `json:"createdBy"`
+	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedBy   string    `json:"updatedBy"`
+	UpdatedAt   time.Time `json:"updatedAt"`
 }
 
 // CreateItemRequest 创建物料请求
 type CreateItemRequest struct {
-	Name          string  `json:"name" binding:"required"`
-	SKU           string  `json:"sku" binding:"required"`
-	Category      string  `json:"category" binding:"required"`
-	Specification string  `json:"specification" binding:"required"`
-	Unit          string  `json:"unit" binding:"required"`
-	Description   string  `json:"description" binding:"omitempty"`
-	Weight        float64 `json:"weight" binding:"omitempty,min=0"`
-	Volume        float64 `json:"volume" binding:"omitempty,min=0"`
-	MinStock      int     `json:"minStock" binding:"required,min=0"`
-	MaxStock      int     `json:"maxStock" binding:"required,min=1"`
-	ReorderPoint  int     `json:"reorderPoint" binding:"required,min=0"`
-	LeadTime      int     `json:"leadTime" binding:"required,min=0"`
+	ItemNo      string `json:"itemNo" binding:"required"`
+	Name        string `json:"name" binding:"required"`
+	Description string `json:"description" binding:"omitempty"`
+	CategoryID  string `json:"category_id" binding:"required"`
+	Unit        string `json:"unit" binding:"required"`
+	Type        string `json:"type" binding:"required"`
+	Status      string `json:"status" binding:"required"`
+	CreatedBy   string `json:"createdBy" binding:"required"`
 }
 
 // UpdateItemRequest 更新物料请求
 type UpdateItemRequest struct {
-	Name          string  `json:"name" binding:"omitempty"`
-	SKU           string  `json:"sku" binding:"omitempty"`
-	Category      string  `json:"category" binding:"omitempty"`
-	Specification string  `json:"specification" binding:"omitempty"`
-	Unit          string  `json:"unit" binding:"omitempty"`
-	Description   string  `json:"description" binding:"omitempty"`
-	Weight        float64 `json:"weight" binding:"omitempty,min=0"`
-	Volume        float64 `json:"volume" binding:"omitempty,min=0"`
-	MinStock      int     `json:"minStock" binding:"omitempty,min=0"`
-	MaxStock      int     `json:"maxStock" binding:"omitempty,min=1"`
-	ReorderPoint  int     `json:"reorderPoint" binding:"omitempty,min=0"`
-	LeadTime      int     `json:"leadTime" binding:"omitempty,min=0"`
-	Status        string  `json:"status" binding:"omitempty,oneof=active inactive"`
+	ItemNo      string `json:"itemNo" binding:"omitempty"`
+	Name        string `json:"name" binding:"omitempty"`
+	Description string `json:"description" binding:"omitempty"`
+	CategoryID  string `json:"category_id" binding:"omitempty"`
+	Unit        string `json:"unit" binding:"omitempty"`
+	Type        string `json:"type" binding:"omitempty"`
+	Status      string `json:"status" binding:"omitempty,oneof=active inactive"`
+	UpdatedBy   string `json:"updatedBy" binding:"required"`
 }
 
 // LocationStockResponse 库位库存响应
@@ -162,78 +156,78 @@ type LocationStockResponse struct {
 
 // WarehouseStockResponse 仓库库存响应
 type WarehouseStockResponse struct {
-	WarehouseId   string                 `json:"warehouseId"`
-	WarehouseName string                 `json:"warehouseName"`
-	Quantity      float64                `json:"quantity"`
+	WarehouseId   string                  `json:"warehouseId"`
+	WarehouseName string                  `json:"warehouseName"`
+	Quantity      float64                 `json:"quantity"`
 	Locations     []LocationStockResponse `json:"locations,omitempty"`
 }
 
 // ItemStockResponse 物料库存响应
 type ItemStockResponse struct {
-	TotalStock  float64                 `json:"totalStock"`
-	Warehouses  []WarehouseStockResponse `json:"warehouses"`
+	TotalStock float64                  `json:"totalStock"`
+	Warehouses []WarehouseStockResponse `json:"warehouses"`
 }
 
 // 库存交易相关
 
 // GetTransactionListRequest 获取库存交易列表请求
 type GetTransactionListRequest struct {
-	Page               int    `form:"page" binding:"omitempty,min=1"`
-	PageSize           int    `form:"pageSize" binding:"omitempty,min=1,max=100"`
-	TransactionNo      string `form:"transactionNo" binding:"omitempty"`
-	Type               string `form:"type" binding:"omitempty,oneof=purchase sales transfer adjustment production"`
-	ItemId             string `form:"itemId" binding:"omitempty"`
-	WarehouseId        string `form:"warehouseId" binding:"omitempty"`
+	Page                 int    `form:"page" binding:"omitempty,min=1"`
+	PageSize             int    `form:"pageSize" binding:"omitempty,min=1,max=100"`
+	TransactionNo        string `form:"transactionNo" binding:"omitempty"`
+	Type                 string `form:"type" binding:"omitempty,oneof=purchase sales transfer adjustment production"`
+	ItemId               string `form:"itemId" binding:"omitempty"`
+	WarehouseId          string `form:"warehouseId" binding:"omitempty"`
 	TransactionDateStart string `form:"transactionDateStart" binding:"omitempty,datetime=2006-01-02"`
 	TransactionDateEnd   string `form:"transactionDateEnd" binding:"omitempty,datetime=2006-01-02"`
 }
 
 // TransactionItem 交易明细
 type TransactionItem struct {
-	ItemId       string  `json:"itemId" binding:"required"`
-	Quantity     float64 `json:"quantity" binding:"required"`
-	UnitCost     float64 `json:"unitCost" binding:"required,min=0"`
-	LocationId   string  `json:"locationId" binding:"omitempty"`
-	FromLocationId string `json:"fromLocationId" binding:"omitempty"`
-	ToLocationId   string `json:"toLocationId" binding:"omitempty"`
+	ItemId         string  `json:"itemId" binding:"required"`
+	Quantity       float64 `json:"quantity" binding:"required"`
+	UnitCost       float64 `json:"unitCost" binding:"required,min=0"`
+	LocationId     string  `json:"locationId" binding:"omitempty"`
+	FromLocationId string  `json:"fromLocationId" binding:"omitempty"`
+	ToLocationId   string  `json:"toLocationId" binding:"omitempty"`
 }
 
 // TransactionItemResponse 交易明细响应
 type TransactionItemResponse struct {
-	ID           string  `json:"id,omitempty"`
-	ItemId       string  `json:"itemId"`
-	ItemCode     string  `json:"itemCode,omitempty"`
-	ItemName     string  `json:"itemName,omitempty"`
-	Quantity     float64 `json:"quantity"`
-	Unit         string  `json:"unit,omitempty"`
-	UnitCost     float64 `json:"unitCost"`
-	TotalCost    float64 `json:"totalCost,omitempty"`
-	LocationId   string  `json:"locationId,omitempty"`
-	LocationCode string  `json:"locationCode,omitempty"`
-	FromLocationId string `json:"fromLocationId,omitempty"`
-	FromLocationCode string `json:"fromLocationCode,omitempty"`
-	ToLocationId   string `json:"toLocationId,omitempty"`
-	ToLocationCode   string `json:"toLocationCode,omitempty"`
+	ID               string  `json:"id,omitempty"`
+	ItemId           string  `json:"itemId"`
+	ItemCode         string  `json:"itemCode,omitempty"`
+	ItemName         string  `json:"itemName,omitempty"`
+	Quantity         float64 `json:"quantity"`
+	Unit             string  `json:"unit,omitempty"`
+	UnitCost         float64 `json:"unitCost"`
+	TotalCost        float64 `json:"totalCost,omitempty"`
+	LocationId       string  `json:"locationId,omitempty"`
+	LocationCode     string  `json:"locationCode,omitempty"`
+	FromLocationId   string  `json:"fromLocationId,omitempty"`
+	FromLocationCode string  `json:"fromLocationCode,omitempty"`
+	ToLocationId     string  `json:"toLocationId,omitempty"`
+	ToLocationCode   string  `json:"toLocationCode,omitempty"`
 }
 
 // TransactionResponse 交易响应
 type TransactionResponse struct {
-	ID              string                  `json:"id"`
-	TransactionNo   string                  `json:"transactionNo"`
-	Type            string                  `json:"type"`
-	ReferenceNo     string                  `json:"referenceNo,omitempty"`
-	WarehouseId     string                  `json:"warehouseId,omitempty"`
-	WarehouseName   string                  `json:"warehouseName,omitempty"`
-	FromWarehouseId string                  `json:"fromWarehouseId,omitempty"`
-	FromWarehouseName string                `json:"fromWarehouseName,omitempty"`
-	ToWarehouseId   string                  `json:"toWarehouseId,omitempty"`
-	ToWarehouseName string                  `json:"toWarehouseName,omitempty"`
-	TransactionDate string                  `json:"transactionDate"`
-	Remarks         string                  `json:"remarks,omitempty"`
-	TotalQuantity   float64                 `json:"totalQuantity,omitempty"`
-	Items           []TransactionItemResponse `json:"items,omitempty"`
-	CreatedBy       string                  `json:"createdBy"`
-	CreatedAt       time.Time               `json:"createdAt"`
+	ID                string                    `json:"id"`
+	TransactionNo     string                    `json:"transactionNo"`
+	Type              string                    `json:"type"`
+	ReferenceNo       string                    `json:"referenceNo,omitempty"`
+	WarehouseId       string                    `json:"warehouseId,omitempty"`
+	WarehouseName     string                    `json:"warehouseName,omitempty"`
+	FromWarehouseId   string                    `json:"fromWarehouseId,omitempty"`
+	FromWarehouseName string                    `json:"fromWarehouseName,omitempty"`
+	ToWarehouseId     string                    `json:"toWarehouseId,omitempty"`
+	ToWarehouseName   string                    `json:"toWarehouseName,omitempty"`
+	TransactionDate   string                    `json:"transactionDate"`
+	Remarks           string                    `json:"remarks,omitempty"`
+	TotalQuantity     float64                   `json:"totalQuantity,omitempty"`
+	Items             []TransactionItemResponse `json:"items,omitempty"`
+	CreatedBy         string                    `json:"createdBy"`
+	CreatedAt         time.Time                 `json:"createdAt"`
 }
 
 // CreateTransactionRequest 创建库存交易请求
@@ -304,20 +298,20 @@ type CountItemResponse struct {
 
 // CountResponse 盘点响应
 type CountResponse struct {
-	ID          string              `json:"id"`
-	CountNo     string              `json:"countNo"`
-	Type        string              `json:"type"`
-	WarehouseId string              `json:"warehouseId"`
-	WarehouseName string            `json:"warehouseName,omitempty"`
-	StartDate   string              `json:"startDate"`
-	EndDate     string              `json:"endDate,omitempty"`
-	Remarks     string              `json:"remarks,omitempty"`
-	Status      string              `json:"status"`
-	Items       []CountItemResponse `json:"items,omitempty"`
-	CreatedBy   string              `json:"createdBy"`
-	CreatedAt   time.Time           `json:"createdAt"`
-	UpdatedBy   string              `json:"updatedBy"`
-	UpdatedAt   time.Time           `json:"updatedAt"`
+	ID            string              `json:"id"`
+	CountNo       string              `json:"countNo"`
+	Type          string              `json:"type"`
+	WarehouseId   string              `json:"warehouseId"`
+	WarehouseName string              `json:"warehouseName,omitempty"`
+	StartDate     string              `json:"startDate"`
+	EndDate       string              `json:"endDate,omitempty"`
+	Remarks       string              `json:"remarks,omitempty"`
+	Status        string              `json:"status"`
+	Items         []CountItemResponse `json:"items,omitempty"`
+	CreatedBy     string              `json:"createdBy"`
+	CreatedAt     time.Time           `json:"createdAt"`
+	UpdatedBy     string              `json:"updatedBy"`
+	UpdatedAt     time.Time           `json:"updatedAt"`
 }
 
 // CreateCountRequest 创建盘点单请求
@@ -331,8 +325,8 @@ type CreateCountRequest struct {
 
 // UpdateCountRequest 更新盘点结果请求
 type UpdateCountRequest struct {
-	EndDate     string      `json:"endDate" binding:"omitempty,datetime=2006-01-02"`
-	Items       []CountItem `json:"items" binding:"required,dive"`
+	EndDate string      `json:"endDate" binding:"omitempty,datetime=2006-01-02"`
+	Items   []CountItem `json:"items" binding:"required,dive"`
 }
 
 // CompleteCountRequest 完成盘点请求
@@ -357,22 +351,22 @@ type GetInventoryBalanceReportRequest struct {
 
 // BalanceReportItem 余额报表项
 type BalanceReportItem struct {
-	ItemId       string  `json:"itemId"`
-	ItemCode     string  `json:"itemCode"`
-	ItemName     string  `json:"itemName"`
-	WarehouseId  string  `json:"warehouseId"`
+	ItemId        string  `json:"itemId"`
+	ItemCode      string  `json:"itemCode"`
+	ItemName      string  `json:"itemName"`
+	WarehouseId   string  `json:"warehouseId"`
 	WarehouseName string  `json:"warehouseName"`
-	Quantity     float64 `json:"quantity"`
-	UnitCost     float64 `json:"unitCost"`
-	TotalValue   float64 `json:"totalValue"`
+	Quantity      float64 `json:"quantity"`
+	UnitCost      float64 `json:"unitCost"`
+	TotalValue    float64 `json:"totalValue"`
 }
 
 // InventoryBalanceReportResponse 库存余额报表响应
 type InventoryBalanceReportResponse struct {
-	AsOfDate    string             `json:"asOfDate"`
-	TotalItems  int                `json:"totalItems"`
-	TotalValue  float64            `json:"totalValue"`
-	Items       []BalanceReportItem `json:"items"`
+	AsOfDate   string              `json:"asOfDate"`
+	TotalItems int                 `json:"totalItems"`
+	TotalValue float64             `json:"totalValue"`
+	Items      []BalanceReportItem `json:"items"`
 }
 
 // GetInventoryMovementReportRequest 获取库存变动报表请求
@@ -394,20 +388,20 @@ type TransactionDetail struct {
 
 // MovementReportItem 变动报表项
 type MovementReportItem struct {
-	ItemId            string              `json:"itemId"`
-	ItemCode          string              `json:"itemCode"`
-	ItemName          string              `json:"itemName"`
-	BeginningBalance  float64             `json:"beginningBalance"`
-	InQuantity        float64             `json:"inQuantity"`
-	OutQuantity       float64             `json:"outQuantity"`
-	EndingBalance     float64             `json:"endingBalance"`
-	Transactions      []TransactionDetail `json:"transactions,omitempty"`
+	ItemId           string              `json:"itemId"`
+	ItemCode         string              `json:"itemCode"`
+	ItemName         string              `json:"itemName"`
+	BeginningBalance float64             `json:"beginningBalance"`
+	InQuantity       float64             `json:"inQuantity"`
+	OutQuantity      float64             `json:"outQuantity"`
+	EndingBalance    float64             `json:"endingBalance"`
+	Transactions     []TransactionDetail `json:"transactions,omitempty"`
 }
 
 // InventoryMovementReportResponse 库存变动报表响应
 type InventoryMovementReportResponse struct {
-	Period  string                `json:"period"`
-	Items   []MovementReportItem  `json:"items"`
+	Period string               `json:"period"`
+	Items  []MovementReportItem `json:"items"`
 }
 
 // GetInventoryAlertReportRequest 获取库存预警报表请求
@@ -431,8 +425,8 @@ type AlertReportItem struct {
 
 // InventoryAlertReportResponse 库存预警报表响应
 type InventoryAlertReportResponse struct {
-	LowStockItems   []AlertReportItem `json:"lowStockItems"`
-	ExcessStockItems []AlertReportItem `json:"excessStockItems"`
+	LowStockItems     []AlertReportItem `json:"lowStockItems"`
+	ExcessStockItems  []AlertReportItem `json:"excessStockItems"`
 	ReorderPointItems []AlertReportItem `json:"reorderPointItems"`
 }
 
@@ -445,19 +439,19 @@ type GetInventoryABCReportRequest struct {
 
 // ABCReportItem ABC分析报表项
 type ABCReportItem struct {
-	ItemId      string  `json:"itemId"`
-	ItemCode    string  `json:"itemCode"`
-	ItemName    string  `json:"itemName"`
-	Category    string  `json:"category"`
-	Quantity    float64 `json:"quantity"`
-	Value       float64 `json:"value"`
-	Percentage  float64 `json:"percentage"`
+	ItemId     string  `json:"itemId"`
+	ItemCode   string  `json:"itemCode"`
+	ItemName   string  `json:"itemName"`
+	Category   string  `json:"category"`
+	Quantity   float64 `json:"quantity"`
+	Value      float64 `json:"value"`
+	Percentage float64 `json:"percentage"`
 }
 
 // InventoryABCReportResponse ABC分析报表响应
 type InventoryABCReportResponse struct {
-	Period  string           `json:"period"`
-	Items   []ABCReportItem  `json:"items"`
+	Period string          `json:"period"`
+	Items  []ABCReportItem `json:"items"`
 }
 
 // ExportInventoryReportRequest 导出库存报表请求

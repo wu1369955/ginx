@@ -30,7 +30,7 @@ var WireSet = wire.NewSet(
 )
 
 // InitializeHandlers 初始化所有处理器
-func InitializeHandlers() (*handlers.UserHandler, *handlers.SalesHandler, *handlers.InventoryHandler, *handlers.PurchaseHandler, *handlers.FinanceHandler, *handlers.ProductionHandler, *handlers.HRHandler, *handlers.CRMHandler, error) {
+func InitializeHandlers() (*handlers.UserHandler, *handlers.SalesHandler, *handlers.InventoryHandler, *handlers.PurchaseHandler, *handlers.FinanceHandler, *handlers.ProductionHandler, *handlers.HRHandler, *handlers.CRMHandler) {
 	wire.Build(WireSet)
-	return nil, nil, nil, nil, nil, nil, nil, nil, nil
+	return nil, nil, nil, nil, nil, nil, nil, nil
 }

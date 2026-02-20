@@ -4,6 +4,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/wu136995/ginx/internal/database"
 	"github.com/wu136995/ginx/internal/models"
 	"gorm.io/gorm"
 )
@@ -72,8 +73,10 @@ type salesService struct {
 }
 
 // NewSalesService 创建销售服务实例
-func NewSalesService(db *gorm.DB) SalesService {
-	return &salesService{db: db}
+func NewSalesService() SalesService {
+	return &salesService{
+		db: database.GetDB(),
+	}
 }
 
 // 客户管理方法

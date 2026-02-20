@@ -3,6 +3,7 @@ package services
 import (
 	"errors"
 
+	"github.com/wu136995/ginx/internal/database"
 	"github.com/wu136995/ginx/internal/models"
 	"gorm.io/gorm"
 )
@@ -21,8 +22,10 @@ type userService struct {
 }
 
 // NewUserService 创建用户服务实例
-func NewUserService(db *gorm.DB) UserService {
-	return &userService{db: db}
+func NewUserService() UserService {
+	return &userService{
+		db: database.GetDB(),
+	}
 }
 
 // GetUserByID 根据ID获取用户

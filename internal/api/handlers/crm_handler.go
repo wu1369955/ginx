@@ -421,11 +421,11 @@ func (h *CRMHandler) ConvertLead(c *gin.Context) {
 	id := c.Param("id")
 
 	// 调用service方法
-	customer, err := h.crmService.ConvertLead(id)
+	err := h.crmService.QualifyLead(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    500,
-			"message": "Failed to convert lead: " + err.Error(),
+			"message": "Failed to qualify lead: " + err.Error(),
 			"data":    nil,
 		})
 		return
@@ -434,7 +434,7 @@ func (h *CRMHandler) ConvertLead(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    customer,
+		"data":    nil,
 	})
 }
 
@@ -630,7 +630,7 @@ func (h *CRMHandler) CloseOpportunity(c *gin.Context) {
 	id := c.Param("id")
 
 	// 调用service方法
-	err := h.crmService.CloseOpportunity(id)
+	err := h.crmService.CloseOpportunity(id, map[string]interface{}{})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    500,
@@ -1229,11 +1229,11 @@ func (h *CRMHandler) GetCustomerReport(c *gin.Context) {
 	}
 
 	// 调用service方法
-	report, err := h.crmService.GetCustomerReport(req)
+	report, err := h.crmService.GetCustomerAnalysisReport(schemas.CustomerAnalysisReportRequest{})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    500,
-			"message": "Failed to get customer report: " + err.Error(),
+			"message": "Failed to get customer analysis report: " + err.Error(),
 			"data":    nil,
 		})
 		return
@@ -1262,7 +1262,7 @@ func (h *CRMHandler) GetSalesPipelineReport(c *gin.Context) {
 	}
 
 	// 调用service方法
-	report, err := h.crmService.GetSalesPipelineReport(req)
+	report, err := h.crmService.GetSalesPipelineReport(schemas.SalesPipelineReportRequest{})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    500,
@@ -1328,11 +1328,11 @@ func (h *CRMHandler) GetServiceRequestReport(c *gin.Context) {
 	}
 
 	// 调用service方法
-	report, err := h.crmService.GetServiceRequestReport(req)
+	report, err := h.crmService.GetServicePerformanceReport(req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    500,
-			"message": "Failed to get service request report: " + err.Error(),
+			"message": "Failed to get service performance report: " + err.Error(),
 			"data":    nil,
 		})
 		return

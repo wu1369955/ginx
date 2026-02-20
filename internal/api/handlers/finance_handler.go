@@ -451,11 +451,11 @@ func (h *FinanceHandler) PostVoucher(c *gin.Context) {
 	id := c.Param("id")
 
 	// 调用service方法
-	err := h.financeService.PostVoucher(id)
+	err := h.financeService.SubmitVoucher(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    500,
-			"message": "Failed to post voucher: " + err.Error(),
+			"message": "Failed to submit voucher: " + err.Error(),
 			"data":    nil,
 		})
 		return
@@ -767,11 +767,11 @@ func (h *FinanceHandler) GetFixedAssetList(c *gin.Context) {
 	}
 
 	// 调用service方法
-	assets, err := h.financeService.GetFixedAssetList(req)
+	assets, err := h.financeService.GetAssetList(req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    500,
-			"message": "Failed to get fixed asset list: " + err.Error(),
+			"message": "Failed to get asset list: " + err.Error(),
 			"data":    nil,
 		})
 		return
@@ -798,11 +798,11 @@ func (h *FinanceHandler) GetFixedAssetDetail(c *gin.Context) {
 	id := c.Param("id")
 
 	// 调用service方法
-	asset, err := h.financeService.GetFixedAssetDetail(id)
+	asset, err := h.financeService.GetAssetDetail(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    500,
-			"message": "Failed to get fixed asset detail: " + err.Error(),
+			"message": "Failed to get asset detail: " + err.Error(),
 			"data":    nil,
 		})
 		return
@@ -837,11 +837,11 @@ func (h *FinanceHandler) CreateFixedAsset(c *gin.Context) {
 	}
 
 	// 调用service方法
-	asset, err := h.financeService.CreateFixedAsset(req)
+	asset, err := h.financeService.CreateAsset(req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    500,
-			"message": "Failed to create fixed asset: " + err.Error(),
+			"message": "Failed to create asset: " + err.Error(),
 			"data":    nil,
 		})
 		return
@@ -880,11 +880,11 @@ func (h *FinanceHandler) UpdateFixedAsset(c *gin.Context) {
 	}
 
 	// 调用service方法
-	asset, err := h.financeService.UpdateFixedAsset(id, req)
+	asset, err := h.financeService.UpdateAsset(id, req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    500,
-			"message": "Failed to update fixed asset: " + err.Error(),
+			"message": "Failed to update asset: " + err.Error(),
 			"data":    nil,
 		})
 		return
@@ -911,11 +911,11 @@ func (h *FinanceHandler) DeleteFixedAsset(c *gin.Context) {
 	id := c.Param("id")
 
 	// 调用service方法
-	err := h.financeService.DeleteFixedAsset(id)
+	err := h.financeService.DeleteAsset(id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    500,
-			"message": "Failed to delete fixed asset: " + err.Error(),
+			"message": "Failed to delete asset: " + err.Error(),
 			"data":    nil,
 		})
 		return
@@ -938,15 +938,12 @@ func (h *FinanceHandler) DeleteFixedAsset(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/fixed-assets/{id}/depreciate [post]
 func (h *FinanceHandler) DepreciateFixedAsset(c *gin.Context) {
-	// 获取路径参数
-	id := c.Param("id")
-
 	// 调用service方法
-	err := h.financeService.DepreciateFixedAsset(id)
+	_, err := h.financeService.CalculateDepreciation(map[string]interface{}{})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    500,
-			"message": "Failed to depreciate fixed asset: " + err.Error(),
+			"message": "Failed to calculate depreciation: " + err.Error(),
 			"data":    nil,
 		})
 		return
@@ -973,11 +970,11 @@ func (h *FinanceHandler) DisposeFixedAsset(c *gin.Context) {
 	id := c.Param("id")
 
 	// 调用service方法
-	err := h.financeService.DisposeFixedAsset(id)
+	err := h.financeService.DisposeAsset(id, map[string]interface{}{})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    500,
-			"message": "Failed to dispose fixed asset: " + err.Error(),
+			"message": "Failed to dispose asset: " + err.Error(),
 			"data":    nil,
 		})
 		return
@@ -1139,11 +1136,11 @@ func (h *FinanceHandler) ExportFinancialReport(c *gin.Context) {
 	}
 
 	// 调用service方法
-	data, err := h.financeService.ExportFinancialReport(req)
+	data, err := h.financeService.ExportFinanceReport(req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    500,
-			"message": "Failed to export financial report: " + err.Error(),
+			"message": "Failed to export finance report: " + err.Error(),
 			"data":    nil,
 		})
 		return

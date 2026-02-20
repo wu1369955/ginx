@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/wu136995/ginx/internal/api/schemas"
@@ -207,9 +208,6 @@ func (s *inventoryService) UpdateWarehouse(id string, req schemas.UpdateWarehous
 	}
 
 	// 更新字段
-	if req.Code != "" {
-		warehouse.Code = req.Code
-	}
 	if req.Name != "" {
 		warehouse.Name = req.Name
 	}
@@ -237,7 +235,6 @@ func (s *inventoryService) UpdateWarehouse(id string, req schemas.UpdateWarehous
 	if req.Status != "" {
 		warehouse.Status = req.Status
 	}
-	warehouse.UpdatedBy = req.UpdatedBy
 
 	// 保存到数据库
 	result = s.db.Save(&warehouse)
@@ -297,6 +294,8 @@ func (s *inventoryService) AddWarehouseLocation(id string, req schemas.AddWareho
 		Status:      req.Status,
 		CreatedBy:   req.CreatedBy,
 		UpdatedBy:   req.CreatedBy,
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
 	}
 
 	// 保存到数据库
@@ -315,7 +314,9 @@ func (s *inventoryService) AddWarehouseLocation(id string, req schemas.AddWareho
 		Capacity:     location.Capacity,
 		UsedCapacity: location.UsedCapacity,
 		Status:       location.Status,
+		CreatedBy:    location.CreatedBy,
 		CreatedAt:    location.CreatedAt,
+		UpdatedBy:    location.UpdatedBy,
 		UpdatedAt:    location.UpdatedAt,
 	}
 
@@ -379,7 +380,9 @@ func (s *inventoryService) GetItemDetail(id string) (*schemas.ItemResponse, erro
 		Unit:        item.Unit,
 		Type:        item.Type,
 		Status:      item.Status,
+		CreatedBy:   item.CreatedBy,
 		CreatedAt:   item.CreatedAt,
+		UpdatedBy:   item.UpdatedBy,
 		UpdatedAt:   item.UpdatedAt,
 	}
 
@@ -421,7 +424,9 @@ func (s *inventoryService) CreateItem(req schemas.CreateItemRequest) (*schemas.I
 		Unit:        item.Unit,
 		Type:        item.Type,
 		Status:      item.Status,
+		CreatedBy:   item.CreatedBy,
 		CreatedAt:   item.CreatedAt,
+		UpdatedBy:   item.UpdatedBy,
 		UpdatedAt:   item.UpdatedAt,
 	}
 
@@ -481,7 +486,9 @@ func (s *inventoryService) UpdateItem(id string, req schemas.UpdateItemRequest) 
 		Unit:        item.Unit,
 		Type:        item.Type,
 		Status:      item.Status,
+		CreatedBy:   item.CreatedBy,
 		CreatedAt:   item.CreatedAt,
+		UpdatedBy:   item.UpdatedBy,
 		UpdatedAt:   item.UpdatedAt,
 	}
 
@@ -520,9 +527,11 @@ func (s *inventoryService) GetItemStock(id string) (*schemas.ItemStockResponse, 
 	var totalQuantity float64
 	var totalCost float64
 
-	// 构建库存明细
-	stockDetails := make([]schemas.StockDetail, len(onHandItems))
-	for i, onHand := range onHandItems {
+	// 构建仓库库存响应
+	warehouseStocks := make([]schemas.WarehouseStockResponse, 0)
+	warehouseMap := make(map[string]schemas.WarehouseStockResponse)
+
+	for _, onHand := range onHandItems {
 		totalQuantity += onHand.Quantity
 		totalCost += onHand.TotalCost
 
@@ -530,23 +539,39 @@ func (s *inventoryService) GetItemStock(id string) (*schemas.ItemStockResponse, 
 		var warehouse models.InventoryWarehouse
 		s.db.First(&warehouse, "id = ?", onHand.WarehouseID)
 
-		// 构建库存明细
-		stockDetails[i] = schemas.StockDetail{
-			WarehouseID:   onHand.WarehouseID,
-			WarehouseName: warehouse.Name,
-			LocationID:    onHand.LocationID,
-			Quantity:      onHand.Quantity,
-			UnitCost:      onHand.UnitCost,
-			TotalCost:     onHand.TotalCost,
+		// 检查仓库是否已经在映射中
+		if _, exists := warehouseMap[onHand.WarehouseID]; !exists {
+			warehouseMap[onHand.WarehouseID] = schemas.WarehouseStockResponse{
+				WarehouseId:   onHand.WarehouseID,
+				WarehouseName: warehouse.Name,
+				Quantity:      0,
+				Locations:     make([]schemas.LocationStockResponse, 0),
+			}
 		}
+
+		// 获取仓库库存
+		warehouseStock := warehouseMap[onHand.WarehouseID]
+		warehouseStock.Quantity += onHand.Quantity
+
+		// 添加库位库存
+		warehouseStock.Locations = append(warehouseStock.Locations, schemas.LocationStockResponse{
+			LocationId: onHand.LocationID,
+			Quantity:   onHand.Quantity,
+		})
+
+		// 更新映射
+		warehouseMap[onHand.WarehouseID] = warehouseStock
+	}
+
+	// 将映射转换为切片
+	for _, warehouseStock := range warehouseMap {
+		warehouseStocks = append(warehouseStocks, warehouseStock)
 	}
 
 	// 构建响应
 	response := &schemas.ItemStockResponse{
-		ItemID:        id,
-		TotalQuantity: totalQuantity,
-		TotalCost:     totalCost,
-		StockDetails:  stockDetails,
+		TotalStock: totalQuantity,
+		Warehouses: warehouseStocks,
 	}
 
 	return response, nil
@@ -569,20 +594,26 @@ func (s *inventoryService) GetTransactionList(req schemas.GetTransactionListRequ
 	// 将模型转换为响应格式
 	response := make([]schemas.TransactionResponse, len(transactions))
 	for i, transaction := range transactions {
+		// 构建交易明细
+		items := []schemas.TransactionItemResponse{
+			{
+				ItemId:    transaction.ItemID,
+				Quantity:  transaction.Quantity,
+				UnitCost:  transaction.UnitCost,
+				TotalCost: transaction.TotalCost,
+			},
+		}
+
 		response[i] = schemas.TransactionResponse{
 			ID:              transaction.ID,
 			TransactionNo:   transaction.TransactionNo,
-			ItemID:          transaction.ItemID,
-			WarehouseID:     transaction.WarehouseID,
-			LocationID:      transaction.LocationID,
 			Type:            transaction.Type,
-			Quantity:        transaction.Quantity,
-			UnitCost:        transaction.UnitCost,
-			TotalCost:       transaction.TotalCost,
-			ReferenceType:   transaction.ReferenceType,
-			ReferenceID:     transaction.ReferenceID,
-			TransactionDate: transaction.TransactionDate,
+			WarehouseId:     transaction.WarehouseID,
+			TransactionDate: transaction.TransactionDate.Format("2006-01-02"),
 			Remarks:         transaction.Remarks,
+			TotalQuantity:   transaction.Quantity,
+			Items:           items,
+			CreatedBy:       transaction.CreatedBy,
 			CreatedAt:       transaction.CreatedAt,
 		}
 	}
@@ -603,21 +634,27 @@ func (s *inventoryService) GetTransactionDetail(id string) (*schemas.Transaction
 		return nil, result.Error
 	}
 
+	// 构建交易明细
+	items := []schemas.TransactionItemResponse{
+		{
+			ItemId:    transaction.ItemID,
+			Quantity:  transaction.Quantity,
+			UnitCost:  transaction.UnitCost,
+			TotalCost: transaction.TotalCost,
+		},
+	}
+
 	// 将模型转换为响应格式
 	response := &schemas.TransactionResponse{
 		ID:              transaction.ID,
 		TransactionNo:   transaction.TransactionNo,
-		ItemID:          transaction.ItemID,
-		WarehouseID:     transaction.WarehouseID,
-		LocationID:      transaction.LocationID,
 		Type:            transaction.Type,
-		Quantity:        transaction.Quantity,
-		UnitCost:        transaction.UnitCost,
-		TotalCost:       transaction.TotalCost,
-		ReferenceType:   transaction.ReferenceType,
-		ReferenceID:     transaction.ReferenceID,
-		TransactionDate: transaction.TransactionDate,
+		WarehouseId:     transaction.WarehouseID,
+		TransactionDate: transaction.TransactionDate.Format("2006-01-02"),
 		Remarks:         transaction.Remarks,
+		TotalQuantity:   transaction.Quantity,
+		Items:           items,
+		CreatedBy:       transaction.CreatedBy,
 		CreatedAt:       transaction.CreatedAt,
 	}
 
@@ -630,45 +667,69 @@ func (s *inventoryService) CreateTransaction(req schemas.CreateTransactionReques
 		return nil, errors.New("database connection is nil")
 	}
 
-	// 创建交易模型
-	transaction := models.InventoryTransaction{
-		TransactionNo:   req.TransactionNo,
-		ItemID:          req.ItemID,
-		WarehouseID:     req.WarehouseID,
-		LocationID:      req.LocationID,
-		Type:            req.Type,
-		Quantity:        req.Quantity,
-		UnitCost:        req.UnitCost,
-		TotalCost:       req.TotalCost,
-		ReferenceType:   req.ReferenceType,
-		ReferenceID:     req.ReferenceID,
-		TransactionDate: req.TransactionDate,
-		Remarks:         req.Remarks,
-		CreatedBy:       req.CreatedBy,
+	// 解析交易日期
+	transactionDate, err := time.Parse("2006-01-02", req.TransactionDate)
+	if err != nil {
+		return nil, err
 	}
 
-	// 保存到数据库
-	result := s.db.Create(&transaction)
-	if result.Error != nil {
-		return nil, result.Error
+	// 生成交易编号
+	transactionNo := fmt.Sprintf("TRX%s", time.Now().Format("20060102030405"))
+
+	// 构建交易明细响应
+	transactionItems := make([]schemas.TransactionItemResponse, len(req.Items))
+	var totalQuantity float64
+
+	// 为每个项目创建交易记录
+	for i, item := range req.Items {
+		// 计算总成本
+		totalCost := item.Quantity * item.UnitCost
+		totalQuantity += item.Quantity
+
+		// 创建交易模型
+		transaction := models.InventoryTransaction{
+			TransactionNo:   transactionNo,
+			ItemID:          item.ItemId,
+			WarehouseID:     req.WarehouseId,
+			LocationID:      item.LocationId,
+			Type:            req.Type,
+			Quantity:        item.Quantity,
+			UnitCost:        item.UnitCost,
+			TotalCost:       totalCost,
+			ReferenceType:   "", // 可以根据实际情况设置
+			ReferenceID:     "", // 可以根据实际情况设置
+			TransactionDate: transactionDate,
+			Remarks:         req.Remarks,
+			CreatedBy:       "", // 可以根据实际情况设置
+		}
+
+		// 保存到数据库
+		result := s.db.Create(&transaction)
+		if result.Error != nil {
+			return nil, result.Error
+		}
+
+		// 构建交易明细响应
+		transactionItems[i] = schemas.TransactionItemResponse{
+			ItemId:    item.ItemId,
+			Quantity:  item.Quantity,
+			UnitCost:  item.UnitCost,
+			TotalCost: totalCost,
+		}
 	}
 
 	// 将模型转换为响应格式
 	response := &schemas.TransactionResponse{
-		ID:              transaction.ID,
-		TransactionNo:   transaction.TransactionNo,
-		ItemID:          transaction.ItemID,
-		WarehouseID:     transaction.WarehouseID,
-		LocationID:      transaction.LocationID,
-		Type:            transaction.Type,
-		Quantity:        transaction.Quantity,
-		UnitCost:        transaction.UnitCost,
-		TotalCost:       transaction.TotalCost,
-		ReferenceType:   transaction.ReferenceType,
-		ReferenceID:     transaction.ReferenceID,
-		TransactionDate: transaction.TransactionDate,
-		Remarks:         transaction.Remarks,
-		CreatedAt:       transaction.CreatedAt,
+		ID:              transactionNo, // 使用交易编号作为响应ID
+		TransactionNo:   transactionNo,
+		Type:            req.Type,
+		WarehouseId:     req.WarehouseId,
+		TransactionDate: req.TransactionDate,
+		Remarks:         req.Remarks,
+		TotalQuantity:   totalQuantity,
+		Items:           transactionItems,
+		CreatedBy:       "", // 可以根据实际情况设置
+		CreatedAt:       time.Now(),
 	}
 
 	return response, nil
@@ -680,45 +741,69 @@ func (s *inventoryService) CreateInventoryAdjustment(req schemas.CreateInventory
 		return nil, errors.New("database connection is nil")
 	}
 
-	// 创建调整交易模型
-	transaction := models.InventoryTransaction{
-		TransactionNo:   req.TransactionNo,
-		ItemID:          req.ItemID,
-		WarehouseID:     req.WarehouseID,
-		LocationID:      req.LocationID,
-		Type:            "adjustment",
-		Quantity:        req.Quantity,
-		UnitCost:        req.UnitCost,
-		TotalCost:       req.Quantity * req.UnitCost,
-		ReferenceType:   "inventory_adjustment",
-		ReferenceID:     req.ReferenceID,
-		TransactionDate: req.TransactionDate,
-		Remarks:         req.Remarks,
-		CreatedBy:       req.CreatedBy,
+	// 解析交易日期
+	transactionDate, err := time.Parse("2006-01-02", req.TransactionDate)
+	if err != nil {
+		return nil, err
 	}
 
-	// 保存到数据库
-	result := s.db.Create(&transaction)
-	if result.Error != nil {
-		return nil, result.Error
+	// 生成交易编号
+	transactionNo := fmt.Sprintf("ADJ%s", time.Now().Format("20060102030405"))
+
+	// 构建交易明细响应
+	transactionItems := make([]schemas.TransactionItemResponse, len(req.Items))
+	var totalQuantity float64
+
+	// 为每个项目创建调整交易记录
+	for i, item := range req.Items {
+		// 计算总成本
+		totalCost := item.Quantity * item.UnitCost
+		totalQuantity += item.Quantity
+
+		// 创建调整交易模型
+		transaction := models.InventoryTransaction{
+			TransactionNo:   transactionNo,
+			ItemID:          item.ItemId,
+			WarehouseID:     req.WarehouseId,
+			LocationID:      item.LocationId,
+			Type:            "adjustment",
+			Quantity:        item.Quantity,
+			UnitCost:        item.UnitCost,
+			TotalCost:       totalCost,
+			ReferenceType:   "inventory_adjustment",
+			ReferenceID:     "", // 可以根据实际情况设置
+			TransactionDate: transactionDate,
+			Remarks:         req.Remarks,
+			CreatedBy:       "", // 可以根据实际情况设置
+		}
+
+		// 保存到数据库
+		result := s.db.Create(&transaction)
+		if result.Error != nil {
+			return nil, result.Error
+		}
+
+		// 构建交易明细响应
+		transactionItems[i] = schemas.TransactionItemResponse{
+			ItemId:    item.ItemId,
+			Quantity:  item.Quantity,
+			UnitCost:  item.UnitCost,
+			TotalCost: totalCost,
+		}
 	}
 
 	// 将模型转换为响应格式
 	response := &schemas.TransactionResponse{
-		ID:              transaction.ID,
-		TransactionNo:   transaction.TransactionNo,
-		ItemID:          transaction.ItemID,
-		WarehouseID:     transaction.WarehouseID,
-		LocationID:      transaction.LocationID,
-		Type:            transaction.Type,
-		Quantity:        transaction.Quantity,
-		UnitCost:        transaction.UnitCost,
-		TotalCost:       transaction.TotalCost,
-		ReferenceType:   transaction.ReferenceType,
-		ReferenceID:     transaction.ReferenceID,
-		TransactionDate: transaction.TransactionDate,
-		Remarks:         transaction.Remarks,
-		CreatedAt:       transaction.CreatedAt,
+		ID:              transactionNo, // 使用交易编号作为响应ID
+		TransactionNo:   transactionNo,
+		Type:            "adjustment",
+		WarehouseId:     req.WarehouseId,
+		TransactionDate: req.TransactionDate,
+		Remarks:         req.Remarks,
+		TotalQuantity:   totalQuantity,
+		Items:           transactionItems,
+		CreatedBy:       "", // 可以根据实际情况设置
+		CreatedAt:       time.Now(),
 	}
 
 	return response, nil
@@ -730,68 +815,93 @@ func (s *inventoryService) CreateWarehouseTransfer(req schemas.CreateWarehouseTr
 		return nil, errors.New("database connection is nil")
 	}
 
-	// 创建转出交易
-	outTransaction := models.InventoryTransaction{
-		TransactionNo:   req.TransactionNo,
-		ItemID:          req.ItemID,
-		WarehouseID:     req.FromWarehouseID,
-		LocationID:      req.FromLocationID,
-		Type:            "transfer_out",
-		Quantity:        -req.Quantity,
-		UnitCost:        req.UnitCost,
-		TotalCost:       -req.Quantity * req.UnitCost,
-		ReferenceType:   "warehouse_transfer",
-		ReferenceID:     req.ReferenceID,
-		TransactionDate: req.TransactionDate,
-		Remarks:         req.Remarks,
-		CreatedBy:       req.CreatedBy,
+	// 解析交易日期
+	transactionDate, err := time.Parse("2006-01-02", req.TransactionDate)
+	if err != nil {
+		return nil, err
 	}
 
-	// 保存转出交易
-	result := s.db.Create(&outTransaction)
-	if result.Error != nil {
-		return nil, result.Error
-	}
+	// 生成交易编号
+	transactionNo := fmt.Sprintf("TRF%s", time.Now().Format("20060102030405"))
 
-	// 创建转入交易
-	inTransaction := models.InventoryTransaction{
-		TransactionNo:   req.TransactionNo,
-		ItemID:          req.ItemID,
-		WarehouseID:     req.ToWarehouseID,
-		LocationID:      req.ToLocationID,
-		Type:            "transfer_in",
-		Quantity:        req.Quantity,
-		UnitCost:        req.UnitCost,
-		TotalCost:       req.Quantity * req.UnitCost,
-		ReferenceType:   "warehouse_transfer",
-		ReferenceID:     req.ReferenceID,
-		TransactionDate: req.TransactionDate,
-		Remarks:         req.Remarks,
-		CreatedBy:       req.CreatedBy,
-	}
+	// 构建交易明细响应
+	transactionItems := make([]schemas.TransactionItemResponse, len(req.Items))
+	var totalQuantity float64
 
-	// 保存转入交易
-	result = s.db.Create(&inTransaction)
-	if result.Error != nil {
-		return nil, result.Error
+	// 为每个项目创建转出和转入交易记录
+	for i, item := range req.Items {
+		// 计算总成本
+		totalCost := item.Quantity * item.UnitCost
+		totalQuantity += item.Quantity
+
+		// 创建转出交易
+		outTransaction := models.InventoryTransaction{
+			TransactionNo:   transactionNo,
+			ItemID:          item.ItemId,
+			WarehouseID:     req.FromWarehouseId,
+			LocationID:      item.FromLocationId,
+			Type:            "transfer_out",
+			Quantity:        -item.Quantity,
+			UnitCost:        item.UnitCost,
+			TotalCost:       -totalCost,
+			ReferenceType:   "warehouse_transfer",
+			ReferenceID:     "", // 可以根据实际情况设置
+			TransactionDate: transactionDate,
+			Remarks:         req.Remarks,
+			CreatedBy:       "", // 可以根据实际情况设置
+		}
+
+		// 保存转出交易
+		result := s.db.Create(&outTransaction)
+		if result.Error != nil {
+			return nil, result.Error
+		}
+
+		// 创建转入交易
+		inTransaction := models.InventoryTransaction{
+			TransactionNo:   transactionNo,
+			ItemID:          item.ItemId,
+			WarehouseID:     req.ToWarehouseId,
+			LocationID:      item.ToLocationId,
+			Type:            "transfer_in",
+			Quantity:        item.Quantity,
+			UnitCost:        item.UnitCost,
+			TotalCost:       totalCost,
+			ReferenceType:   "warehouse_transfer",
+			ReferenceID:     "", // 可以根据实际情况设置
+			TransactionDate: transactionDate,
+			Remarks:         req.Remarks,
+			CreatedBy:       "", // 可以根据实际情况设置
+		}
+
+		// 保存转入交易
+		result = s.db.Create(&inTransaction)
+		if result.Error != nil {
+			return nil, result.Error
+		}
+
+		// 构建交易明细响应
+		transactionItems[i] = schemas.TransactionItemResponse{
+			ItemId:    item.ItemId,
+			Quantity:  item.Quantity,
+			UnitCost:  item.UnitCost,
+			TotalCost: totalCost,
+		}
 	}
 
 	// 将模型转换为响应格式
 	response := &schemas.TransactionResponse{
-		ID:              inTransaction.ID,
-		TransactionNo:   inTransaction.TransactionNo,
-		ItemID:          inTransaction.ItemID,
-		WarehouseID:     inTransaction.WarehouseID,
-		LocationID:      inTransaction.LocationID,
+		ID:              transactionNo, // 使用交易编号作为响应ID
+		TransactionNo:   transactionNo,
 		Type:            "transfer",
-		Quantity:        inTransaction.Quantity,
-		UnitCost:        inTransaction.UnitCost,
-		TotalCost:       inTransaction.TotalCost,
-		ReferenceType:   inTransaction.ReferenceType,
-		ReferenceID:     inTransaction.ReferenceID,
-		TransactionDate: inTransaction.TransactionDate,
-		Remarks:         inTransaction.Remarks,
-		CreatedAt:       inTransaction.CreatedAt,
+		FromWarehouseId: req.FromWarehouseId,
+		ToWarehouseId:   req.ToWarehouseId,
+		TransactionDate: req.TransactionDate,
+		Remarks:         req.Remarks,
+		TotalQuantity:   totalQuantity,
+		Items:           transactionItems,
+		CreatedBy:       "", // 可以根据实际情况设置
+		CreatedAt:       time.Now(),
 	}
 
 	return response, nil
@@ -815,16 +925,17 @@ func (s *inventoryService) GetCountList(req schemas.GetCountListRequest) ([]sche
 	response := make([]schemas.CountResponse, len(counts))
 	for i, count := range counts {
 		response[i] = schemas.CountResponse{
-			ID:            count.ID,
-			CountNo:       count.CountNo,
-			WarehouseID:   count.WarehouseID,
-			CountDate:     count.CountDate,
-			Status:        count.Status,
-			TotalItems:    count.TotalItems,
-			TotalVariance: count.TotalVariance,
-			Remarks:       count.Remarks,
-			CreatedAt:     count.CreatedAt,
-			UpdatedAt:     count.UpdatedAt,
+			ID:          count.ID,
+			CountNo:     count.CountNo,
+			Type:        "stock_take", // 默认为库存盘点类型
+			WarehouseId: count.WarehouseID,
+			StartDate:   count.CountDate.Format("2006-01-02"),
+			Status:      count.Status,
+			Remarks:     count.Remarks,
+			CreatedBy:   count.CreatedBy,
+			CreatedAt:   count.CreatedAt,
+			UpdatedBy:   count.UpdatedBy,
+			UpdatedAt:   count.UpdatedAt,
 		}
 	}
 
@@ -846,16 +957,17 @@ func (s *inventoryService) GetCountDetail(id string) (*schemas.CountResponse, er
 
 	// 将模型转换为响应格式
 	response := &schemas.CountResponse{
-		ID:            count.ID,
-		CountNo:       count.CountNo,
-		WarehouseID:   count.WarehouseID,
-		CountDate:     count.CountDate,
-		Status:        count.Status,
-		TotalItems:    count.TotalItems,
-		TotalVariance: count.TotalVariance,
-		Remarks:       count.Remarks,
-		CreatedAt:     count.CreatedAt,
-		UpdatedAt:     count.UpdatedAt,
+		ID:          count.ID,
+		CountNo:     count.CountNo,
+		Type:        "stock_take", // 默认为库存盘点类型
+		WarehouseId: count.WarehouseID,
+		StartDate:   count.CountDate.Format("2006-01-02"),
+		Status:      count.Status,
+		Remarks:     count.Remarks,
+		CreatedBy:   count.CreatedBy,
+		CreatedAt:   count.CreatedAt,
+		UpdatedBy:   count.UpdatedBy,
+		UpdatedAt:   count.UpdatedAt,
 	}
 
 	return response, nil
@@ -867,16 +979,25 @@ func (s *inventoryService) CreateCount(req schemas.CreateCountRequest) (*schemas
 		return nil, errors.New("database connection is nil")
 	}
 
+	// 解析盘点日期
+	countDate, err := time.Parse("2006-01-02", req.StartDate)
+	if err != nil {
+		return nil, err
+	}
+
+	// 生成盘点编号
+	countNo := fmt.Sprintf("CNT%s", time.Now().Format("20060102030405"))
+
 	// 创建盘点模型
 	count := models.InventoryCount{
-		CountNo:     req.CountNo,
-		WarehouseID: req.WarehouseID,
-		CountDate:   req.CountDate,
+		CountNo:     countNo,
+		WarehouseID: req.WarehouseId,
+		CountDate:   countDate,
 		Status:      "pending",
-		TotalItems:  req.TotalItems,
+		TotalItems:  len(req.Items),
 		Remarks:     req.Remarks,
-		CreatedBy:   req.CreatedBy,
-		UpdatedBy:   req.CreatedBy,
+		CreatedBy:   "", // 可以根据实际情况设置
+		UpdatedBy:   "", // 可以根据实际情况设置
 	}
 
 	// 保存到数据库
@@ -887,16 +1008,17 @@ func (s *inventoryService) CreateCount(req schemas.CreateCountRequest) (*schemas
 
 	// 将模型转换为响应格式
 	response := &schemas.CountResponse{
-		ID:            count.ID,
-		CountNo:       count.CountNo,
-		WarehouseID:   count.WarehouseID,
-		CountDate:     count.CountDate,
-		Status:        count.Status,
-		TotalItems:    count.TotalItems,
-		TotalVariance: count.TotalVariance,
-		Remarks:       count.Remarks,
-		CreatedAt:     count.CreatedAt,
-		UpdatedAt:     count.UpdatedAt,
+		ID:          count.ID,
+		CountNo:     count.CountNo,
+		Type:        req.Type,
+		WarehouseId: count.WarehouseID,
+		StartDate:   count.CountDate.Format("2006-01-02"),
+		Status:      count.Status,
+		Remarks:     count.Remarks,
+		CreatedBy:   count.CreatedBy,
+		CreatedAt:   count.CreatedAt,
+		UpdatedBy:   count.UpdatedBy,
+		UpdatedAt:   count.UpdatedAt,
 	}
 
 	return response, nil
@@ -916,25 +1038,10 @@ func (s *inventoryService) UpdateCount(id string, req schemas.UpdateCountRequest
 	}
 
 	// 更新字段
-	if req.CountNo != "" {
-		count.CountNo = req.CountNo
+	if len(req.Items) > 0 {
+		count.TotalItems = len(req.Items)
 	}
-	if req.WarehouseID != "" {
-		count.WarehouseID = req.WarehouseID
-	}
-	if !req.CountDate.IsZero() {
-		count.CountDate = req.CountDate
-	}
-	if req.Status != "" {
-		count.Status = req.Status
-	}
-	if req.TotalItems > 0 {
-		count.TotalItems = req.TotalItems
-	}
-	if req.Remarks != "" {
-		count.Remarks = req.Remarks
-	}
-	count.UpdatedBy = req.UpdatedBy
+	count.UpdatedBy = "" // 可以根据实际情况设置
 
 	// 保存到数据库
 	result = s.db.Save(&count)
@@ -944,16 +1051,17 @@ func (s *inventoryService) UpdateCount(id string, req schemas.UpdateCountRequest
 
 	// 将模型转换为响应格式
 	response := &schemas.CountResponse{
-		ID:            count.ID,
-		CountNo:       count.CountNo,
-		WarehouseID:   count.WarehouseID,
-		CountDate:     count.CountDate,
-		Status:        count.Status,
-		TotalItems:    count.TotalItems,
-		TotalVariance: count.TotalVariance,
-		Remarks:       count.Remarks,
-		CreatedAt:     count.CreatedAt,
-		UpdatedAt:     count.UpdatedAt,
+		ID:          count.ID,
+		CountNo:     count.CountNo,
+		Type:        "stock_take", // 默认为库存盘点类型
+		WarehouseId: count.WarehouseID,
+		StartDate:   count.CountDate.Format("2006-01-02"),
+		Status:      count.Status,
+		Remarks:     count.Remarks,
+		CreatedBy:   count.CreatedBy,
+		CreatedAt:   count.CreatedAt,
+		UpdatedBy:   count.UpdatedBy,
+		UpdatedAt:   count.UpdatedAt,
 	}
 
 	return response, nil
@@ -974,8 +1082,7 @@ func (s *inventoryService) CompleteCount(id string, req schemas.CompleteCountReq
 
 	// 更新状态为已完成
 	count.Status = "completed"
-	count.TotalVariance = req.TotalVariance
-	count.UpdatedBy = req.UpdatedBy
+	count.UpdatedBy = "" // 可以根据实际情况设置
 
 	// 保存到数据库
 	result = s.db.Save(&count)
@@ -1001,7 +1108,7 @@ func (s *inventoryService) CancelCount(id string, req schemas.CancelCountRequest
 
 	// 更新状态为已取消
 	count.Status = "cancelled"
-	count.UpdatedBy = req.UpdatedBy
+	count.UpdatedBy = "" // 可以根据实际情况设置
 
 	// 保存到数据库
 	result = s.db.Save(&count)

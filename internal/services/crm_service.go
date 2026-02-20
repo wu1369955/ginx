@@ -18,9 +18,9 @@ type CRMService interface {
 	CreateCustomer(req schemas.CustomerCreateRequest) (*schemas.CustomerContactResponse, error)
 	UpdateCustomer(id string, req schemas.CustomerUpdateRequest) (*schemas.CustomerContactResponse, error)
 	DeleteCustomer(id string) error
-	GetCustomerContacts(id string) ([]schemas.CustomerContactResponse, error)
-	AddCustomerContact(id string, req schemas.CustomerContactCreateRequest) (*schemas.CustomerContactResponse, error)
-	GetCustomerHistory(id string) ([]schemas.CustomerContactResponse, error)
+	GetCustomerContacts(id string) ([]schemas.ContactResponse, error)
+	AddCustomerContact(id string, req schemas.CustomerContactCreateRequest) (*schemas.ContactResponse, error)
+	GetCustomerHistory(id string) ([]schemas.ActivityResponse, error)
 
 	// 销售线索管理
 	GetLeadList(req map[string]interface{}) ([]schemas.LeadResponse, error)
@@ -173,16 +173,18 @@ func (s *crmService) CreateCustomer(req schemas.CustomerCreateRequest) (*schemas
 	// 创建客户模型
 	account := models.CRMAccount{
 		ID:            req.ID,
-		AccountNo:     req.AccountNo,
+		AccountNo:     req.Code,
 		Name:          req.Name,
 		Type:          req.Type,
-		Industry:      req.Industry,
 		Region:        req.Region,
 		Address:       req.Address,
-		ContactPerson: req.ContactPerson,
+		ContactPerson: req.ContactName,
 		Phone:         req.Phone,
 		Email:         req.Email,
-		Status:        "active",
+		TaxNo:         req.TaxNumber,
+		CreditLimit:   req.CreditLimit,
+		Status:        req.Status,
+		Remarks:       req.Remarks,
 		CreatedAt:     time.Now(),
 		UpdatedAt:     time.Now(),
 		CreatedBy:     req.CreatedBy,
@@ -198,6 +200,7 @@ func (s *crmService) CreateCustomer(req schemas.CustomerCreateRequest) (*schemas
 	// 将模型转换为响应格式
 	customer := &schemas.CustomerContactResponse{
 		ID:            account.ID,
+		AccountNo:     account.AccountNo,
 		Name:          account.Name,
 		Type:          account.Type,
 		Industry:      account.Industry,
@@ -207,6 +210,10 @@ func (s *crmService) CreateCustomer(req schemas.CustomerCreateRequest) (*schemas
 		Phone:         account.Phone,
 		Email:         account.Email,
 		Status:        account.Status,
+		CreatedAt:     account.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:     account.UpdatedAt.Format(time.RFC3339),
+		CreatedBy:     account.CreatedBy,
+		UpdatedBy:     account.UpdatedBy,
 	}
 
 	return customer, nil
@@ -226,15 +233,42 @@ func (s *crmService) UpdateCustomer(id string, req schemas.CustomerUpdateRequest
 	}
 
 	// 更新字段
-	account.Name = req.Name
-	account.Type = req.Type
-	account.Industry = req.Industry
-	account.Region = req.Region
-	account.Address = req.Address
-	account.ContactPerson = req.ContactPerson
-	account.Phone = req.Phone
-	account.Email = req.Email
-	account.Status = req.Status
+	if req.Code != "" {
+		account.AccountNo = req.Code
+	}
+	if req.Name != "" {
+		account.Name = req.Name
+	}
+	if req.Type != "" {
+		account.Type = req.Type
+	}
+	if req.Region != "" {
+		account.Region = req.Region
+	}
+	if req.Address != "" {
+		account.Address = req.Address
+	}
+	if req.ContactName != "" {
+		account.ContactPerson = req.ContactName
+	}
+	if req.Phone != "" {
+		account.Phone = req.Phone
+	}
+	if req.Email != "" {
+		account.Email = req.Email
+	}
+	if req.TaxNumber != "" {
+		account.TaxNo = req.TaxNumber
+	}
+	if req.CreditLimit != 0 {
+		account.CreditLimit = req.CreditLimit
+	}
+	if req.Status != "" {
+		account.Status = req.Status
+	}
+	if req.Remarks != "" {
+		account.Remarks = req.Remarks
+	}
 	account.UpdatedAt = time.Now()
 	account.UpdatedBy = req.UpdatedBy
 
@@ -247,6 +281,7 @@ func (s *crmService) UpdateCustomer(id string, req schemas.CustomerUpdateRequest
 	// 将模型转换为响应格式
 	customer := &schemas.CustomerContactResponse{
 		ID:            account.ID,
+		AccountNo:     account.AccountNo,
 		Name:          account.Name,
 		Type:          account.Type,
 		Industry:      account.Industry,
@@ -256,6 +291,10 @@ func (s *crmService) UpdateCustomer(id string, req schemas.CustomerUpdateRequest
 		Phone:         account.Phone,
 		Email:         account.Email,
 		Status:        account.Status,
+		CreatedAt:     account.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:     account.UpdatedAt.Format(time.RFC3339),
+		CreatedBy:     account.CreatedBy,
+		UpdatedBy:     account.UpdatedBy,
 	}
 
 	return customer, nil
@@ -276,7 +315,7 @@ func (s *crmService) DeleteCustomer(id string) error {
 	return nil
 }
 
-func (s *crmService) GetCustomerContacts(id string) ([]schemas.CustomerContactResponse, error) {
+func (s *crmService) GetCustomerContacts(id string) ([]schemas.ContactResponse, error) {
 	// 检查数据库连接
 	if s.db == nil {
 		return nil, errors.New("database connection is nil")
@@ -290,22 +329,28 @@ func (s *crmService) GetCustomerContacts(id string) ([]schemas.CustomerContactRe
 	}
 
 	// 将模型转换为响应格式
-	contactList := make([]schemas.CustomerContactResponse, len(contacts))
+	contactList := make([]schemas.ContactResponse, len(contacts))
 	for i, contact := range contacts {
-		contactList[i] = schemas.CustomerContactResponse{
-			ID:            contact.ID,
-			Name:          contact.Name,
-			ContactPerson: contact.Name,
-			Phone:         contact.Phone,
-			Email:         contact.Email,
-			Position:      contact.Position,
+		contactList[i] = schemas.ContactResponse{
+			ID:        contact.ID,
+			AccountID: contact.AccountID,
+			Name:      contact.Name,
+			Position:  contact.Position,
+			Phone:     contact.Phone,
+			Email:     contact.Email,
+			Mobile:    contact.Mobile,
+			Address:   contact.Address,
+			CreatedBy: contact.CreatedBy,
+			CreatedAt: contact.CreatedAt,
+			UpdatedBy: contact.UpdatedBy,
+			UpdatedAt: contact.UpdatedAt,
 		}
 	}
 
 	return contactList, nil
 }
 
-func (s *crmService) AddCustomerContact(id string, req schemas.CustomerContactCreateRequest) (*schemas.CustomerContactResponse, error) {
+func (s *crmService) AddCustomerContact(id string, req schemas.CustomerContactCreateRequest) (*schemas.ContactResponse, error) {
 	// 检查数据库连接
 	if s.db == nil {
 		return nil, errors.New("database connection is nil")
@@ -334,19 +379,25 @@ func (s *crmService) AddCustomerContact(id string, req schemas.CustomerContactCr
 	}
 
 	// 将模型转换为响应格式
-	contactResponse := &schemas.CustomerContactResponse{
-		ID:            contact.ID,
-		Name:          contact.Name,
-		ContactPerson: contact.Name,
-		Phone:         contact.Phone,
-		Email:         contact.Email,
-		Position:      contact.Position,
+	contactResponse := &schemas.ContactResponse{
+		ID:        contact.ID,
+		AccountID: contact.AccountID,
+		Name:      contact.Name,
+		Position:  contact.Position,
+		Phone:     contact.Phone,
+		Email:     contact.Email,
+		Mobile:    contact.Mobile,
+		Address:   contact.Address,
+		CreatedBy: contact.CreatedBy,
+		CreatedAt: contact.CreatedAt,
+		UpdatedBy: contact.UpdatedBy,
+		UpdatedAt: contact.UpdatedAt,
 	}
 
 	return contactResponse, nil
 }
 
-func (s *crmService) GetCustomerHistory(id string) ([]schemas.CustomerContactResponse, error) {
+func (s *crmService) GetCustomerHistory(id string) ([]schemas.ActivityResponse, error) {
 	// 检查数据库连接
 	if s.db == nil {
 		return nil, errors.New("database connection is nil")
@@ -360,13 +411,25 @@ func (s *crmService) GetCustomerHistory(id string) ([]schemas.CustomerContactRes
 	}
 
 	// 将模型转换为响应格式
-	historyList := make([]schemas.CustomerContactResponse, len(activities))
+	historyList := make([]schemas.ActivityResponse, len(activities))
 	for i, activity := range activities {
-		historyList[i] = schemas.CustomerContactResponse{
-			ID:            activity.ID,
-			Name:          activity.Subject,
-			ContactPerson: activity.Type,
-			Status:        activity.Status,
+		historyList[i] = schemas.ActivityResponse{
+			ID:          activity.ID,
+			AccountID:   activity.AccountID,
+			ContactID:   activity.ContactID,
+			Type:        activity.Type,
+			Subject:     activity.Subject,
+			Description: activity.Description,
+			Location:    activity.Location,
+			Status:      activity.Status,
+			Priority:    activity.Priority,
+			StartTime:   activity.StartTime,
+			EndTime:     activity.EndTime,
+			Outcome:     activity.Outcome,
+			CreatedBy:   activity.CreatedBy,
+			CreatedAt:   activity.CreatedAt,
+			UpdatedBy:   activity.UpdatedBy,
+			UpdatedAt:   activity.UpdatedAt,
 		}
 	}
 
@@ -392,6 +455,7 @@ func (s *crmService) GetLeadList(req map[string]interface{}) ([]schemas.LeadResp
 	for i, lead := range leads {
 		leadList[i] = schemas.LeadResponse{
 			ID:            lead.ID,
+			Code:          "", // 暂时设置为空字符串，因为CRMLead模型中没有Code字段
 			Name:          lead.Name,
 			Company:       lead.Company,
 			ContactPerson: lead.ContactPerson,
@@ -401,6 +465,8 @@ func (s *crmService) GetLeadList(req map[string]interface{}) ([]schemas.LeadResp
 			Status:        lead.Status,
 			Score:         lead.Score,
 			Description:   lead.Description,
+			CreatedAt:     lead.CreatedAt.Format(time.RFC3339),
+			UpdatedAt:     lead.UpdatedAt.Format(time.RFC3339),
 		}
 	}
 
@@ -423,6 +489,7 @@ func (s *crmService) GetLeadDetail(id string) (*schemas.LeadResponse, error) {
 	// 将模型转换为响应格式
 	leadDetail := &schemas.LeadResponse{
 		ID:            lead.ID,
+		Code:          "", // 暂时设置为空字符串，因为CRMLead模型中没有Code字段
 		Name:          lead.Name,
 		Company:       lead.Company,
 		ContactPerson: lead.ContactPerson,
@@ -432,6 +499,8 @@ func (s *crmService) GetLeadDetail(id string) (*schemas.LeadResponse, error) {
 		Status:        lead.Status,
 		Score:         lead.Score,
 		Description:   lead.Description,
+		CreatedAt:     lead.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:     lead.UpdatedAt.Format(time.RFC3339),
 	}
 
 	return leadDetail, nil
@@ -470,6 +539,7 @@ func (s *crmService) CreateLead(req schemas.LeadCreateRequest) (*schemas.LeadRes
 	// 将模型转换为响应格式
 	leadResponse := &schemas.LeadResponse{
 		ID:            lead.ID,
+		Code:          req.Code,
 		Name:          lead.Name,
 		Company:       lead.Company,
 		ContactPerson: lead.ContactPerson,
@@ -479,6 +549,8 @@ func (s *crmService) CreateLead(req schemas.LeadCreateRequest) (*schemas.LeadRes
 		Status:        lead.Status,
 		Score:         lead.Score,
 		Description:   lead.Description,
+		CreatedAt:     lead.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:     lead.UpdatedAt.Format(time.RFC3339),
 	}
 
 	return leadResponse, nil
@@ -498,15 +570,33 @@ func (s *crmService) UpdateLead(id string, req schemas.LeadUpdateRequest) (*sche
 	}
 
 	// 更新字段
-	lead.Name = req.Name
-	lead.Company = req.Company
-	lead.ContactPerson = req.ContactPerson
-	lead.Phone = req.Phone
-	lead.Email = req.Email
-	lead.Source = req.Source
-	lead.Status = req.Status
-	lead.Score = req.Score
-	lead.Description = req.Description
+	if req.Name != "" {
+		lead.Name = req.Name
+	}
+	if req.Company != "" {
+		lead.Company = req.Company
+	}
+	if req.ContactPerson != "" {
+		lead.ContactPerson = req.ContactPerson
+	}
+	if req.Phone != "" {
+		lead.Phone = req.Phone
+	}
+	if req.Email != "" {
+		lead.Email = req.Email
+	}
+	if req.Source != "" {
+		lead.Source = req.Source
+	}
+	if req.Status != "" {
+		lead.Status = req.Status
+	}
+	if req.Score != 0 {
+		lead.Score = req.Score
+	}
+	if req.Description != "" {
+		lead.Description = req.Description
+	}
 	lead.UpdatedAt = time.Now()
 	lead.UpdatedBy = req.UpdatedBy
 
@@ -528,6 +618,8 @@ func (s *crmService) UpdateLead(id string, req schemas.LeadUpdateRequest) (*sche
 		Status:        lead.Status,
 		Score:         lead.Score,
 		Description:   lead.Description,
+		CreatedAt:     lead.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:     lead.UpdatedAt.Format(time.RFC3339),
 	}
 
 	return leadResponse, nil
@@ -629,7 +721,11 @@ func (s *crmService) GetOpportunityList(req map[string]interface{}) ([]schemas.O
 			Probability:     opportunity.Probability,
 			EstimatedAmount: opportunity.EstimatedAmount,
 			ActualAmount:    opportunity.ActualAmount,
-			CloseDate:       opportunity.CloseDate,
+			CloseDate:       opportunity.CloseDate.Format(time.RFC3339),
+			CreatedAt:       opportunity.CreatedAt.Format(time.RFC3339),
+			UpdatedAt:       opportunity.UpdatedAt.Format(time.RFC3339),
+			CreatedBy:       opportunity.CreatedBy,
+			UpdatedBy:       opportunity.UpdatedBy,
 		}
 	}
 
@@ -660,7 +756,11 @@ func (s *crmService) GetOpportunityDetail(id string) (*schemas.OpportunityRespon
 		Probability:     opportunity.Probability,
 		EstimatedAmount: opportunity.EstimatedAmount,
 		ActualAmount:    opportunity.ActualAmount,
-		CloseDate:       opportunity.CloseDate,
+		CloseDate:       opportunity.CloseDate.Format(time.RFC3339),
+		CreatedAt:       opportunity.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:       opportunity.UpdatedAt.Format(time.RFC3339),
+		CreatedBy:       opportunity.CreatedBy,
+		UpdatedBy:       opportunity.UpdatedBy,
 	}
 
 	return opportunityDetail, nil
@@ -672,6 +772,12 @@ func (s *crmService) CreateOpportunity(req schemas.OpportunityCreateRequest) (*s
 		return nil, errors.New("database connection is nil")
 	}
 
+	// 解析CloseDate字符串为time.Time类型
+	closeDate, err := time.Parse("2006-01-02", req.CloseDate)
+	if err != nil {
+		return nil, err
+	}
+
 	// 创建销售机会模型
 	opportunity := models.CRMOpportunity{
 		ID:              req.ID,
@@ -679,10 +785,10 @@ func (s *crmService) CreateOpportunity(req schemas.OpportunityCreateRequest) (*s
 		AccountID:       req.AccountID,
 		Name:            req.Name,
 		Description:     req.Description,
-		Stage:           "prospecting",
+		Stage:           req.Stage,
 		Probability:     req.Probability,
 		EstimatedAmount: req.EstimatedAmount,
-		CloseDate:       req.CloseDate,
+		CloseDate:       closeDate,
 		CreatedAt:       time.Now(),
 		UpdatedAt:       time.Now(),
 		CreatedBy:       req.CreatedBy,
@@ -706,7 +812,11 @@ func (s *crmService) CreateOpportunity(req schemas.OpportunityCreateRequest) (*s
 		Probability:     opportunity.Probability,
 		EstimatedAmount: opportunity.EstimatedAmount,
 		ActualAmount:    opportunity.ActualAmount,
-		CloseDate:       opportunity.CloseDate,
+		CloseDate:       opportunity.CloseDate.Format(time.RFC3339),
+		CreatedAt:       opportunity.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:       opportunity.UpdatedAt.Format(time.RFC3339),
+		CreatedBy:       opportunity.CreatedBy,
+		UpdatedBy:       opportunity.UpdatedBy,
 	}
 
 	return opportunityResponse, nil
@@ -726,13 +836,32 @@ func (s *crmService) UpdateOpportunity(id string, req schemas.OpportunityUpdateR
 	}
 
 	// 更新字段
-	opportunity.Name = req.Name
-	opportunity.Description = req.Description
-	opportunity.Stage = req.Stage
-	opportunity.Probability = req.Probability
-	opportunity.EstimatedAmount = req.EstimatedAmount
-	opportunity.ActualAmount = req.ActualAmount
-	opportunity.CloseDate = req.CloseDate
+	if req.AccountID != "" {
+		opportunity.AccountID = req.AccountID
+	}
+	if req.Name != "" {
+		opportunity.Name = req.Name
+	}
+	if req.Description != "" {
+		opportunity.Description = req.Description
+	}
+	if req.Stage != "" {
+		opportunity.Stage = req.Stage
+	}
+	if req.Probability != 0 {
+		opportunity.Probability = req.Probability
+	}
+	if req.EstimatedAmount != 0 {
+		opportunity.EstimatedAmount = req.EstimatedAmount
+	}
+	if req.CloseDate != "" {
+		// 解析CloseDate字符串为time.Time类型
+		closeDate, err := time.Parse("2006-01-02", req.CloseDate)
+		if err != nil {
+			return nil, err
+		}
+		opportunity.CloseDate = closeDate
+	}
 	opportunity.UpdatedAt = time.Now()
 	opportunity.UpdatedBy = req.UpdatedBy
 
@@ -753,7 +882,11 @@ func (s *crmService) UpdateOpportunity(id string, req schemas.OpportunityUpdateR
 		Probability:     opportunity.Probability,
 		EstimatedAmount: opportunity.EstimatedAmount,
 		ActualAmount:    opportunity.ActualAmount,
-		CloseDate:       opportunity.CloseDate,
+		CloseDate:       opportunity.CloseDate.Format(time.RFC3339),
+		CreatedAt:       opportunity.CreatedAt.Format(time.RFC3339),
+		UpdatedAt:       opportunity.UpdatedAt.Format(time.RFC3339),
+		CreatedBy:       opportunity.CreatedBy,
+		UpdatedBy:       opportunity.UpdatedBy,
 	}
 
 	return opportunityResponse, nil
@@ -865,6 +998,10 @@ func (s *crmService) GetCampaignList(req map[string]interface{}) ([]schemas.Camp
 			Budget:         campaign.Budget,
 			ActualCost:     campaign.ActualCost,
 			TargetAudience: campaign.TargetAudience,
+			CreatedBy:      campaign.CreatedBy,
+			CreatedAt:      campaign.CreatedAt,
+			UpdatedBy:      campaign.UpdatedBy,
+			UpdatedAt:      campaign.UpdatedAt,
 		}
 	}
 
@@ -897,6 +1034,10 @@ func (s *crmService) GetCampaignDetail(id string) (*schemas.CampaignResponse, er
 		Budget:         campaign.Budget,
 		ActualCost:     campaign.ActualCost,
 		TargetAudience: campaign.TargetAudience,
+		CreatedBy:      campaign.CreatedBy,
+		CreatedAt:      campaign.CreatedAt,
+		UpdatedBy:      campaign.UpdatedBy,
+		UpdatedAt:      campaign.UpdatedAt,
 	}
 
 	return campaignDetail, nil
@@ -946,6 +1087,10 @@ func (s *crmService) CreateCampaign(req schemas.CampaignCreateRequest) (*schemas
 		Budget:         campaign.Budget,
 		ActualCost:     campaign.ActualCost,
 		TargetAudience: campaign.TargetAudience,
+		CreatedBy:      campaign.CreatedBy,
+		CreatedAt:      campaign.CreatedAt,
+		UpdatedBy:      campaign.UpdatedBy,
+		UpdatedAt:      campaign.UpdatedAt,
 	}
 
 	return campaignResponse, nil
@@ -996,6 +1141,10 @@ func (s *crmService) UpdateCampaign(id string, req schemas.CampaignUpdateRequest
 		Budget:         campaign.Budget,
 		ActualCost:     campaign.ActualCost,
 		TargetAudience: campaign.TargetAudience,
+		CreatedBy:      campaign.CreatedBy,
+		CreatedAt:      campaign.CreatedAt,
+		UpdatedBy:      campaign.UpdatedBy,
+		UpdatedAt:      campaign.UpdatedAt,
 	}
 
 	return campaignResponse, nil
@@ -1164,6 +1313,10 @@ func (s *crmService) GetActivityDetail(id string) (*schemas.ActivityResponse, er
 		StartTime:   activity.StartTime,
 		EndTime:     activity.EndTime,
 		Outcome:     activity.Outcome,
+		CreatedBy:   activity.CreatedBy,
+		CreatedAt:   activity.CreatedAt,
+		UpdatedBy:   activity.UpdatedBy,
+		UpdatedAt:   activity.UpdatedAt,
 	}
 
 	return activityDetail, nil
@@ -1214,6 +1367,10 @@ func (s *crmService) CreateActivity(req schemas.ActivityCreateRequest) (*schemas
 		StartTime:   activity.StartTime,
 		EndTime:     activity.EndTime,
 		Outcome:     activity.Outcome,
+		CreatedBy:   activity.CreatedBy,
+		CreatedAt:   activity.CreatedAt,
+		UpdatedBy:   activity.UpdatedBy,
+		UpdatedAt:   activity.UpdatedAt,
 	}
 
 	return activityResponse, nil
@@ -1265,6 +1422,10 @@ func (s *crmService) UpdateActivity(id string, req schemas.ActivityUpdateRequest
 		StartTime:   activity.StartTime,
 		EndTime:     activity.EndTime,
 		Outcome:     activity.Outcome,
+		CreatedBy:   activity.CreatedBy,
+		CreatedAt:   activity.CreatedAt,
+		UpdatedBy:   activity.UpdatedBy,
+		UpdatedAt:   activity.UpdatedAt,
 	}
 
 	return activityResponse, nil
@@ -1404,6 +1565,10 @@ func (s *crmService) GetServiceRequestDetail(id string) (*schemas.ServiceRequest
 		ResponseTime:   caseItem.ResponseTime,
 		ResolutionTime: caseItem.ResolutionTime,
 		Satisfaction:   caseItem.Satisfaction,
+		CreatedBy:      caseItem.CreatedBy,
+		CreatedAt:      caseItem.CreatedAt,
+		UpdatedBy:      caseItem.UpdatedBy,
+		UpdatedAt:      caseItem.UpdatedAt,
 	}
 
 	return requestDetail, nil
@@ -1453,6 +1618,10 @@ func (s *crmService) CreateServiceRequest(req schemas.ServiceRequestCreateReques
 		ResponseTime:   caseItem.ResponseTime,
 		ResolutionTime: caseItem.ResolutionTime,
 		Satisfaction:   caseItem.Satisfaction,
+		CreatedBy:      caseItem.CreatedBy,
+		CreatedAt:      caseItem.CreatedAt,
+		UpdatedBy:      caseItem.UpdatedBy,
+		UpdatedAt:      caseItem.UpdatedAt,
 	}
 
 	return requestResponse, nil
@@ -1502,6 +1671,10 @@ func (s *crmService) UpdateServiceRequest(id string, req schemas.ServiceRequestU
 		ResponseTime:   caseItem.ResponseTime,
 		ResolutionTime: caseItem.ResolutionTime,
 		Satisfaction:   caseItem.Satisfaction,
+		CreatedBy:      caseItem.CreatedBy,
+		CreatedAt:      caseItem.CreatedAt,
+		UpdatedBy:      caseItem.UpdatedBy,
+		UpdatedAt:      caseItem.UpdatedAt,
 	}
 
 	return requestResponse, nil
@@ -1636,6 +1809,10 @@ func (s *crmService) GetServiceTicketList(req map[string]interface{}) ([]schemas
 			ResponseTime:   caseItem.ResponseTime,
 			ResolutionTime: caseItem.ResolutionTime,
 			Satisfaction:   caseItem.Satisfaction,
+			CreatedBy:      caseItem.CreatedBy,
+			CreatedAt:      caseItem.CreatedAt,
+			UpdatedBy:      caseItem.UpdatedBy,
+			UpdatedAt:      caseItem.UpdatedAt,
 		}
 	}
 
@@ -1670,6 +1847,10 @@ func (s *crmService) GetServiceTicketDetail(id string) (*schemas.ServiceTicketRe
 		ResponseTime:   caseItem.ResponseTime,
 		ResolutionTime: caseItem.ResolutionTime,
 		Satisfaction:   caseItem.Satisfaction,
+		CreatedBy:      caseItem.CreatedBy,
+		CreatedAt:      caseItem.CreatedAt,
+		UpdatedBy:      caseItem.UpdatedBy,
+		UpdatedAt:      caseItem.UpdatedAt,
 	}
 
 	return ticketDetail, nil
@@ -1719,6 +1900,10 @@ func (s *crmService) CreateServiceTicket(req schemas.ServiceTicketCreateRequest)
 		ResponseTime:   caseItem.ResponseTime,
 		ResolutionTime: caseItem.ResolutionTime,
 		Satisfaction:   caseItem.Satisfaction,
+		CreatedBy:      caseItem.CreatedBy,
+		CreatedAt:      caseItem.CreatedAt,
+		UpdatedBy:      caseItem.UpdatedBy,
+		UpdatedAt:      caseItem.UpdatedAt,
 	}
 
 	return ticketResponse, nil
@@ -1768,6 +1953,10 @@ func (s *crmService) UpdateServiceTicket(id string, req schemas.ServiceTicketUpd
 		ResponseTime:   caseItem.ResponseTime,
 		ResolutionTime: caseItem.ResolutionTime,
 		Satisfaction:   caseItem.Satisfaction,
+		CreatedBy:      caseItem.CreatedBy,
+		CreatedAt:      caseItem.CreatedAt,
+		UpdatedBy:      caseItem.UpdatedBy,
+		UpdatedAt:      caseItem.UpdatedAt,
 	}
 
 	return ticketResponse, nil
@@ -1891,7 +2080,7 @@ func (s *crmService) GetSalesPipelineReport(req schemas.SalesPipelineReportReque
 	report := &schemas.SalesPipelineReportResponse{
 		TotalOpportunities: len(opportunities),
 		TotalValue:         0,
-		Stages:             make([]schemas.PipelineStage, 0),
+		Stages:             make([]schemas.SalesPipelineStage, 0),
 	}
 
 	// 计算总价值和按阶段分组
@@ -1908,10 +2097,17 @@ func (s *crmService) GetSalesPipelineReport(req schemas.SalesPipelineReportReque
 			stageValue += opportunity.EstimatedAmount
 		}
 
-		report.Stages = append(report.Stages, schemas.PipelineStage{
-			Stage: stage,
-			Count: len(stageOpportunities),
-			Value: stageValue,
+		// 计算百分比
+		percentage := 0.0
+		if report.TotalValue > 0 {
+			percentage = (stageValue / report.TotalValue) * 100
+		}
+
+		report.Stages = append(report.Stages, schemas.SalesPipelineStage{
+			Stage:      stage,
+			Count:      len(stageOpportunities),
+			Value:      stageValue,
+			Percentage: percentage,
 		})
 	}
 

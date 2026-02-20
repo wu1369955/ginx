@@ -56,7 +56,7 @@ type PurchaseService interface {
 	UpdatePurchaseInvoice(id string, req map[string]interface{}) (map[string]interface{}, error)
 	DeletePurchaseInvoice(id string) error
 	VerifyPurchaseInvoice(id string) error
-	PayPurchaseInvoice(id string, req map[string]interface{}) error
+	PayPurchaseInvoice(id string) error
 
 	// 采购退货管理
 	GetPurchaseReturnList(req map[string]interface{}) ([]map[string]interface{}, error)
@@ -1164,7 +1164,7 @@ func (s *purchaseService) VerifyPurchaseInvoice(id string) error {
 	return nil
 }
 
-func (s *purchaseService) PayPurchaseInvoice(id string, req map[string]interface{}) error {
+func (s *purchaseService) PayPurchaseInvoice(id string) error {
 	// 检查数据库连接
 	if s.db == nil {
 		return errors.New("database connection is nil")
