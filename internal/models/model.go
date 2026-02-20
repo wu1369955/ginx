@@ -62,6 +62,12 @@ var AllModels = []interface{}{
 
 	// 财务模型
 	&FinanceAccount{},
+
+	// 生产模型
+	&ProductionOrder{},
+	&ProductionTicket{},
+	&Routing{},
+	&WorkCenter{},
 }
 
 // AutoMigrate 自动迁移所有模型

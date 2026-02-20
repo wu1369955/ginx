@@ -30,10 +30,27 @@ func NewProductionHandler(productionService services.ProductionService) *Product
 // @Router /api/production/orders [get]
 func (h *ProductionHandler) GetProductionOrderList(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	// 从查询参数中获取过滤条件
+	if status := c.Query("status"); status != "" {
+		req["status"] = status
+	}
+	if priority := c.Query("priority"); priority != "" {
+		req["priority"] = priority
+	}
+	orders, err := h.productionService.GetProductionOrderList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    orders,
 	})
 }
 
@@ -48,10 +65,20 @@ func (h *ProductionHandler) GetProductionOrderList(c *gin.Context) {
 // @Router /api/production/orders/{id} [get]
 func (h *ProductionHandler) GetProductionOrderDetail(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	order, err := h.productionService.GetProductionOrderDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    order,
 	})
 }
 
@@ -66,10 +93,28 @@ func (h *ProductionHandler) GetProductionOrderDetail(c *gin.Context) {
 // @Router /api/production/orders [post]
 func (h *ProductionHandler) CreateProductionOrder(c *gin.Context) {
 	// 实现逻辑
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	order, err := h.productionService.CreateProductionOrder(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    order,
 	})
 }
 
@@ -85,10 +130,29 @@ func (h *ProductionHandler) CreateProductionOrder(c *gin.Context) {
 // @Router /api/production/orders/{id} [put]
 func (h *ProductionHandler) UpdateProductionOrder(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	order, err := h.productionService.UpdateProductionOrder(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    order,
 	})
 }
 
@@ -103,6 +167,16 @@ func (h *ProductionHandler) UpdateProductionOrder(c *gin.Context) {
 // @Router /api/production/orders/{id} [delete]
 func (h *ProductionHandler) DeleteProductionOrder(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.productionService.DeleteProductionOrder(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -121,6 +195,16 @@ func (h *ProductionHandler) DeleteProductionOrder(c *gin.Context) {
 // @Router /api/production/orders/{id}/submit [post]
 func (h *ProductionHandler) SubmitProductionOrder(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.productionService.SubmitProductionOrder(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -139,6 +223,16 @@ func (h *ProductionHandler) SubmitProductionOrder(c *gin.Context) {
 // @Router /api/production/orders/{id}/approve [post]
 func (h *ProductionHandler) ApproveProductionOrder(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.productionService.ApproveProductionOrder(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -157,6 +251,16 @@ func (h *ProductionHandler) ApproveProductionOrder(c *gin.Context) {
 // @Router /api/production/orders/{id}/release [post]
 func (h *ProductionHandler) ReleaseProductionOrder(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.productionService.StartProductionOrder(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -175,6 +279,16 @@ func (h *ProductionHandler) ReleaseProductionOrder(c *gin.Context) {
 // @Router /api/production/orders/{id}/close [post]
 func (h *ProductionHandler) CloseProductionOrder(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.productionService.CompleteProductionOrder(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -193,10 +307,24 @@ func (h *ProductionHandler) CloseProductionOrder(c *gin.Context) {
 // @Router /api/production/workorders [get]
 func (h *ProductionHandler) GetWorkOrderList(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	// 从查询参数中获取过滤条件
+	if status := c.Query("status"); status != "" {
+		req["status"] = status
+	}
+	workOrders, err := h.productionService.GetProductionTicketList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    workOrders,
 	})
 }
 
@@ -211,10 +339,20 @@ func (h *ProductionHandler) GetWorkOrderList(c *gin.Context) {
 // @Router /api/production/workorders/{id} [get]
 func (h *ProductionHandler) GetWorkOrderDetail(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	workOrder, err := h.productionService.GetProductionTicketDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    workOrder,
 	})
 }
 
@@ -229,10 +367,28 @@ func (h *ProductionHandler) GetWorkOrderDetail(c *gin.Context) {
 // @Router /api/production/workorders [post]
 func (h *ProductionHandler) CreateWorkOrder(c *gin.Context) {
 	// 实现逻辑
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	workOrder, err := h.productionService.CreateProductionTicket(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    workOrder,
 	})
 }
 
@@ -248,10 +404,29 @@ func (h *ProductionHandler) CreateWorkOrder(c *gin.Context) {
 // @Router /api/production/workorders/{id} [put]
 func (h *ProductionHandler) UpdateWorkOrder(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	workOrder, err := h.productionService.UpdateProductionTicket(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    workOrder,
 	})
 }
 
@@ -266,6 +441,16 @@ func (h *ProductionHandler) UpdateWorkOrder(c *gin.Context) {
 // @Router /api/production/workorders/{id} [delete]
 func (h *ProductionHandler) DeleteWorkOrder(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.productionService.DeleteProductionTicket(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -284,6 +469,16 @@ func (h *ProductionHandler) DeleteWorkOrder(c *gin.Context) {
 // @Router /api/production/workorders/{id}/start [post]
 func (h *ProductionHandler) StartWorkOrder(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.productionService.StartProductionTicket(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -302,6 +497,16 @@ func (h *ProductionHandler) StartWorkOrder(c *gin.Context) {
 // @Router /api/production/workorders/{id}/complete [post]
 func (h *ProductionHandler) CompleteWorkOrder(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.productionService.CompleteProductionTicket(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -320,10 +525,20 @@ func (h *ProductionHandler) CompleteWorkOrder(c *gin.Context) {
 // @Router /api/production/routings [get]
 func (h *ProductionHandler) GetRoutingList(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	routings, err := h.productionService.GetRoutingList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    routings,
 	})
 }
 
@@ -338,10 +553,20 @@ func (h *ProductionHandler) GetRoutingList(c *gin.Context) {
 // @Router /api/production/routings/{id} [get]
 func (h *ProductionHandler) GetRoutingDetail(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	routing, err := h.productionService.GetRoutingDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    routing,
 	})
 }
 
@@ -356,10 +581,28 @@ func (h *ProductionHandler) GetRoutingDetail(c *gin.Context) {
 // @Router /api/production/routings [post]
 func (h *ProductionHandler) CreateRouting(c *gin.Context) {
 	// 实现逻辑
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	routing, err := h.productionService.CreateRouting(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    routing,
 	})
 }
 
@@ -375,10 +618,29 @@ func (h *ProductionHandler) CreateRouting(c *gin.Context) {
 // @Router /api/production/routings/{id} [put]
 func (h *ProductionHandler) UpdateRouting(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	routing, err := h.productionService.UpdateRouting(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    routing,
 	})
 }
 
@@ -393,6 +655,16 @@ func (h *ProductionHandler) UpdateRouting(c *gin.Context) {
 // @Router /api/production/routings/{id} [delete]
 func (h *ProductionHandler) DeleteRouting(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.productionService.DeleteRouting(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -411,10 +683,20 @@ func (h *ProductionHandler) DeleteRouting(c *gin.Context) {
 // @Router /api/production/workcenters [get]
 func (h *ProductionHandler) GetWorkCenterList(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	workCenters, err := h.productionService.GetWorkCenterList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    workCenters,
 	})
 }
 
@@ -429,10 +711,20 @@ func (h *ProductionHandler) GetWorkCenterList(c *gin.Context) {
 // @Router /api/production/workcenters/{id} [get]
 func (h *ProductionHandler) GetWorkCenterDetail(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	workCenter, err := h.productionService.GetWorkCenterDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    workCenter,
 	})
 }
 
@@ -447,10 +739,28 @@ func (h *ProductionHandler) GetWorkCenterDetail(c *gin.Context) {
 // @Router /api/production/workcenters [post]
 func (h *ProductionHandler) CreateWorkCenter(c *gin.Context) {
 	// 实现逻辑
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	workCenter, err := h.productionService.CreateWorkCenter(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    workCenter,
 	})
 }
 
@@ -466,10 +776,29 @@ func (h *ProductionHandler) CreateWorkCenter(c *gin.Context) {
 // @Router /api/production/workcenters/{id} [put]
 func (h *ProductionHandler) UpdateWorkCenter(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	workCenter, err := h.productionService.UpdateWorkCenter(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    workCenter,
 	})
 }
 
@@ -484,6 +813,16 @@ func (h *ProductionHandler) UpdateWorkCenter(c *gin.Context) {
 // @Router /api/production/workcenters/{id} [delete]
 func (h *ProductionHandler) DeleteWorkCenter(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.productionService.DeleteWorkCenter(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -502,10 +841,20 @@ func (h *ProductionHandler) DeleteWorkCenter(c *gin.Context) {
 // @Router /api/production/mrp [get]
 func (h *ProductionHandler) GetMRPList(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	mrpResults, err := h.productionService.GetMRPResults(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    mrpResults,
 	})
 }
 
@@ -519,10 +868,20 @@ func (h *ProductionHandler) GetMRPList(c *gin.Context) {
 // @Router /api/production/mrp/run [post]
 func (h *ProductionHandler) RunMRP(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	mrpResult, err := h.productionService.RunMRP(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    mrpResult,
 	})
 }
 
@@ -537,10 +896,21 @@ func (h *ProductionHandler) RunMRP(c *gin.Context) {
 // @Router /api/production/mrp/{id} [get]
 func (h *ProductionHandler) GetMRPDetail(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	req["id"] = c.Param("id")
+	mrpSuggestions, err := h.productionService.GetMRPSuggestions(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    mrpSuggestions,
 	})
 }
 
@@ -555,10 +925,20 @@ func (h *ProductionHandler) GetMRPDetail(c *gin.Context) {
 // @Router /api/production/reports/orders [get]
 func (h *ProductionHandler) GetProductionOrderReport(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	report, err := h.productionService.GetProductionPlanReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -572,10 +952,20 @@ func (h *ProductionHandler) GetProductionOrderReport(c *gin.Context) {
 // @Router /api/production/reports/workorders [get]
 func (h *ProductionHandler) GetWorkOrderReport(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	report, err := h.productionService.GetProductionExecutionReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -589,10 +979,20 @@ func (h *ProductionHandler) GetWorkOrderReport(c *gin.Context) {
 // @Router /api/production/reports/workcenter-load [get]
 func (h *ProductionHandler) GetWorkCenterLoadReport(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	report, err := h.productionService.GetWorkCenterLoadReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -606,10 +1006,20 @@ func (h *ProductionHandler) GetWorkCenterLoadReport(c *gin.Context) {
 // @Router /api/production/reports/cost [get]
 func (h *ProductionHandler) GetProductionCostReport(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	report, err := h.productionService.GetProductionCostReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -623,9 +1033,19 @@ func (h *ProductionHandler) GetProductionCostReport(c *gin.Context) {
 // @Router /api/production/reports/export [get]
 func (h *ProductionHandler) ExportProductionReport(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	reportData, err := h.productionService.ExportProductionReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    string(reportData),
 	})
 }

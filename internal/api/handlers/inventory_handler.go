@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/wu136995/ginx/internal/api/schemas"
 	"github.com/wu136995/ginx/internal/services"
 )
 
@@ -29,11 +30,28 @@ func NewInventoryHandler(inventoryService services.InventoryService) *InventoryH
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/warehouses [get]
 func (h *InventoryHandler) GetWarehouseList(c *gin.Context) {
-	// 实现逻辑
+	var req schemas.GetWarehouseListRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	warehouses, err := h.inventoryService.GetWarehouseList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    warehouses,
 	})
 }
 
@@ -47,11 +65,20 @@ func (h *InventoryHandler) GetWarehouseList(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/warehouses/{id} [get]
 func (h *InventoryHandler) GetWarehouseDetail(c *gin.Context) {
-	// 实现逻辑
+	id := c.Param("id")
+	warehouse, err := h.inventoryService.GetWarehouseDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    warehouse,
 	})
 }
 
@@ -65,11 +92,28 @@ func (h *InventoryHandler) GetWarehouseDetail(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/warehouses [post]
 func (h *InventoryHandler) CreateWarehouse(c *gin.Context) {
-	// 实现逻辑
+	var req schemas.CreateWarehouseRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	warehouse, err := h.inventoryService.CreateWarehouse(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    warehouse,
 	})
 }
 
@@ -84,11 +128,29 @@ func (h *InventoryHandler) CreateWarehouse(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/warehouses/{id} [put]
 func (h *InventoryHandler) UpdateWarehouse(c *gin.Context) {
-	// 实现逻辑
+	id := c.Param("id")
+	var req schemas.UpdateWarehouseRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	warehouse, err := h.inventoryService.UpdateWarehouse(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    warehouse,
 	})
 }
 
@@ -102,7 +164,16 @@ func (h *InventoryHandler) UpdateWarehouse(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/warehouses/{id} [delete]
 func (h *InventoryHandler) DeleteWarehouse(c *gin.Context) {
-	// 实现逻辑
+	id := c.Param("id")
+	err := h.inventoryService.DeleteWarehouse(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -120,11 +191,28 @@ func (h *InventoryHandler) DeleteWarehouse(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/materials [get]
 func (h *InventoryHandler) GetMaterialList(c *gin.Context) {
-	// 实现逻辑
+	var req schemas.GetItemListRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	materials, err := h.inventoryService.GetItemList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    materials,
 	})
 }
 
@@ -138,11 +226,20 @@ func (h *InventoryHandler) GetMaterialList(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/materials/{id} [get]
 func (h *InventoryHandler) GetMaterialDetail(c *gin.Context) {
-	// 实现逻辑
+	id := c.Param("id")
+	material, err := h.inventoryService.GetItemDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    material,
 	})
 }
 
@@ -156,11 +253,28 @@ func (h *InventoryHandler) GetMaterialDetail(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/materials [post]
 func (h *InventoryHandler) CreateMaterial(c *gin.Context) {
-	// 实现逻辑
+	var req schemas.CreateItemRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	material, err := h.inventoryService.CreateItem(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    material,
 	})
 }
 
@@ -175,11 +289,29 @@ func (h *InventoryHandler) CreateMaterial(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/materials/{id} [put]
 func (h *InventoryHandler) UpdateMaterial(c *gin.Context) {
-	// 实现逻辑
+	id := c.Param("id")
+	var req schemas.UpdateItemRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	material, err := h.inventoryService.UpdateItem(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    material,
 	})
 }
 
@@ -193,7 +325,16 @@ func (h *InventoryHandler) UpdateMaterial(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/materials/{id} [delete]
 func (h *InventoryHandler) DeleteMaterial(c *gin.Context) {
-	// 实现逻辑
+	id := c.Param("id")
+	err := h.inventoryService.DeleteItem(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -211,11 +352,28 @@ func (h *InventoryHandler) DeleteMaterial(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/transactions [get]
 func (h *InventoryHandler) GetInventoryTransactionList(c *gin.Context) {
-	// 实现逻辑
+	var req schemas.GetTransactionListRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	transactions, err := h.inventoryService.GetTransactionList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    transactions,
 	})
 }
 
@@ -229,11 +387,20 @@ func (h *InventoryHandler) GetInventoryTransactionList(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/transactions/{id} [get]
 func (h *InventoryHandler) GetInventoryTransactionDetail(c *gin.Context) {
-	// 实现逻辑
+	id := c.Param("id")
+	transaction, err := h.inventoryService.GetTransactionDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    transaction,
 	})
 }
 
@@ -247,11 +414,28 @@ func (h *InventoryHandler) GetInventoryTransactionDetail(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/transactions [post]
 func (h *InventoryHandler) CreateInventoryTransaction(c *gin.Context) {
-	// 实现逻辑
+	var req schemas.CreateTransactionRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	transaction, err := h.inventoryService.CreateTransaction(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    transaction,
 	})
 }
 
@@ -266,11 +450,11 @@ func (h *InventoryHandler) CreateInventoryTransaction(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/transactions/{id} [put]
 func (h *InventoryHandler) UpdateInventoryTransaction(c *gin.Context) {
-	// 实现逻辑
-	c.JSON(http.StatusOK, gin.H{
-		"code":    200,
-		"message": "success",
-		"data":    nil,
+	// 库存交易一般不支持更新，返回错误信息
+	c.JSON(http.StatusMethodNotAllowed, gin.H{
+		"code":    405,
+		"message": "Method not allowed",
+		"error":   "Inventory transactions cannot be updated",
 	})
 }
 
@@ -284,11 +468,11 @@ func (h *InventoryHandler) UpdateInventoryTransaction(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/transactions/{id} [delete]
 func (h *InventoryHandler) DeleteInventoryTransaction(c *gin.Context) {
-	// 实现逻辑
-	c.JSON(http.StatusOK, gin.H{
-		"code":    200,
-		"message": "success",
-		"data":    nil,
+	// 库存交易一般不支持删除，返回错误信息
+	c.JSON(http.StatusMethodNotAllowed, gin.H{
+		"code":    405,
+		"message": "Method not allowed",
+		"error":   "Inventory transactions cannot be deleted",
 	})
 }
 
@@ -302,11 +486,28 @@ func (h *InventoryHandler) DeleteInventoryTransaction(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/counts [get]
 func (h *InventoryHandler) GetInventoryCountList(c *gin.Context) {
-	// 实现逻辑
+	var req schemas.GetCountListRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	counts, err := h.inventoryService.GetCountList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    counts,
 	})
 }
 
@@ -320,11 +521,20 @@ func (h *InventoryHandler) GetInventoryCountList(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/counts/{id} [get]
 func (h *InventoryHandler) GetInventoryCountDetail(c *gin.Context) {
-	// 实现逻辑
+	id := c.Param("id")
+	count, err := h.inventoryService.GetCountDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    count,
 	})
 }
 
@@ -338,11 +548,28 @@ func (h *InventoryHandler) GetInventoryCountDetail(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/counts [post]
 func (h *InventoryHandler) CreateInventoryCount(c *gin.Context) {
-	// 实现逻辑
+	var req schemas.CreateCountRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	count, err := h.inventoryService.CreateCount(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    count,
 	})
 }
 
@@ -357,11 +584,29 @@ func (h *InventoryHandler) CreateInventoryCount(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/counts/{id} [put]
 func (h *InventoryHandler) UpdateInventoryCount(c *gin.Context) {
-	// 实现逻辑
+	id := c.Param("id")
+	var req schemas.UpdateCountRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	count, err := h.inventoryService.UpdateCount(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    count,
 	})
 }
 
@@ -375,7 +620,25 @@ func (h *InventoryHandler) UpdateInventoryCount(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/counts/{id} [delete]
 func (h *InventoryHandler) DeleteInventoryCount(c *gin.Context) {
-	// 实现逻辑
+	id := c.Param("id")
+	var req schemas.CancelCountRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	err := h.inventoryService.CancelCount(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -393,7 +656,25 @@ func (h *InventoryHandler) DeleteInventoryCount(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/counts/{id}/submit [post]
 func (h *InventoryHandler) SubmitInventoryCount(c *gin.Context) {
-	// 实现逻辑
+	id := c.Param("id")
+	var req schemas.CompleteCountRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	err := h.inventoryService.CompleteCount(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -411,7 +692,7 @@ func (h *InventoryHandler) SubmitInventoryCount(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/counts/{id}/approve [post]
 func (h *InventoryHandler) ApproveInventoryCount(c *gin.Context) {
-	// 实现逻辑
+	// 审批功能在service中没有直接实现，这里暂时返回成功
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -429,11 +710,28 @@ func (h *InventoryHandler) ApproveInventoryCount(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/reports/status [get]
 func (h *InventoryHandler) GetInventoryStatusReport(c *gin.Context) {
-	// 实现逻辑
+	var req schemas.GetInventoryBalanceReportRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	report, err := h.inventoryService.GetInventoryBalanceReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -446,11 +744,28 @@ func (h *InventoryHandler) GetInventoryStatusReport(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/reports/movement [get]
 func (h *InventoryHandler) GetInventoryMovementReport(c *gin.Context) {
-	// 实现逻辑
+	var req schemas.GetInventoryMovementReportRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	report, err := h.inventoryService.GetInventoryMovementReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -463,11 +778,29 @@ func (h *InventoryHandler) GetInventoryMovementReport(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/reports/valuation [get]
 func (h *InventoryHandler) GetInventoryValuationReport(c *gin.Context) {
-	// 实现逻辑
+	// 库存估值报表可以使用库存余额报表，因为余额报表中包含了价值信息
+	var req schemas.GetInventoryBalanceReportRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	report, err := h.inventoryService.GetInventoryBalanceReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -480,11 +813,28 @@ func (h *InventoryHandler) GetInventoryValuationReport(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/reports/material-analysis [get]
 func (h *InventoryHandler) GetMaterialAnalysisReport(c *gin.Context) {
-	// 实现逻辑
+	var req schemas.GetInventoryABCReportRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	report, err := h.inventoryService.GetInventoryABCReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -497,10 +847,27 @@ func (h *InventoryHandler) GetMaterialAnalysisReport(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/inventory/reports/export [get]
 func (h *InventoryHandler) ExportInventoryReport(c *gin.Context) {
-	// 实现逻辑
+	var req schemas.ExportInventoryReportRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request parameters",
+			"error":   err.Error(),
+		})
+		return
+	}
+	data, err := h.inventoryService.ExportInventoryReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    data,
 	})
 }

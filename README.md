@@ -30,12 +30,16 @@
 - ✅ 配置管理（Viper）
 - ✅ Docker 容器化
 - ✅ 完整的项目结构
+- ✅ Swagger API 文档
+- ✅ 分模块启动功能
+- ✅ 冷热分离存储
+- ✅ 数据迁移服务
 
 ## 项目结构
 
 ```
-├── bin/              # 构建产物
-├── build/            # 构建脚本
+├── cmd/              # 命令行工具
+├── cold_data/        # 冷存储数据
 ├── configs/          # 配置文件
 │   └── config.yaml   # 主配置文件
 ├── doc/              # 项目文档
@@ -45,22 +49,35 @@
 │   └── 后端实现文档清单.md   # 后端实现文档清单
 ├── internal/         # 内部包
 │   ├── api/          # API 相关代码
+│   │   ├── handlers/     # 请求处理器
 │   │   ├── middlewares/  # 中间件
-│   │   └── routes/       # 路由
+│   │   ├── routes/       # 路由
+│   │   └── schemas/      # 数据结构定义
 │   ├── config/       # 配置管理
+│   ├── data/         # 数据访问层
+│   │   ├── migration/    # 数据迁移
+│   │   └── storage/      # 存储实现
 │   ├── database/     # 数据库连接
 │   ├── errors/       # 错误处理
 │   ├── models/       # 数据模型
+│   ├── services/     # 业务逻辑层
 │   └── utils/        # 工具函数
+├── pkg/              # 公共包
+├── scripts/          # 脚本文件
 ├── sql/              # SQL 文件
 │   └── erp_database.sql # ERP系统数据库建表语句
+├── tests/            # 测试文件
+├── wire/             # Wire 依赖注入配置
 ├── .gitignore        # Git 忽略文件
 ├── docker-compose.yml # Docker Compose 配置
 ├── Dockerfile        # Docker 构建文件
 ├── go.mod            # Go 模块文件
 ├── go.sum            # Go 依赖校验文件
 ├── main.go           # 主入口文件
-└── README.md         # 项目文档
+├── Makefile          # 构建脚本
+├── README.md         # 项目文档
+├── wire.go           # Wire 依赖注入定义
+└── wire_gen.go       # Wire 生成的代码
 ```
 
 ## 快速开始
@@ -159,6 +176,7 @@ go run main.go -module crm       # CRM模块
 
 - 基础地址：`http://localhost:8080`
 - 健康检查：`http://localhost:8080/health`
+- Swagger API 文档：`http://localhost:8080/swagger/index.html`（需要取消注释 main.go 中的 Swagger 路由配置）
 
 ## 开发指南
 

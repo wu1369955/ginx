@@ -30,10 +30,27 @@ func NewSalesHandler(salesService services.SalesService) *SalesHandler {
 // @Router /api/sales/customers [get]
 func (h *SalesHandler) GetSalesCustomerList(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	// 从查询参数中获取过滤条件
+	if name := c.Query("name"); name != "" {
+		req["name"] = name
+	}
+	if status := c.Query("status"); status != "" {
+		req["status"] = status
+	}
+	customers, err := h.salesService.GetCustomerList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    customers,
 	})
 }
 
@@ -48,10 +65,20 @@ func (h *SalesHandler) GetSalesCustomerList(c *gin.Context) {
 // @Router /api/sales/customers/{id} [get]
 func (h *SalesHandler) GetSalesCustomerDetail(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	customer, err := h.salesService.GetCustomerDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    customer,
 	})
 }
 
@@ -66,10 +93,28 @@ func (h *SalesHandler) GetSalesCustomerDetail(c *gin.Context) {
 // @Router /api/sales/customers [post]
 func (h *SalesHandler) CreateSalesCustomer(c *gin.Context) {
 	// 实现逻辑
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	customer, err := h.salesService.CreateCustomer(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    customer,
 	})
 }
 
@@ -85,10 +130,29 @@ func (h *SalesHandler) CreateSalesCustomer(c *gin.Context) {
 // @Router /api/sales/customers/{id} [put]
 func (h *SalesHandler) UpdateSalesCustomer(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	customer, err := h.salesService.UpdateCustomer(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    customer,
 	})
 }
 
@@ -103,6 +167,16 @@ func (h *SalesHandler) UpdateSalesCustomer(c *gin.Context) {
 // @Router /api/sales/customers/{id} [delete]
 func (h *SalesHandler) DeleteSalesCustomer(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.salesService.DeleteCustomer(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -121,10 +195,20 @@ func (h *SalesHandler) DeleteSalesCustomer(c *gin.Context) {
 // @Router /api/sales/customers/{id}/credit-evaluate [post]
 func (h *SalesHandler) CustomerCreditEvaluate(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	result, err := h.salesService.CustomerCreditEvaluate(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    result,
 	})
 }
 
@@ -139,10 +223,27 @@ func (h *SalesHandler) CustomerCreditEvaluate(c *gin.Context) {
 // @Router /api/sales/quotations [get]
 func (h *SalesHandler) GetQuotationList(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	// 从查询参数中获取过滤条件
+	if customerName := c.Query("customer_name"); customerName != "" {
+		req["customer_name"] = customerName
+	}
+	if status := c.Query("status"); status != "" {
+		req["status"] = status
+	}
+	quotations, err := h.salesService.GetQuotationList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    quotations,
 	})
 }
 
@@ -157,10 +258,20 @@ func (h *SalesHandler) GetQuotationList(c *gin.Context) {
 // @Router /api/sales/quotations/{id} [get]
 func (h *SalesHandler) GetQuotationDetail(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	quotation, err := h.salesService.GetQuotationDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    quotation,
 	})
 }
 
@@ -175,10 +286,28 @@ func (h *SalesHandler) GetQuotationDetail(c *gin.Context) {
 // @Router /api/sales/quotations [post]
 func (h *SalesHandler) CreateQuotation(c *gin.Context) {
 	// 实现逻辑
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	quotation, err := h.salesService.CreateQuotation(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    quotation,
 	})
 }
 
@@ -194,10 +323,29 @@ func (h *SalesHandler) CreateQuotation(c *gin.Context) {
 // @Router /api/sales/quotations/{id} [put]
 func (h *SalesHandler) UpdateQuotation(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	quotation, err := h.salesService.UpdateQuotation(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    quotation,
 	})
 }
 
@@ -212,6 +360,16 @@ func (h *SalesHandler) UpdateQuotation(c *gin.Context) {
 // @Router /api/sales/quotations/{id} [delete]
 func (h *SalesHandler) DeleteQuotation(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.salesService.DeleteQuotation(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -230,6 +388,16 @@ func (h *SalesHandler) DeleteQuotation(c *gin.Context) {
 // @Router /api/sales/quotations/{id}/approve [post]
 func (h *SalesHandler) ApproveQuotation(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.salesService.ApproveQuotation(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -248,10 +416,20 @@ func (h *SalesHandler) ApproveQuotation(c *gin.Context) {
 // @Router /api/sales/quotations/{id}/generate-order [post]
 func (h *SalesHandler) GenerateOrderFromQuotation(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	order, err := h.salesService.GenerateOrderFromQuotation(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    order,
 	})
 }
 
@@ -266,10 +444,27 @@ func (h *SalesHandler) GenerateOrderFromQuotation(c *gin.Context) {
 // @Router /api/sales/orders [get]
 func (h *SalesHandler) GetOrderList(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	// 从查询参数中获取过滤条件
+	if customerName := c.Query("customer_name"); customerName != "" {
+		req["customer_name"] = customerName
+	}
+	if status := c.Query("status"); status != "" {
+		req["status"] = status
+	}
+	orders, err := h.salesService.GetOrderList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    orders,
 	})
 }
 
@@ -284,10 +479,20 @@ func (h *SalesHandler) GetOrderList(c *gin.Context) {
 // @Router /api/sales/orders/{id} [get]
 func (h *SalesHandler) GetOrderDetail(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	order, err := h.salesService.GetOrderDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    order,
 	})
 }
 
@@ -302,10 +507,28 @@ func (h *SalesHandler) GetOrderDetail(c *gin.Context) {
 // @Router /api/sales/orders [post]
 func (h *SalesHandler) CreateOrder(c *gin.Context) {
 	// 实现逻辑
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	order, err := h.salesService.CreateOrder(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    order,
 	})
 }
 
@@ -321,10 +544,29 @@ func (h *SalesHandler) CreateOrder(c *gin.Context) {
 // @Router /api/sales/orders/{id} [put]
 func (h *SalesHandler) UpdateOrder(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	order, err := h.salesService.UpdateOrder(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    order,
 	})
 }
 
@@ -339,6 +581,16 @@ func (h *SalesHandler) UpdateOrder(c *gin.Context) {
 // @Router /api/sales/orders/{id} [delete]
 func (h *SalesHandler) DeleteOrder(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.salesService.DeleteOrder(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -357,6 +609,16 @@ func (h *SalesHandler) DeleteOrder(c *gin.Context) {
 // @Router /api/sales/orders/{id}/approve [post]
 func (h *SalesHandler) ApproveOrder(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.salesService.ApproveOrder(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -375,6 +637,16 @@ func (h *SalesHandler) ApproveOrder(c *gin.Context) {
 // @Router /api/sales/orders/{id}/cancel [post]
 func (h *SalesHandler) CancelOrder(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.salesService.CancelOrder(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -393,10 +665,20 @@ func (h *SalesHandler) CancelOrder(c *gin.Context) {
 // @Router /api/sales/orders/{id}/generate-delivery [post]
 func (h *SalesHandler) GenerateDeliveryFromOrder(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	delivery, err := h.salesService.GenerateDeliveryFromOrder(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    delivery,
 	})
 }
 
@@ -411,10 +693,27 @@ func (h *SalesHandler) GenerateDeliveryFromOrder(c *gin.Context) {
 // @Router /api/sales/deliveries [get]
 func (h *SalesHandler) GetDeliveryList(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	// 从查询参数中获取过滤条件
+	if orderNo := c.Query("order_no"); orderNo != "" {
+		req["order_no"] = orderNo
+	}
+	if status := c.Query("status"); status != "" {
+		req["status"] = status
+	}
+	deliveries, err := h.salesService.GetDeliveryList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    deliveries,
 	})
 }
 
@@ -429,10 +728,20 @@ func (h *SalesHandler) GetDeliveryList(c *gin.Context) {
 // @Router /api/sales/deliveries/{id} [get]
 func (h *SalesHandler) GetDeliveryDetail(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	delivery, err := h.salesService.GetDeliveryDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    delivery,
 	})
 }
 
@@ -447,10 +756,28 @@ func (h *SalesHandler) GetDeliveryDetail(c *gin.Context) {
 // @Router /api/sales/deliveries [post]
 func (h *SalesHandler) CreateDelivery(c *gin.Context) {
 	// 实现逻辑
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	delivery, err := h.salesService.CreateDelivery(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    delivery,
 	})
 }
 
@@ -466,10 +793,29 @@ func (h *SalesHandler) CreateDelivery(c *gin.Context) {
 // @Router /api/sales/deliveries/{id} [put]
 func (h *SalesHandler) UpdateDelivery(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	delivery, err := h.salesService.UpdateDelivery(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    delivery,
 	})
 }
 
@@ -484,6 +830,16 @@ func (h *SalesHandler) UpdateDelivery(c *gin.Context) {
 // @Router /api/sales/deliveries/{id} [delete]
 func (h *SalesHandler) DeleteDelivery(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.salesService.DeleteDelivery(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -502,10 +858,27 @@ func (h *SalesHandler) DeleteDelivery(c *gin.Context) {
 // @Router /api/sales/invoices [get]
 func (h *SalesHandler) GetInvoiceList(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	// 从查询参数中获取过滤条件
+	if customerName := c.Query("customer_name"); customerName != "" {
+		req["customer_name"] = customerName
+	}
+	if status := c.Query("status"); status != "" {
+		req["status"] = status
+	}
+	invoices, err := h.salesService.GetInvoiceList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    invoices,
 	})
 }
 
@@ -520,10 +893,20 @@ func (h *SalesHandler) GetInvoiceList(c *gin.Context) {
 // @Router /api/sales/invoices/{id} [get]
 func (h *SalesHandler) GetInvoiceDetail(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	invoice, err := h.salesService.GetInvoiceDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    invoice,
 	})
 }
 
@@ -538,10 +921,28 @@ func (h *SalesHandler) GetInvoiceDetail(c *gin.Context) {
 // @Router /api/sales/invoices [post]
 func (h *SalesHandler) CreateInvoice(c *gin.Context) {
 	// 实现逻辑
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	invoice, err := h.salesService.CreateInvoice(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    invoice,
 	})
 }
 
@@ -557,10 +958,29 @@ func (h *SalesHandler) CreateInvoice(c *gin.Context) {
 // @Router /api/sales/invoices/{id} [put]
 func (h *SalesHandler) UpdateInvoice(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	invoice, err := h.salesService.UpdateInvoice(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    invoice,
 	})
 }
 
@@ -575,6 +995,16 @@ func (h *SalesHandler) UpdateInvoice(c *gin.Context) {
 // @Router /api/sales/invoices/{id} [delete]
 func (h *SalesHandler) DeleteInvoice(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.salesService.DeleteInvoice(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -593,6 +1023,25 @@ func (h *SalesHandler) DeleteInvoice(c *gin.Context) {
 // @Router /api/sales/invoices/{id}/receive-payment [post]
 func (h *SalesHandler) ReceiveInvoicePayment(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	err := h.salesService.ReceiveInvoicePayment(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -611,10 +1060,27 @@ func (h *SalesHandler) ReceiveInvoicePayment(c *gin.Context) {
 // @Router /api/sales/returns [get]
 func (h *SalesHandler) GetReturnList(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	// 从查询参数中获取过滤条件
+	if customerName := c.Query("customer_name"); customerName != "" {
+		req["customer_name"] = customerName
+	}
+	if status := c.Query("status"); status != "" {
+		req["status"] = status
+	}
+	returns, err := h.salesService.GetReturnList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    returns,
 	})
 }
 
@@ -629,10 +1095,20 @@ func (h *SalesHandler) GetReturnList(c *gin.Context) {
 // @Router /api/sales/returns/{id} [get]
 func (h *SalesHandler) GetReturnDetail(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	returnOrder, err := h.salesService.GetReturnDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    returnOrder,
 	})
 }
 
@@ -647,10 +1123,28 @@ func (h *SalesHandler) GetReturnDetail(c *gin.Context) {
 // @Router /api/sales/returns [post]
 func (h *SalesHandler) CreateReturn(c *gin.Context) {
 	// 实现逻辑
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	returnOrder, err := h.salesService.CreateReturn(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    returnOrder,
 	})
 }
 
@@ -666,10 +1160,29 @@ func (h *SalesHandler) CreateReturn(c *gin.Context) {
 // @Router /api/sales/returns/{id} [put]
 func (h *SalesHandler) UpdateReturn(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Bad Request",
+			"error":   err.Error(),
+		})
+		return
+	}
+	returnOrder, err := h.salesService.UpdateReturn(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    returnOrder,
 	})
 }
 
@@ -684,6 +1197,16 @@ func (h *SalesHandler) UpdateReturn(c *gin.Context) {
 // @Router /api/sales/returns/{id} [delete]
 func (h *SalesHandler) DeleteReturn(c *gin.Context) {
 	// 实现逻辑
+	id := c.Param("id")
+	err := h.salesService.DeleteReturn(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -702,10 +1225,27 @@ func (h *SalesHandler) DeleteReturn(c *gin.Context) {
 // @Router /api/sales/reports/order-execution [get]
 func (h *SalesHandler) GetOrderExecutionReport(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	// 从查询参数中获取过滤条件
+	if startDate := c.Query("start_date"); startDate != "" {
+		req["start_date"] = startDate
+	}
+	if endDate := c.Query("end_date"); endDate != "" {
+		req["end_date"] = endDate
+	}
+	report, err := h.salesService.GetOrderExecutionReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -719,10 +1259,27 @@ func (h *SalesHandler) GetOrderExecutionReport(c *gin.Context) {
 // @Router /api/sales/reports/customer-analysis [get]
 func (h *SalesHandler) GetSalesCustomerAnalysisReport(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	// 从查询参数中获取过滤条件
+	if startDate := c.Query("start_date"); startDate != "" {
+		req["start_date"] = startDate
+	}
+	if endDate := c.Query("end_date"); endDate != "" {
+		req["end_date"] = endDate
+	}
+	report, err := h.salesService.GetCustomerAnalysisReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -736,10 +1293,27 @@ func (h *SalesHandler) GetSalesCustomerAnalysisReport(c *gin.Context) {
 // @Router /api/sales/reports/product-trend [get]
 func (h *SalesHandler) GetProductTrendReport(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	// 从查询参数中获取过滤条件
+	if startDate := c.Query("start_date"); startDate != "" {
+		req["start_date"] = startDate
+	}
+	if endDate := c.Query("end_date"); endDate != "" {
+		req["end_date"] = endDate
+	}
+	report, err := h.salesService.GetProductTrendReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -753,9 +1327,29 @@ func (h *SalesHandler) GetProductTrendReport(c *gin.Context) {
 // @Router /api/sales/reports/export [get]
 func (h *SalesHandler) ExportSalesReport(c *gin.Context) {
 	// 实现逻辑
+	req := make(map[string]interface{})
+	// 从查询参数中获取过滤条件
+	if reportType := c.Query("report_type"); reportType != "" {
+		req["report_type"] = reportType
+	}
+	if startDate := c.Query("start_date"); startDate != "" {
+		req["start_date"] = startDate
+	}
+	if endDate := c.Query("end_date"); endDate != "" {
+		req["end_date"] = endDate
+	}
+	reportData, err := h.salesService.ExportSalesReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Internal Server Error",
+			"error":   err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    string(reportData),
 	})
 }
