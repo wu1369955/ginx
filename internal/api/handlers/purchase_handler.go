@@ -29,11 +29,27 @@ func NewPurchaseHandler(purchaseService services.PurchaseService) *PurchaseHandl
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/suppliers [get]
 func (h *PurchaseHandler) GetSupplierList(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	suppliers, err := h.purchaseService.GetSupplierList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get supplier list: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    suppliers,
 	})
 }
 
@@ -47,11 +63,24 @@ func (h *PurchaseHandler) GetSupplierList(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/suppliers/{id} [get]
 func (h *PurchaseHandler) GetSupplierDetail(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	supplier, err := h.purchaseService.GetSupplierDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get supplier detail: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    supplier,
 	})
 }
 
@@ -65,11 +94,32 @@ func (h *PurchaseHandler) GetSupplierDetail(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/suppliers [post]
 func (h *PurchaseHandler) CreateSupplier(c *gin.Context) {
-	// 实现逻辑
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	supplier, err := h.purchaseService.CreateSupplier(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to create supplier: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    supplier,
 	})
 }
 
@@ -84,11 +134,35 @@ func (h *PurchaseHandler) CreateSupplier(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/suppliers/{id} [put]
 func (h *PurchaseHandler) UpdateSupplier(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	supplier, err := h.purchaseService.UpdateSupplier(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to update supplier: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    supplier,
 	})
 }
 
@@ -102,7 +176,20 @@ func (h *PurchaseHandler) UpdateSupplier(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/suppliers/{id} [delete]
 func (h *PurchaseHandler) DeleteSupplier(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.DeleteSupplier(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to delete supplier: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -120,11 +207,24 @@ func (h *PurchaseHandler) DeleteSupplier(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/suppliers/{id}/contacts [get]
 func (h *PurchaseHandler) GetSupplierContacts(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	contacts, err := h.purchaseService.GetSupplierContacts(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get supplier contacts: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    contacts,
 	})
 }
 
@@ -139,11 +239,35 @@ func (h *PurchaseHandler) GetSupplierContacts(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/suppliers/{id}/contacts [post]
 func (h *PurchaseHandler) AddSupplierContact(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	contact, err := h.purchaseService.AddSupplierContact(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to add supplier contact: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    contact,
 	})
 }
 
@@ -157,11 +281,27 @@ func (h *PurchaseHandler) AddSupplierContact(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/requisitions [get]
 func (h *PurchaseHandler) GetRequisitionList(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	requisitions, err := h.purchaseService.GetRequisitionList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get requisition list: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    requisitions,
 	})
 }
 
@@ -175,11 +315,24 @@ func (h *PurchaseHandler) GetRequisitionList(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/requisitions/{id} [get]
 func (h *PurchaseHandler) GetRequisitionDetail(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	requisition, err := h.purchaseService.GetRequisitionDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get requisition detail: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    requisition,
 	})
 }
 
@@ -193,11 +346,32 @@ func (h *PurchaseHandler) GetRequisitionDetail(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/requisitions [post]
 func (h *PurchaseHandler) CreateRequisition(c *gin.Context) {
-	// 实现逻辑
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	requisition, err := h.purchaseService.CreateRequisition(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to create requisition: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    requisition,
 	})
 }
 
@@ -212,11 +386,35 @@ func (h *PurchaseHandler) CreateRequisition(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/requisitions/{id} [put]
 func (h *PurchaseHandler) UpdateRequisition(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	requisition, err := h.purchaseService.UpdateRequisition(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to update requisition: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    requisition,
 	})
 }
 
@@ -230,7 +428,20 @@ func (h *PurchaseHandler) UpdateRequisition(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/requisitions/{id} [delete]
 func (h *PurchaseHandler) DeleteRequisition(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.DeleteRequisition(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to delete requisition: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -248,7 +459,20 @@ func (h *PurchaseHandler) DeleteRequisition(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/requisitions/{id}/submit [post]
 func (h *PurchaseHandler) SubmitRequisition(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.SubmitRequisition(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to submit requisition: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -266,7 +490,20 @@ func (h *PurchaseHandler) SubmitRequisition(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/requisitions/{id}/approve [post]
 func (h *PurchaseHandler) ApproveRequisition(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.ApproveRequisition(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to approve requisition: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -284,7 +521,20 @@ func (h *PurchaseHandler) ApproveRequisition(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/requisitions/{id}/reject [post]
 func (h *PurchaseHandler) RejectRequisition(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.RejectRequisition(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to reject requisition: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -302,11 +552,27 @@ func (h *PurchaseHandler) RejectRequisition(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/orders [get]
 func (h *PurchaseHandler) GetPurchaseOrderList(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	orders, err := h.purchaseService.GetPurchaseOrderList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get purchase order list: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    orders,
 	})
 }
 
@@ -320,11 +586,24 @@ func (h *PurchaseHandler) GetPurchaseOrderList(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/orders/{id} [get]
 func (h *PurchaseHandler) GetPurchaseOrderDetail(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	order, err := h.purchaseService.GetPurchaseOrderDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get purchase order detail: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    order,
 	})
 }
 
@@ -338,11 +617,32 @@ func (h *PurchaseHandler) GetPurchaseOrderDetail(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/orders [post]
 func (h *PurchaseHandler) CreatePurchaseOrder(c *gin.Context) {
-	// 实现逻辑
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	order, err := h.purchaseService.CreatePurchaseOrder(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to create purchase order: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    order,
 	})
 }
 
@@ -357,11 +657,35 @@ func (h *PurchaseHandler) CreatePurchaseOrder(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/orders/{id} [put]
 func (h *PurchaseHandler) UpdatePurchaseOrder(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	order, err := h.purchaseService.UpdatePurchaseOrder(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to update purchase order: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    order,
 	})
 }
 
@@ -375,7 +699,20 @@ func (h *PurchaseHandler) UpdatePurchaseOrder(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/orders/{id} [delete]
 func (h *PurchaseHandler) DeletePurchaseOrder(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.DeletePurchaseOrder(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to delete purchase order: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -393,7 +730,20 @@ func (h *PurchaseHandler) DeletePurchaseOrder(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/orders/{id}/submit [post]
 func (h *PurchaseHandler) SubmitPurchaseOrder(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.SubmitPurchaseOrder(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to submit purchase order: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -411,7 +761,20 @@ func (h *PurchaseHandler) SubmitPurchaseOrder(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/orders/{id}/approve [post]
 func (h *PurchaseHandler) ApprovePurchaseOrder(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.ApprovePurchaseOrder(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to approve purchase order: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -429,7 +792,20 @@ func (h *PurchaseHandler) ApprovePurchaseOrder(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/orders/{id}/reject [post]
 func (h *PurchaseHandler) RejectPurchaseOrder(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.RejectPurchaseOrder(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to reject purchase order: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -447,7 +823,20 @@ func (h *PurchaseHandler) RejectPurchaseOrder(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/orders/{id}/close [post]
 func (h *PurchaseHandler) ClosePurchaseOrder(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.ClosePurchaseOrder(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to close purchase order: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -465,11 +854,27 @@ func (h *PurchaseHandler) ClosePurchaseOrder(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/receipts [get]
 func (h *PurchaseHandler) GetPurchaseReceiptList(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	receipts, err := h.purchaseService.GetPurchaseReceiptList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get purchase receipt list: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    receipts,
 	})
 }
 
@@ -483,11 +888,24 @@ func (h *PurchaseHandler) GetPurchaseReceiptList(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/receipts/{id} [get]
 func (h *PurchaseHandler) GetPurchaseReceiptDetail(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	receipt, err := h.purchaseService.GetPurchaseReceiptDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get purchase receipt detail: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    receipt,
 	})
 }
 
@@ -501,11 +919,32 @@ func (h *PurchaseHandler) GetPurchaseReceiptDetail(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/receipts [post]
 func (h *PurchaseHandler) CreatePurchaseReceipt(c *gin.Context) {
-	// 实现逻辑
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	receipt, err := h.purchaseService.CreatePurchaseReceipt(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to create purchase receipt: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    receipt,
 	})
 }
 
@@ -520,11 +959,35 @@ func (h *PurchaseHandler) CreatePurchaseReceipt(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/receipts/{id} [put]
 func (h *PurchaseHandler) UpdatePurchaseReceipt(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	receipt, err := h.purchaseService.UpdatePurchaseReceipt(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to update purchase receipt: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    receipt,
 	})
 }
 
@@ -538,7 +1001,20 @@ func (h *PurchaseHandler) UpdatePurchaseReceipt(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/receipts/{id} [delete]
 func (h *PurchaseHandler) DeletePurchaseReceipt(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.DeletePurchaseReceipt(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to delete purchase receipt: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -556,7 +1032,20 @@ func (h *PurchaseHandler) DeletePurchaseReceipt(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/receipts/{id}/complete [post]
 func (h *PurchaseHandler) CompletePurchaseReceipt(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.CompletePurchaseReceipt(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to complete purchase receipt: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -574,11 +1063,27 @@ func (h *PurchaseHandler) CompletePurchaseReceipt(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/invoices [get]
 func (h *PurchaseHandler) GetPurchaseInvoiceList(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	invoices, err := h.purchaseService.GetPurchaseInvoiceList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get purchase invoice list: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    invoices,
 	})
 }
 
@@ -592,11 +1097,24 @@ func (h *PurchaseHandler) GetPurchaseInvoiceList(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/invoices/{id} [get]
 func (h *PurchaseHandler) GetPurchaseInvoiceDetail(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	invoice, err := h.purchaseService.GetPurchaseInvoiceDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get purchase invoice detail: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    invoice,
 	})
 }
 
@@ -610,11 +1128,32 @@ func (h *PurchaseHandler) GetPurchaseInvoiceDetail(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/invoices [post]
 func (h *PurchaseHandler) CreatePurchaseInvoice(c *gin.Context) {
-	// 实现逻辑
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	invoice, err := h.purchaseService.CreatePurchaseInvoice(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to create purchase invoice: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    invoice,
 	})
 }
 
@@ -629,11 +1168,35 @@ func (h *PurchaseHandler) CreatePurchaseInvoice(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/invoices/{id} [put]
 func (h *PurchaseHandler) UpdatePurchaseInvoice(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	invoice, err := h.purchaseService.UpdatePurchaseInvoice(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to update purchase invoice: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    invoice,
 	})
 }
 
@@ -647,7 +1210,20 @@ func (h *PurchaseHandler) UpdatePurchaseInvoice(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/invoices/{id} [delete]
 func (h *PurchaseHandler) DeletePurchaseInvoice(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.DeletePurchaseInvoice(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to delete purchase invoice: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -665,7 +1241,20 @@ func (h *PurchaseHandler) DeletePurchaseInvoice(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/invoices/{id}/verify [post]
 func (h *PurchaseHandler) VerifyPurchaseInvoice(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.VerifyPurchaseInvoice(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to verify purchase invoice: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -683,7 +1272,20 @@ func (h *PurchaseHandler) VerifyPurchaseInvoice(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/invoices/{id}/pay [post]
 func (h *PurchaseHandler) PayPurchaseInvoice(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.PayPurchaseInvoice(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to pay purchase invoice: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -701,11 +1303,27 @@ func (h *PurchaseHandler) PayPurchaseInvoice(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/returns [get]
 func (h *PurchaseHandler) GetPurchaseReturnList(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	returns, err := h.purchaseService.GetPurchaseReturnList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get purchase return list: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    returns,
 	})
 }
 
@@ -719,11 +1337,24 @@ func (h *PurchaseHandler) GetPurchaseReturnList(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/returns/{id} [get]
 func (h *PurchaseHandler) GetPurchaseReturnDetail(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	return_, err := h.purchaseService.GetPurchaseReturnDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get purchase return detail: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    return_,
 	})
 }
 
@@ -737,11 +1368,32 @@ func (h *PurchaseHandler) GetPurchaseReturnDetail(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/returns [post]
 func (h *PurchaseHandler) CreatePurchaseReturn(c *gin.Context) {
-	// 实现逻辑
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	return_, err := h.purchaseService.CreatePurchaseReturn(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to create purchase return: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    return_,
 	})
 }
 
@@ -756,11 +1408,35 @@ func (h *PurchaseHandler) CreatePurchaseReturn(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/returns/{id} [put]
 func (h *PurchaseHandler) UpdatePurchaseReturn(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	return_, err := h.purchaseService.UpdatePurchaseReturn(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to update purchase return: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    return_,
 	})
 }
 
@@ -774,7 +1450,20 @@ func (h *PurchaseHandler) UpdatePurchaseReturn(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/returns/{id} [delete]
 func (h *PurchaseHandler) DeletePurchaseReturn(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.DeletePurchaseReturn(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to delete purchase return: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -792,7 +1481,20 @@ func (h *PurchaseHandler) DeletePurchaseReturn(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/returns/{id}/complete [post]
 func (h *PurchaseHandler) CompletePurchaseReturn(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.purchaseService.CompletePurchaseReturn(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to complete purchase return: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -810,11 +1512,27 @@ func (h *PurchaseHandler) CompletePurchaseReturn(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/reports/summary [get]
 func (h *PurchaseHandler) GetPurchaseSummaryReport(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	report, err := h.purchaseService.GetPurchaseSummaryReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get purchase summary report: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -827,11 +1545,27 @@ func (h *PurchaseHandler) GetPurchaseSummaryReport(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/reports/detail [get]
 func (h *PurchaseHandler) GetPurchaseDetailReport(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	report, err := h.purchaseService.GetPurchaseDetailReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get purchase detail report: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -844,11 +1578,27 @@ func (h *PurchaseHandler) GetPurchaseDetailReport(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/reports/supplier-analysis [get]
 func (h *PurchaseHandler) GetSupplierAnalysisReport(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	report, err := h.purchaseService.GetSupplierAnalysisReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get supplier analysis report: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -861,11 +1611,27 @@ func (h *PurchaseHandler) GetSupplierAnalysisReport(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/reports/price-analysis [get]
 func (h *PurchaseHandler) GetPriceAnalysisReport(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	report, err := h.purchaseService.GetPriceAnalysisReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get price analysis report: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -878,11 +1644,27 @@ func (h *PurchaseHandler) GetPriceAnalysisReport(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/reports/forecast [get]
 func (h *PurchaseHandler) GetPurchaseForecastReport(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	report, err := h.purchaseService.GetPurchaseForecastReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get purchase forecast report: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -895,10 +1677,26 @@ func (h *PurchaseHandler) GetPurchaseForecastReport(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/purchase/reports/export [get]
 func (h *PurchaseHandler) ExportPurchaseReport(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	data, err := h.purchaseService.ExportPurchaseReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to export purchase report: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    string(data),
 	})
 }

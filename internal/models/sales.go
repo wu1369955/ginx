@@ -21,7 +21,9 @@ type SalesCustomer struct {
 	Category      string         `json:"category" gorm:"type:varchar(50)"`
 	Region        string         `json:"region" gorm:"type:varchar(50)"`
 	CreditLimit   float64        `json:"credit_limit" gorm:"type:decimal(18,2);default:0"`
+	CreditBalance float64        `json:"credit_balance" gorm:"type:decimal(18,2);default:0"`
 	CreditDays    int            `json:"credit_days" gorm:"type:int;default:0"`
+	PaymentTerms  string         `json:"payment_terms" gorm:"type:varchar(50)"`
 	Remarks       string         `json:"remarks" gorm:"type:text"`
 	Status        string         `json:"status" gorm:"type:varchar(20);default:'active'"`
 	CreatedBy     string         `json:"created_by" gorm:"type:varchar(36)"`

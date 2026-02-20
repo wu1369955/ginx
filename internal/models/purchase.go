@@ -212,12 +212,15 @@ type PurchaseInvoice struct {
 	ID          string         `json:"id" gorm:"primaryKey;type:varchar(36)"`
 	InvoiceNo   string         `json:"invoice_no" gorm:"unique;not null;type:varchar(20)"`
 	OrderID     string         `json:"order_id" gorm:"not null;type:varchar(36)"`
+	ReceiptID   string         `json:"receipt_id" gorm:"type:varchar(36)"`
 	VendorID    string         `json:"vendor_id" gorm:"not null;type:varchar(36)"`
 	InvoiceDate time.Time      `json:"invoice_date" gorm:"not null;type:date"`
 	DueDate     time.Time      `json:"due_date" gorm:"not null;type:date"`
 	TotalAmount float64        `json:"total_amount" gorm:"not null;type:decimal(18,2)"`
 	PaidAmount  float64        `json:"paid_amount" gorm:"type:decimal(18,2);default:0"`
+	TaxAmount   float64        `json:"tax_amount" gorm:"type:decimal(18,2);default:0"`
 	Status      string         `json:"status" gorm:"type:varchar(20);default:'unpaid'"`
+	PaymentTerms string         `json:"payment_terms" gorm:"type:varchar(50)"`
 	Remarks     string         `json:"remarks" gorm:"type:text"`
 	CreatedBy   string         `json:"created_by" gorm:"type:varchar(36)"`
 	CreatedAt   time.Time      `json:"created_at" gorm:"not null"`
@@ -263,20 +266,22 @@ func (PurchaseInvoiceItem) TableName() string {
 
 // PurchaseReturn 采购退货单表模型
 type PurchaseReturn struct {
-	ID         string         `json:"id" gorm:"primaryKey;type:varchar(36)"`
-	ReturnNo   string         `json:"return_no" gorm:"unique;not null;type:varchar(20)"`
-	OrderID    string         `json:"order_id" gorm:"not null;type:varchar(36)"`
-	VendorID   string         `json:"vendor_id" gorm:"not null;type:varchar(36)"`
-	ReturnDate time.Time      `json:"return_date" gorm:"not null;type:date"`
+	ID          string         `json:"id" gorm:"primaryKey;type:varchar(36)"`
+	ReturnNo    string         `json:"return_no" gorm:"unique;not null;type:varchar(20)"`
+	OrderID     string         `json:"order_id" gorm:"not null;type:varchar(36)"`
+	ReceiptID   string         `json:"receipt_id" gorm:"type:varchar(36)"`
+	VendorID    string         `json:"vendor_id" gorm:"not null;type:varchar(36)"`
+	ReturnDate  time.Time      `json:"return_date" gorm:"not null;type:date"`
+	TotalQuantity float64       `json:"total_quantity" gorm:"type:decimal(18,4);default:0"`
 	TotalAmount float64       `json:"total_amount" gorm:"not null;type:decimal(18,2)"`
-	Status     string         `json:"status" gorm:"type:varchar(20);default:'pending'"`
-	Reason     string         `json:"reason" gorm:"type:text"`
-	Remarks    string         `json:"remarks" gorm:"type:text"`
-	CreatedBy  string         `json:"created_by" gorm:"type:varchar(36)"`
-	CreatedAt  time.Time      `json:"created_at" gorm:"not null"`
-	UpdatedBy  string         `json:"updated_by" gorm:"type:varchar(36)"`
-	UpdatedAt  time.Time      `json:"updated_at" gorm:"not null"`
-	DeletedAt  gorm.DeletedAt `json:"deleted_at" gorm:"index"`
+	Status      string         `json:"status" gorm:"type:varchar(20);default:'pending'"`
+	Reason      string         `json:"reason" gorm:"type:text"`
+	Remarks     string         `json:"remarks" gorm:"type:text"`
+	CreatedBy   string         `json:"created_by" gorm:"type:varchar(36)"`
+	CreatedAt   time.Time      `json:"created_at" gorm:"not null"`
+	UpdatedBy   string         `json:"updated_by" gorm:"type:varchar(36)"`
+	UpdatedAt   time.Time      `json:"updated_at" gorm:"not null"`
+	DeletedAt   gorm.DeletedAt `json:"deleted_at" gorm:"index"`
 
 	// 关联
 	Order   PurchaseOrder      `json:"order,omitempty" gorm:"foreignKey:OrderID"`

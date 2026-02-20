@@ -28,7 +28,7 @@ type LocationResponse struct {
 // WarehouseResponse 仓库响应
 type WarehouseResponse struct {
 	ID            string             `json:"id"`
-	WarehouseNo   string             `json:"warehouseNo"`
+	Code          string             `json:"code"`
 	Name          string             `json:"name"`
 	Type          string             `json:"type"`
 	Address       string             `json:"address"`
@@ -48,6 +48,8 @@ type WarehouseResponse struct {
 
 // CreateWarehouseRequest 创建仓库请求
 type CreateWarehouseRequest struct {
+	ID          string `json:"id" binding:"required"`
+	Code        string `json:"code" binding:"required"`
 	Name        string `json:"name" binding:"required"`
 	Type        string `json:"type" binding:"required,oneof=raw_material finished_goods semi_finished tools"`
 	Address     string `json:"address" binding:"required"`
@@ -56,6 +58,8 @@ type CreateWarehouseRequest struct {
 	Phone       string `json:"phone" binding:"required"`
 	Description string `json:"description" binding:"omitempty"`
 	Capacity    int    `json:"capacity" binding:"required,min=1"`
+	Status      string `json:"status" binding:"omitempty,oneof=active inactive"`
+	CreatedBy   string `json:"createdBy" binding:"required"`
 }
 
 // UpdateWarehouseRequest 更新仓库请求

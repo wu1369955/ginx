@@ -29,11 +29,27 @@ func NewFinanceHandler(financeService services.FinanceService) *FinanceHandler {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/accounts [get]
 func (h *FinanceHandler) GetAccountList(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	accounts, err := h.financeService.GetAccountList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get account list: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    accounts,
 	})
 }
 
@@ -47,11 +63,24 @@ func (h *FinanceHandler) GetAccountList(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/accounts/{id} [get]
 func (h *FinanceHandler) GetAccountDetail(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	account, err := h.financeService.GetAccountDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get account detail: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    account,
 	})
 }
 
@@ -65,11 +94,32 @@ func (h *FinanceHandler) GetAccountDetail(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/accounts [post]
 func (h *FinanceHandler) CreateAccount(c *gin.Context) {
-	// 实现逻辑
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	account, err := h.financeService.CreateAccount(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to create account: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    account,
 	})
 }
 
@@ -84,11 +134,35 @@ func (h *FinanceHandler) CreateAccount(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/accounts/{id} [put]
 func (h *FinanceHandler) UpdateAccount(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	account, err := h.financeService.UpdateAccount(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to update account: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    account,
 	})
 }
 
@@ -102,7 +176,20 @@ func (h *FinanceHandler) UpdateAccount(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/accounts/{id} [delete]
 func (h *FinanceHandler) DeleteAccount(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.financeService.DeleteAccount(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to delete account: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -120,11 +207,27 @@ func (h *FinanceHandler) DeleteAccount(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/vouchers [get]
 func (h *FinanceHandler) GetVoucherList(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	vouchers, err := h.financeService.GetVoucherList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get voucher list: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    vouchers,
 	})
 }
 
@@ -138,11 +241,24 @@ func (h *FinanceHandler) GetVoucherList(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/vouchers/{id} [get]
 func (h *FinanceHandler) GetVoucherDetail(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	voucher, err := h.financeService.GetVoucherDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get voucher detail: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    voucher,
 	})
 }
 
@@ -156,11 +272,32 @@ func (h *FinanceHandler) GetVoucherDetail(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/vouchers [post]
 func (h *FinanceHandler) CreateVoucher(c *gin.Context) {
-	// 实现逻辑
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	voucher, err := h.financeService.CreateVoucher(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to create voucher: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    voucher,
 	})
 }
 
@@ -175,11 +312,35 @@ func (h *FinanceHandler) CreateVoucher(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/vouchers/{id} [put]
 func (h *FinanceHandler) UpdateVoucher(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	voucher, err := h.financeService.UpdateVoucher(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to update voucher: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    voucher,
 	})
 }
 
@@ -193,7 +354,20 @@ func (h *FinanceHandler) UpdateVoucher(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/vouchers/{id} [delete]
 func (h *FinanceHandler) DeleteVoucher(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.financeService.DeleteVoucher(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to delete voucher: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -211,7 +385,20 @@ func (h *FinanceHandler) DeleteVoucher(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/vouchers/{id}/submit [post]
 func (h *FinanceHandler) SubmitVoucher(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.financeService.SubmitVoucher(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to submit voucher: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -229,7 +416,20 @@ func (h *FinanceHandler) SubmitVoucher(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/vouchers/{id}/approve [post]
 func (h *FinanceHandler) ApproveVoucher(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.financeService.ApproveVoucher(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to approve voucher: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -247,7 +447,20 @@ func (h *FinanceHandler) ApproveVoucher(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/vouchers/{id}/post [post]
 func (h *FinanceHandler) PostVoucher(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.financeService.PostVoucher(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to post voucher: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -265,11 +478,27 @@ func (h *FinanceHandler) PostVoucher(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/budgets [get]
 func (h *FinanceHandler) GetBudgetList(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	budgets, err := h.financeService.GetBudgetList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get budget list: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    budgets,
 	})
 }
 
@@ -283,11 +512,24 @@ func (h *FinanceHandler) GetBudgetList(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/budgets/{id} [get]
 func (h *FinanceHandler) GetBudgetDetail(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	budget, err := h.financeService.GetBudgetDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get budget detail: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    budget,
 	})
 }
 
@@ -301,11 +543,32 @@ func (h *FinanceHandler) GetBudgetDetail(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/budgets [post]
 func (h *FinanceHandler) CreateBudget(c *gin.Context) {
-	// 实现逻辑
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	budget, err := h.financeService.CreateBudget(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to create budget: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    budget,
 	})
 }
 
@@ -320,11 +583,35 @@ func (h *FinanceHandler) CreateBudget(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/budgets/{id} [put]
 func (h *FinanceHandler) UpdateBudget(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	budget, err := h.financeService.UpdateBudget(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to update budget: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    budget,
 	})
 }
 
@@ -338,7 +625,20 @@ func (h *FinanceHandler) UpdateBudget(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/budgets/{id} [delete]
 func (h *FinanceHandler) DeleteBudget(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.financeService.DeleteBudget(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to delete budget: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -356,7 +656,20 @@ func (h *FinanceHandler) DeleteBudget(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/budgets/{id}/submit [post]
 func (h *FinanceHandler) SubmitBudget(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.financeService.SubmitBudget(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to submit budget: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -374,7 +687,20 @@ func (h *FinanceHandler) SubmitBudget(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/budgets/{id}/approve [post]
 func (h *FinanceHandler) ApproveBudget(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.financeService.ApproveBudget(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to approve budget: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -392,11 +718,35 @@ func (h *FinanceHandler) ApproveBudget(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/budgets/{id}/adjust [post]
 func (h *FinanceHandler) AdjustBudget(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	budget, err := h.financeService.AdjustBudget(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to adjust budget: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    budget,
 	})
 }
 
@@ -410,11 +760,27 @@ func (h *FinanceHandler) AdjustBudget(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/fixed-assets [get]
 func (h *FinanceHandler) GetFixedAssetList(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	assets, err := h.financeService.GetFixedAssetList(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get fixed asset list: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    assets,
 	})
 }
 
@@ -428,11 +794,24 @@ func (h *FinanceHandler) GetFixedAssetList(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/fixed-assets/{id} [get]
 func (h *FinanceHandler) GetFixedAssetDetail(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	asset, err := h.financeService.GetFixedAssetDetail(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get fixed asset detail: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    asset,
 	})
 }
 
@@ -446,11 +825,32 @@ func (h *FinanceHandler) GetFixedAssetDetail(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/fixed-assets [post]
 func (h *FinanceHandler) CreateFixedAsset(c *gin.Context) {
-	// 实现逻辑
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	asset, err := h.financeService.CreateFixedAsset(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to create fixed asset: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    asset,
 	})
 }
 
@@ -465,11 +865,35 @@ func (h *FinanceHandler) CreateFixedAsset(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/fixed-assets/{id} [put]
 func (h *FinanceHandler) UpdateFixedAsset(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 解析请求体
+	var req map[string]interface{}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid request body: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
+	// 调用service方法
+	asset, err := h.financeService.UpdateFixedAsset(id, req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to update fixed asset: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    asset,
 	})
 }
 
@@ -483,7 +907,20 @@ func (h *FinanceHandler) UpdateFixedAsset(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/fixed-assets/{id} [delete]
 func (h *FinanceHandler) DeleteFixedAsset(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.financeService.DeleteFixedAsset(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to delete fixed asset: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -501,7 +938,20 @@ func (h *FinanceHandler) DeleteFixedAsset(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/fixed-assets/{id}/depreciate [post]
 func (h *FinanceHandler) DepreciateFixedAsset(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.financeService.DepreciateFixedAsset(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to depreciate fixed asset: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -519,7 +969,20 @@ func (h *FinanceHandler) DepreciateFixedAsset(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/fixed-assets/{id}/dispose [post]
 func (h *FinanceHandler) DisposeFixedAsset(c *gin.Context) {
-	// 实现逻辑
+	// 获取路径参数
+	id := c.Param("id")
+
+	// 调用service方法
+	err := h.financeService.DisposeFixedAsset(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to dispose fixed asset: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
@@ -537,11 +1000,27 @@ func (h *FinanceHandler) DisposeFixedAsset(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/reports/balance-sheet [get]
 func (h *FinanceHandler) GetBalanceSheet(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	report, err := h.financeService.GetBalanceSheet(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get balance sheet: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -554,11 +1033,27 @@ func (h *FinanceHandler) GetBalanceSheet(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/reports/income-statement [get]
 func (h *FinanceHandler) GetIncomeStatement(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	report, err := h.financeService.GetIncomeStatement(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get income statement: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -571,11 +1066,27 @@ func (h *FinanceHandler) GetIncomeStatement(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/reports/cash-flow [get]
 func (h *FinanceHandler) GetCashFlowStatement(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	report, err := h.financeService.GetCashFlowStatement(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get cash flow statement: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -588,11 +1099,27 @@ func (h *FinanceHandler) GetCashFlowStatement(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/reports/trial-balance [get]
 func (h *FinanceHandler) GetTrialBalance(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	report, err := h.financeService.GetTrialBalance(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to get trial balance: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    report,
 	})
 }
 
@@ -605,10 +1132,26 @@ func (h *FinanceHandler) GetTrialBalance(c *gin.Context) {
 // @Success 200 {object} map[string]interface{} "成功"
 // @Router /api/finance/reports/export [get]
 func (h *FinanceHandler) ExportFinancialReport(c *gin.Context) {
-	// 实现逻辑
+	// 从查询参数获取过滤条件
+	req := make(map[string]interface{})
+	for k, v := range c.Request.URL.Query() {
+		req[k] = v[0]
+	}
+
+	// 调用service方法
+	data, err := h.financeService.ExportFinancialReport(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    500,
+			"message": "Failed to export financial report: " + err.Error(),
+			"data":    nil,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"code":    200,
 		"message": "success",
-		"data":    nil,
+		"data":    string(data),
 	})
 }
