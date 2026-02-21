@@ -6,13 +6,8 @@ import (
 
 // Compress 压缩中间件
 func Compress() gin.HandlerFunc {
-	// 使用Gin内置的压缩中间件
+	// 暂时返回一个空的中间件，避免 "incorrect header check" 错误
 	return gin.HandlerFunc(func(c *gin.Context) {
-		// 检查是否支持压缩
-		if c.Request.Header.Get("Accept-Encoding") != "" {
-			// 启用压缩
-			c.Writer.Header().Set("Content-Encoding", "gzip")
-		}
 		c.Next()
 	})
 }

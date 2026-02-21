@@ -1,0 +1,6610 @@
+basePath: /
+definitions:
+  schemas.ActivityCreateRequest:
+    properties:
+      account_id:
+        type: string
+      contact_id:
+        type: string
+      created_by:
+        type: string
+      description:
+        type: string
+      end_time:
+        type: string
+      id:
+        type: string
+      location:
+        type: string
+      priority:
+        type: string
+      start_time:
+        type: string
+      subject:
+        type: string
+      type:
+        description: call, meeting, email, task
+        type: string
+    required:
+    - account_id
+    - created_by
+    - end_time
+    - id
+    - start_time
+    - subject
+    - type
+    type: object
+  schemas.ActivityUpdateRequest:
+    properties:
+      contact_id:
+        type: string
+      description:
+        type: string
+      end_time:
+        type: string
+      location:
+        type: string
+      outcome:
+        type: string
+      priority:
+        type: string
+      start_time:
+        type: string
+      status:
+        type: string
+      subject:
+        type: string
+      type:
+        type: string
+      updated_by:
+        type: string
+    required:
+    - updated_by
+    type: object
+  schemas.CampaignCreateRequest:
+    properties:
+      budget:
+        type: number
+      campaign_no:
+        type: string
+      created_by:
+        type: string
+      description:
+        type: string
+      end_date:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      start_date:
+        type: string
+      target_audience:
+        type: string
+      type:
+        type: string
+    required:
+    - campaign_no
+    - created_by
+    - end_date
+    - id
+    - name
+    - start_date
+    - type
+    type: object
+  schemas.CampaignUpdateRequest:
+    properties:
+      actual_cost:
+        type: number
+      budget:
+        type: number
+      description:
+        type: string
+      end_date:
+        type: string
+      name:
+        type: string
+      start_date:
+        type: string
+      status:
+        type: string
+      target_audience:
+        type: string
+      type:
+        type: string
+      updated_by:
+        type: string
+    required:
+    - updated_by
+    type: object
+  schemas.CustomerCreateRequest:
+    properties:
+      address:
+        type: string
+      bank_account:
+        type: string
+      bank_name:
+        type: string
+      category:
+        type: string
+      code:
+        type: string
+      contact_name:
+        type: string
+      createdBy:
+        type: string
+      credit_days:
+        type: integer
+      credit_limit:
+        type: number
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      region:
+        type: string
+      remarks:
+        type: string
+      status:
+        type: string
+      tax_number:
+        type: string
+      type:
+        description: individual, company
+        type: string
+    required:
+    - code
+    - contact_name
+    - createdBy
+    - email
+    - id
+    - name
+    - phone
+    - type
+    type: object
+  schemas.CustomerUpdateRequest:
+    properties:
+      address:
+        type: string
+      bank_account:
+        type: string
+      bank_name:
+        type: string
+      category:
+        type: string
+      code:
+        type: string
+      contact_name:
+        type: string
+      credit_days:
+        type: integer
+      credit_limit:
+        type: number
+      email:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      region:
+        type: string
+      remarks:
+        type: string
+      status:
+        type: string
+      tax_number:
+        type: string
+      type:
+        type: string
+      updatedBy:
+        type: string
+    required:
+    - updatedBy
+    type: object
+  schemas.LeadCreateRequest:
+    properties:
+      code:
+        type: string
+      company:
+        type: string
+      contactPerson:
+        type: string
+      createdBy:
+        type: string
+      description:
+        type: string
+      email:
+        type: string
+      estimated_value:
+        type: number
+      id:
+        type: string
+      name:
+        type: string
+      phone:
+        type: string
+      remarks:
+        type: string
+      score:
+        type: integer
+      source:
+        type: string
+      status:
+        type: string
+    required:
+    - code
+    - contactPerson
+    - createdBy
+    - email
+    - id
+    - name
+    - phone
+    - source
+    type: object
+  schemas.LeadUpdateRequest:
+    properties:
+      company:
+        type: string
+      contactPerson:
+        type: string
+      description:
+        type: string
+      email:
+        type: string
+      estimated_value:
+        type: number
+      name:
+        type: string
+      phone:
+        type: string
+      remarks:
+        type: string
+      score:
+        type: integer
+      source:
+        type: string
+      status:
+        type: string
+      updatedBy:
+        type: string
+    required:
+    - updatedBy
+    type: object
+  schemas.OpportunityCreateRequest:
+    properties:
+      account_id:
+        type: string
+      close_date:
+        type: string
+      createdBy:
+        type: string
+      description:
+        type: string
+      estimated_amount:
+        type: number
+      id:
+        type: string
+      name:
+        type: string
+      opportunity_no:
+        type: string
+      probability:
+        type: integer
+      stage:
+        type: string
+    required:
+    - account_id
+    - close_date
+    - createdBy
+    - estimated_amount
+    - id
+    - name
+    - opportunity_no
+    - stage
+    type: object
+  schemas.OpportunityUpdateRequest:
+    properties:
+      account_id:
+        type: string
+      close_date:
+        type: string
+      description:
+        type: string
+      estimated_amount:
+        type: number
+      name:
+        type: string
+      probability:
+        type: integer
+      stage:
+        type: string
+      updatedBy:
+        type: string
+    required:
+    - updatedBy
+    type: object
+  schemas.ServiceRequestCreateRequest:
+    properties:
+      account_id:
+        type: string
+      case_no:
+        type: string
+      contact_id:
+        type: string
+      created_by:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      priority:
+        type: string
+      subject:
+        type: string
+      type:
+        type: string
+    required:
+    - account_id
+    - case_no
+    - created_by
+    - description
+    - id
+    - priority
+    - subject
+    - type
+    type: object
+  schemas.ServiceRequestUpdateRequest:
+    properties:
+      contact_id:
+        type: string
+      description:
+        type: string
+      priority:
+        type: string
+      resolution:
+        type: string
+      status:
+        type: string
+      subject:
+        type: string
+      type:
+        type: string
+      updated_by:
+        type: string
+    required:
+    - updated_by
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@example.com
+    name: API Support
+    url: http://www.example.com/support
+  description: ERP系统API文档
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: ERP系统API文档
+  version: "1.0"
+paths:
+  /api/crm/activities:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有客户活动的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取客户活动列表
+      tags:
+      - CRM-客户活动管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新客户活动
+      parameters:
+      - description: 客户活动信息
+        in: body
+        name: activity
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.ActivityCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建客户活动
+      tags:
+      - CRM-客户活动管理
+  /api/crm/activities/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除客户活动
+      parameters:
+      - description: 客户活动ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除客户活动
+      tags:
+      - CRM-客户活动管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取客户活动详情
+      parameters:
+      - description: 客户活动ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取客户活动详情
+      tags:
+      - CRM-客户活动管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新客户活动
+      parameters:
+      - description: 客户活动ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 客户活动信息
+        in: body
+        name: activity
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.ActivityUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新客户活动
+      tags:
+      - CRM-客户活动管理
+  /api/crm/campaigns:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有营销活动的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取营销活动列表
+      tags:
+      - CRM-营销活动管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新营销活动
+      parameters:
+      - description: 营销活动信息
+        in: body
+        name: campaign
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.CampaignCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建营销活动
+      tags:
+      - CRM-营销活动管理
+  /api/crm/campaigns/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除营销活动
+      parameters:
+      - description: 营销活动ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除营销活动
+      tags:
+      - CRM-营销活动管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取营销活动详情
+      parameters:
+      - description: 营销活动ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取营销活动详情
+      tags:
+      - CRM-营销活动管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新营销活动
+      parameters:
+      - description: 营销活动ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 营销活动信息
+        in: body
+        name: campaign
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.CampaignUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新营销活动
+      tags:
+      - CRM-营销活动管理
+  /api/crm/customers:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有客户的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取客户列表
+      tags:
+      - CRM-客户管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新客户
+      parameters:
+      - description: 客户信息
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.CustomerCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建客户
+      tags:
+      - CRM-客户管理
+  /api/crm/customers/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除客户
+      parameters:
+      - description: 客户ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除客户
+      tags:
+      - CRM-客户管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取客户详情
+      parameters:
+      - description: 客户ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取客户详情
+      tags:
+      - CRM-客户管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新客户信息
+      parameters:
+      - description: 客户ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 客户信息
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.CustomerUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新客户
+      tags:
+      - CRM-客户管理
+  /api/crm/leads:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有销售线索的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取销售线索列表
+      tags:
+      - CRM-销售线索管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新销售线索
+      parameters:
+      - description: 销售线索信息
+        in: body
+        name: lead
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.LeadCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建销售线索
+      tags:
+      - CRM-销售线索管理
+  /api/crm/leads/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除销售线索
+      parameters:
+      - description: 销售线索ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除销售线索
+      tags:
+      - CRM-销售线索管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取销售线索详情
+      parameters:
+      - description: 销售线索ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取销售线索详情
+      tags:
+      - CRM-销售线索管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新销售线索
+      parameters:
+      - description: 销售线索ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 销售线索信息
+        in: body
+        name: lead
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.LeadUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新销售线索
+      tags:
+      - CRM-销售线索管理
+  /api/crm/leads/{id}/convert:
+    post:
+      consumes:
+      - application/json
+      description: 转换销售线索为客户
+      parameters:
+      - description: 销售线索ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 转换销售线索
+      tags:
+      - CRM-销售线索管理
+  /api/crm/leads/{id}/qualify:
+    post:
+      consumes:
+      - application/json
+      description: 筛选销售线索
+      parameters:
+      - description: 销售线索ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 筛选销售线索
+      tags:
+      - CRM-销售线索管理
+  /api/crm/opportunities:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有销售机会的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取销售机会列表
+      tags:
+      - CRM-销售机会管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新销售机会
+      parameters:
+      - description: 销售机会信息
+        in: body
+        name: opportunity
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.OpportunityCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建销售机会
+      tags:
+      - CRM-销售机会管理
+  /api/crm/opportunities/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除销售机会
+      parameters:
+      - description: 销售机会ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除销售机会
+      tags:
+      - CRM-销售机会管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取销售机会详情
+      parameters:
+      - description: 销售机会ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取销售机会详情
+      tags:
+      - CRM-销售机会管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新销售机会
+      parameters:
+      - description: 销售机会ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 销售机会信息
+        in: body
+        name: opportunity
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.OpportunityUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新销售机会
+      tags:
+      - CRM-销售机会管理
+  /api/crm/opportunities/{id}/close:
+    post:
+      consumes:
+      - application/json
+      description: 关闭销售机会
+      parameters:
+      - description: 销售机会ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 关闭销售机会
+      tags:
+      - CRM-销售机会管理
+  /api/crm/reports/campaign-effectiveness:
+    get:
+      consumes:
+      - application/json
+      description: 获取营销活动效果的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取营销活动效果报表
+      tags:
+      - CRM-报表管理
+  /api/crm/reports/customers:
+    get:
+      consumes:
+      - application/json
+      description: 获取客户的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取客户报表
+      tags:
+      - CRM-报表管理
+  /api/crm/reports/export:
+    get:
+      consumes:
+      - application/json
+      description: 导出CRM相关的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 导出CRM报表
+      tags:
+      - CRM-报表管理
+  /api/crm/reports/sales-pipeline:
+    get:
+      consumes:
+      - application/json
+      description: 获取销售漏斗的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取销售漏斗报表
+      tags:
+      - CRM-报表管理
+  /api/crm/reports/service-requests:
+    get:
+      consumes:
+      - application/json
+      description: 获取客户服务请求的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取客户服务请求报表
+      tags:
+      - CRM-报表管理
+  /api/crm/service-requests:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有客户服务请求的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取客户服务请求列表
+      tags:
+      - CRM-客户服务管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新客户服务请求
+      parameters:
+      - description: 客户服务请求信息
+        in: body
+        name: serviceRequest
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.ServiceRequestCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建客户服务请求
+      tags:
+      - CRM-客户服务管理
+  /api/crm/service-requests/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除客户服务请求
+      parameters:
+      - description: 客户服务请求ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除客户服务请求
+      tags:
+      - CRM-客户服务管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取客户服务请求详情
+      parameters:
+      - description: 客户服务请求ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取客户服务请求详情
+      tags:
+      - CRM-客户服务管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新客户服务请求
+      parameters:
+      - description: 客户服务请求ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 客户服务请求信息
+        in: body
+        name: serviceRequest
+        required: true
+        schema:
+          $ref: '#/definitions/schemas.ServiceRequestUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新客户服务请求
+      tags:
+      - CRM-客户服务管理
+  /api/crm/service-requests/{id}/resolve:
+    post:
+      consumes:
+      - application/json
+      description: 解决客户服务请求
+      parameters:
+      - description: 客户服务请求ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 解决客户服务请求
+      tags:
+      - CRM-客户服务管理
+  /api/finance/accounts:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有账户的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取账户列表
+      tags:
+      - 财务-账户管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新账户
+      parameters:
+      - description: 账户信息
+        in: body
+        name: account
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建账户
+      tags:
+      - 财务-账户管理
+  /api/finance/accounts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除账户
+      parameters:
+      - description: 账户ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除账户
+      tags:
+      - 财务-账户管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取账户详情
+      parameters:
+      - description: 账户ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取账户详情
+      tags:
+      - 财务-账户管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新账户信息
+      parameters:
+      - description: 账户ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 账户信息
+        in: body
+        name: account
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新账户
+      tags:
+      - 财务-账户管理
+  /api/finance/budgets:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有预算的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取预算列表
+      tags:
+      - 财务-预算管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新预算
+      parameters:
+      - description: 预算信息
+        in: body
+        name: budget
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建预算
+      tags:
+      - 财务-预算管理
+  /api/finance/budgets/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除预算
+      parameters:
+      - description: 预算ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除预算
+      tags:
+      - 财务-预算管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取预算详情
+      parameters:
+      - description: 预算ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取预算详情
+      tags:
+      - 财务-预算管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新预算
+      parameters:
+      - description: 预算ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 预算信息
+        in: body
+        name: budget
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新预算
+      tags:
+      - 财务-预算管理
+  /api/finance/budgets/{id}/adjust:
+    post:
+      consumes:
+      - application/json
+      description: 调整预算
+      parameters:
+      - description: 预算ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 调整预算
+      tags:
+      - 财务-预算管理
+  /api/finance/budgets/{id}/approve:
+    post:
+      consumes:
+      - application/json
+      description: 审批预算
+      parameters:
+      - description: 预算ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 审批预算
+      tags:
+      - 财务-预算管理
+  /api/finance/budgets/{id}/submit:
+    post:
+      consumes:
+      - application/json
+      description: 提交预算
+      parameters:
+      - description: 预算ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 提交预算
+      tags:
+      - 财务-预算管理
+  /api/finance/fixed-assets:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有固定资产的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取固定资产列表
+      tags:
+      - 财务-固定资产管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新固定资产
+      parameters:
+      - description: 固定资产信息
+        in: body
+        name: asset
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建固定资产
+      tags:
+      - 财务-固定资产管理
+  /api/finance/fixed-assets/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除固定资产
+      parameters:
+      - description: 固定资产ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除固定资产
+      tags:
+      - 财务-固定资产管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取固定资产详情
+      parameters:
+      - description: 固定资产ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取固定资产详情
+      tags:
+      - 财务-固定资产管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新固定资产
+      parameters:
+      - description: 固定资产ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 固定资产信息
+        in: body
+        name: asset
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新固定资产
+      tags:
+      - 财务-固定资产管理
+  /api/finance/fixed-assets/{id}/depreciate:
+    post:
+      consumes:
+      - application/json
+      description: 折旧固定资产
+      parameters:
+      - description: 固定资产ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 折旧固定资产
+      tags:
+      - 财务-固定资产管理
+  /api/finance/fixed-assets/{id}/dispose:
+    post:
+      consumes:
+      - application/json
+      description: 处置固定资产
+      parameters:
+      - description: 固定资产ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 处置固定资产
+      tags:
+      - 财务-固定资产管理
+  /api/finance/reports/balance-sheet:
+    get:
+      consumes:
+      - application/json
+      description: 获取资产负债表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取资产负债表
+      tags:
+      - 财务-报表管理
+  /api/finance/reports/cash-flow:
+    get:
+      consumes:
+      - application/json
+      description: 获取现金流量表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取现金流量表
+      tags:
+      - 财务-报表管理
+  /api/finance/reports/export:
+    get:
+      consumes:
+      - application/json
+      description: 导出财务相关的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 导出财务报表
+      tags:
+      - 财务-报表管理
+  /api/finance/reports/income-statement:
+    get:
+      consumes:
+      - application/json
+      description: 获取利润表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取利润表
+      tags:
+      - 财务-报表管理
+  /api/finance/reports/trial-balance:
+    get:
+      consumes:
+      - application/json
+      description: 获取试算平衡表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取试算平衡表
+      tags:
+      - 财务-报表管理
+  /api/finance/vouchers:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有凭证的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取凭证列表
+      tags:
+      - 财务-凭证管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新凭证
+      parameters:
+      - description: 凭证信息
+        in: body
+        name: voucher
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建凭证
+      tags:
+      - 财务-凭证管理
+  /api/finance/vouchers/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除凭证
+      parameters:
+      - description: 凭证ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除凭证
+      tags:
+      - 财务-凭证管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取凭证详情
+      parameters:
+      - description: 凭证ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取凭证详情
+      tags:
+      - 财务-凭证管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新凭证
+      parameters:
+      - description: 凭证ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 凭证信息
+        in: body
+        name: voucher
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新凭证
+      tags:
+      - 财务-凭证管理
+  /api/finance/vouchers/{id}/approve:
+    post:
+      consumes:
+      - application/json
+      description: 审批凭证
+      parameters:
+      - description: 凭证ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 审批凭证
+      tags:
+      - 财务-凭证管理
+  /api/finance/vouchers/{id}/post:
+    post:
+      consumes:
+      - application/json
+      description: 过账凭证
+      parameters:
+      - description: 凭证ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 过账凭证
+      tags:
+      - 财务-凭证管理
+  /api/finance/vouchers/{id}/submit:
+    post:
+      consumes:
+      - application/json
+      description: 提交凭证
+      parameters:
+      - description: 凭证ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 提交凭证
+      tags:
+      - 财务-凭证管理
+  /api/inventory/counts:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有库存盘点的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取库存盘点列表
+      tags:
+      - 库存-库存盘点
+    post:
+      consumes:
+      - application/json
+      description: 创建新库存盘点
+      parameters:
+      - description: 盘点信息
+        in: body
+        name: count
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建库存盘点
+      tags:
+      - 库存-库存盘点
+  /api/inventory/counts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除库存盘点
+      parameters:
+      - description: 盘点ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除库存盘点
+      tags:
+      - 库存-库存盘点
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取库存盘点详情
+      parameters:
+      - description: 盘点ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取库存盘点详情
+      tags:
+      - 库存-库存盘点
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新库存盘点
+      parameters:
+      - description: 盘点ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 盘点信息
+        in: body
+        name: count
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新库存盘点
+      tags:
+      - 库存-库存盘点
+  /api/inventory/counts/{id}/approve:
+    post:
+      consumes:
+      - application/json
+      description: 审批库存盘点
+      parameters:
+      - description: 盘点ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 审批库存盘点
+      tags:
+      - 库存-库存盘点
+  /api/inventory/counts/{id}/submit:
+    post:
+      consumes:
+      - application/json
+      description: 提交库存盘点
+      parameters:
+      - description: 盘点ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 提交库存盘点
+      tags:
+      - 库存-库存盘点
+  /api/inventory/materials:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有物料的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取物料列表
+      tags:
+      - 库存-物料管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新物料
+      parameters:
+      - description: 物料信息
+        in: body
+        name: material
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建物料
+      tags:
+      - 库存-物料管理
+  /api/inventory/materials/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除物料
+      parameters:
+      - description: 物料ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除物料
+      tags:
+      - 库存-物料管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取物料详情
+      parameters:
+      - description: 物料ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取物料详情
+      tags:
+      - 库存-物料管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新物料信息
+      parameters:
+      - description: 物料ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 物料信息
+        in: body
+        name: material
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新物料
+      tags:
+      - 库存-物料管理
+  /api/inventory/reports/export:
+    get:
+      consumes:
+      - application/json
+      description: 导出库存相关的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 导出库存报表
+      tags:
+      - 库存-报表管理
+  /api/inventory/reports/material-analysis:
+    get:
+      consumes:
+      - application/json
+      description: 获取物料分析的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取物料分析报表
+      tags:
+      - 库存-报表管理
+  /api/inventory/reports/movement:
+    get:
+      consumes:
+      - application/json
+      description: 获取库存移动的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取库存移动报表
+      tags:
+      - 库存-报表管理
+  /api/inventory/reports/status:
+    get:
+      consumes:
+      - application/json
+      description: 获取库存状态的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取库存状态报表
+      tags:
+      - 库存-报表管理
+  /api/inventory/reports/valuation:
+    get:
+      consumes:
+      - application/json
+      description: 获取库存估值的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取库存估值报表
+      tags:
+      - 库存-报表管理
+  /api/inventory/transactions:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有库存交易的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取库存交易列表
+      tags:
+      - 库存-库存交易
+    post:
+      consumes:
+      - application/json
+      description: 创建新库存交易
+      parameters:
+      - description: 交易信息
+        in: body
+        name: transaction
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建库存交易
+      tags:
+      - 库存-库存交易
+  /api/inventory/transactions/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除库存交易
+      parameters:
+      - description: 交易ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除库存交易
+      tags:
+      - 库存-库存交易
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取库存交易详情
+      parameters:
+      - description: 交易ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取库存交易详情
+      tags:
+      - 库存-库存交易
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新库存交易
+      parameters:
+      - description: 交易ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 交易信息
+        in: body
+        name: transaction
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新库存交易
+      tags:
+      - 库存-库存交易
+  /api/inventory/warehouses:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有仓库的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取仓库列表
+      tags:
+      - 库存-仓库管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新仓库
+      parameters:
+      - description: 仓库信息
+        in: body
+        name: warehouse
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建仓库
+      tags:
+      - 库存-仓库管理
+  /api/inventory/warehouses/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除仓库
+      parameters:
+      - description: 仓库ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除仓库
+      tags:
+      - 库存-仓库管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取仓库详情
+      parameters:
+      - description: 仓库ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取仓库详情
+      tags:
+      - 库存-仓库管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新仓库信息
+      parameters:
+      - description: 仓库ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 仓库信息
+        in: body
+        name: warehouse
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新仓库
+      tags:
+      - 库存-仓库管理
+  /api/production/mrp:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有物料需求计划的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取物料需求计划列表
+      tags:
+      - 生产-物料需求计划
+  /api/production/mrp/{id}:
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取物料需求计划详情
+      parameters:
+      - description: 物料需求计划ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取物料需求计划详情
+      tags:
+      - 生产-物料需求计划
+  /api/production/mrp/run:
+    post:
+      consumes:
+      - application/json
+      description: 运行物料需求计划
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 运行物料需求计划
+      tags:
+      - 生产-物料需求计划
+  /api/production/orders:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有生产订单的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取生产订单列表
+      tags:
+      - 生产-生产订单管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新生产订单
+      parameters:
+      - description: 生产订单信息
+        in: body
+        name: order
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建生产订单
+      tags:
+      - 生产-生产订单管理
+  /api/production/orders/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除生产订单
+      parameters:
+      - description: 生产订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除生产订单
+      tags:
+      - 生产-生产订单管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取生产订单详情
+      parameters:
+      - description: 生产订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取生产订单详情
+      tags:
+      - 生产-生产订单管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新生产订单
+      parameters:
+      - description: 生产订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 生产订单信息
+        in: body
+        name: order
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新生产订单
+      tags:
+      - 生产-生产订单管理
+  /api/production/orders/{id}/approve:
+    post:
+      consumes:
+      - application/json
+      description: 审批生产订单
+      parameters:
+      - description: 生产订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 审批生产订单
+      tags:
+      - 生产-生产订单管理
+  /api/production/orders/{id}/close:
+    post:
+      consumes:
+      - application/json
+      description: 关闭生产订单
+      parameters:
+      - description: 生产订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 关闭生产订单
+      tags:
+      - 生产-生产订单管理
+  /api/production/orders/{id}/release:
+    post:
+      consumes:
+      - application/json
+      description: 下达生产订单
+      parameters:
+      - description: 生产订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 下达生产订单
+      tags:
+      - 生产-生产订单管理
+  /api/production/orders/{id}/submit:
+    post:
+      consumes:
+      - application/json
+      description: 提交生产订单
+      parameters:
+      - description: 生产订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 提交生产订单
+      tags:
+      - 生产-生产订单管理
+  /api/production/reports/cost:
+    get:
+      consumes:
+      - application/json
+      description: 获取生产成本的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取生产成本报表
+      tags:
+      - 生产-报表管理
+  /api/production/reports/export:
+    get:
+      consumes:
+      - application/json
+      description: 导出生产相关的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 导出生产报表
+      tags:
+      - 生产-报表管理
+  /api/production/reports/orders:
+    get:
+      consumes:
+      - application/json
+      description: 获取生产订单的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取生产订单报表
+      tags:
+      - 生产-报表管理
+  /api/production/reports/workcenter-load:
+    get:
+      consumes:
+      - application/json
+      description: 获取工作中心负载的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取工作中心负载报表
+      tags:
+      - 生产-报表管理
+  /api/production/reports/workorders:
+    get:
+      consumes:
+      - application/json
+      description: 获取生产工单的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取生产工单报表
+      tags:
+      - 生产-报表管理
+  /api/production/routings:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有工艺路线的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取工艺路线列表
+      tags:
+      - 生产-工艺路线管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新工艺路线
+      parameters:
+      - description: 工艺路线信息
+        in: body
+        name: routing
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建工艺路线
+      tags:
+      - 生产-工艺路线管理
+  /api/production/routings/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除工艺路线
+      parameters:
+      - description: 工艺路线ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除工艺路线
+      tags:
+      - 生产-工艺路线管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取工艺路线详情
+      parameters:
+      - description: 工艺路线ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取工艺路线详情
+      tags:
+      - 生产-工艺路线管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新工艺路线
+      parameters:
+      - description: 工艺路线ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 工艺路线信息
+        in: body
+        name: routing
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新工艺路线
+      tags:
+      - 生产-工艺路线管理
+  /api/production/workcenters:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有工作中心的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取工作中心列表
+      tags:
+      - 生产-工作中心管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新工作中心
+      parameters:
+      - description: 工作中心信息
+        in: body
+        name: workcenter
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建工作中心
+      tags:
+      - 生产-工作中心管理
+  /api/production/workcenters/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除工作中心
+      parameters:
+      - description: 工作中心ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除工作中心
+      tags:
+      - 生产-工作中心管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取工作中心详情
+      parameters:
+      - description: 工作中心ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取工作中心详情
+      tags:
+      - 生产-工作中心管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新工作中心
+      parameters:
+      - description: 工作中心ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 工作中心信息
+        in: body
+        name: workcenter
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新工作中心
+      tags:
+      - 生产-工作中心管理
+  /api/production/workorders:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有生产工单的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取生产工单列表
+      tags:
+      - 生产-生产工单管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新生产工单
+      parameters:
+      - description: 生产工单信息
+        in: body
+        name: workorder
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建生产工单
+      tags:
+      - 生产-生产工单管理
+  /api/production/workorders/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除生产工单
+      parameters:
+      - description: 生产工单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除生产工单
+      tags:
+      - 生产-生产工单管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取生产工单详情
+      parameters:
+      - description: 生产工单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取生产工单详情
+      tags:
+      - 生产-生产工单管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新生产工单
+      parameters:
+      - description: 生产工单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 生产工单信息
+        in: body
+        name: workorder
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新生产工单
+      tags:
+      - 生产-生产工单管理
+  /api/production/workorders/{id}/complete:
+    post:
+      consumes:
+      - application/json
+      description: 完成生产工单
+      parameters:
+      - description: 生产工单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 完成生产工单
+      tags:
+      - 生产-生产工单管理
+  /api/production/workorders/{id}/start:
+    post:
+      consumes:
+      - application/json
+      description: 开始生产工单
+      parameters:
+      - description: 生产工单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 开始生产工单
+      tags:
+      - 生产-生产工单管理
+  /api/purchase/invoices:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有采购发票的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取采购发票列表
+      tags:
+      - 采购-采购发票
+    post:
+      consumes:
+      - application/json
+      description: 创建新采购发票
+      parameters:
+      - description: 采购发票信息
+        in: body
+        name: invoice
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建采购发票
+      tags:
+      - 采购-采购发票
+  /api/purchase/invoices/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除采购发票
+      parameters:
+      - description: 采购发票ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除采购发票
+      tags:
+      - 采购-采购发票
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取采购发票详情
+      parameters:
+      - description: 采购发票ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取采购发票详情
+      tags:
+      - 采购-采购发票
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新采购发票
+      parameters:
+      - description: 采购发票ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 采购发票信息
+        in: body
+        name: invoice
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新采购发票
+      tags:
+      - 采购-采购发票
+  /api/purchase/invoices/{id}/pay:
+    post:
+      consumes:
+      - application/json
+      description: 支付采购发票
+      parameters:
+      - description: 采购发票ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 支付采购发票
+      tags:
+      - 采购-采购发票
+  /api/purchase/invoices/{id}/verify:
+    post:
+      consumes:
+      - application/json
+      description: 验证采购发票
+      parameters:
+      - description: 采购发票ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 验证采购发票
+      tags:
+      - 采购-采购发票
+  /api/purchase/orders:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有采购订单的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取采购订单列表
+      tags:
+      - 采购-采购订单
+    post:
+      consumes:
+      - application/json
+      description: 创建新采购订单
+      parameters:
+      - description: 采购订单信息
+        in: body
+        name: order
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建采购订单
+      tags:
+      - 采购-采购订单
+  /api/purchase/orders/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除采购订单
+      parameters:
+      - description: 采购订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除采购订单
+      tags:
+      - 采购-采购订单
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取采购订单详情
+      parameters:
+      - description: 采购订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取采购订单详情
+      tags:
+      - 采购-采购订单
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新采购订单
+      parameters:
+      - description: 采购订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 采购订单信息
+        in: body
+        name: order
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新采购订单
+      tags:
+      - 采购-采购订单
+  /api/purchase/orders/{id}/approve:
+    post:
+      consumes:
+      - application/json
+      description: 审批采购订单
+      parameters:
+      - description: 采购订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 审批采购订单
+      tags:
+      - 采购-采购订单
+  /api/purchase/orders/{id}/close:
+    post:
+      consumes:
+      - application/json
+      description: 关闭采购订单
+      parameters:
+      - description: 采购订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 关闭采购订单
+      tags:
+      - 采购-采购订单
+  /api/purchase/orders/{id}/reject:
+    post:
+      consumes:
+      - application/json
+      description: 拒绝采购订单
+      parameters:
+      - description: 采购订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 拒绝采购订单
+      tags:
+      - 采购-采购订单
+  /api/purchase/orders/{id}/submit:
+    post:
+      consumes:
+      - application/json
+      description: 提交采购订单
+      parameters:
+      - description: 采购订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 提交采购订单
+      tags:
+      - 采购-采购订单
+  /api/purchase/receipts:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有采购收货的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取采购收货列表
+      tags:
+      - 采购-采购收货
+    post:
+      consumes:
+      - application/json
+      description: 创建新采购收货
+      parameters:
+      - description: 采购收货信息
+        in: body
+        name: receipt
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建采购收货
+      tags:
+      - 采购-采购收货
+  /api/purchase/receipts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除采购收货
+      parameters:
+      - description: 采购收货ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除采购收货
+      tags:
+      - 采购-采购收货
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取采购收货详情
+      parameters:
+      - description: 采购收货ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取采购收货详情
+      tags:
+      - 采购-采购收货
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新采购收货
+      parameters:
+      - description: 采购收货ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 采购收货信息
+        in: body
+        name: receipt
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新采购收货
+      tags:
+      - 采购-采购收货
+  /api/purchase/receipts/{id}/complete:
+    post:
+      consumes:
+      - application/json
+      description: 完成采购收货
+      parameters:
+      - description: 采购收货ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 完成采购收货
+      tags:
+      - 采购-采购收货
+  /api/purchase/reports/detail:
+    get:
+      consumes:
+      - application/json
+      description: 获取采购明细的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取采购明细报表
+      tags:
+      - 采购-报表管理
+  /api/purchase/reports/export:
+    get:
+      consumes:
+      - application/json
+      description: 导出采购相关的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 导出采购报表
+      tags:
+      - 采购-报表管理
+  /api/purchase/reports/forecast:
+    get:
+      consumes:
+      - application/json
+      description: 获取采购预测的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取采购预测报表
+      tags:
+      - 采购-报表管理
+  /api/purchase/reports/price-analysis:
+    get:
+      consumes:
+      - application/json
+      description: 获取价格分析的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取价格分析报表
+      tags:
+      - 采购-报表管理
+  /api/purchase/reports/summary:
+    get:
+      consumes:
+      - application/json
+      description: 获取采购汇总的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取采购汇总报表
+      tags:
+      - 采购-报表管理
+  /api/purchase/reports/supplier-analysis:
+    get:
+      consumes:
+      - application/json
+      description: 获取供应商分析的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取供应商分析报表
+      tags:
+      - 采购-报表管理
+  /api/purchase/requisitions:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有采购申请的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取采购申请列表
+      tags:
+      - 采购-采购申请
+    post:
+      consumes:
+      - application/json
+      description: 创建新采购申请
+      parameters:
+      - description: 采购申请信息
+        in: body
+        name: requisition
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建采购申请
+      tags:
+      - 采购-采购申请
+  /api/purchase/requisitions/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除采购申请
+      parameters:
+      - description: 采购申请ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除采购申请
+      tags:
+      - 采购-采购申请
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取采购申请详情
+      parameters:
+      - description: 采购申请ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取采购申请详情
+      tags:
+      - 采购-采购申请
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新采购申请
+      parameters:
+      - description: 采购申请ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 采购申请信息
+        in: body
+        name: requisition
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新采购申请
+      tags:
+      - 采购-采购申请
+  /api/purchase/requisitions/{id}/approve:
+    post:
+      consumes:
+      - application/json
+      description: 审批采购申请
+      parameters:
+      - description: 采购申请ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 审批采购申请
+      tags:
+      - 采购-采购申请
+  /api/purchase/requisitions/{id}/reject:
+    post:
+      consumes:
+      - application/json
+      description: 拒绝采购申请
+      parameters:
+      - description: 采购申请ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 拒绝采购申请
+      tags:
+      - 采购-采购申请
+  /api/purchase/requisitions/{id}/submit:
+    post:
+      consumes:
+      - application/json
+      description: 提交采购申请
+      parameters:
+      - description: 采购申请ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 提交采购申请
+      tags:
+      - 采购-采购申请
+  /api/purchase/returns:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有采购退货的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取采购退货列表
+      tags:
+      - 采购-采购退货
+    post:
+      consumes:
+      - application/json
+      description: 创建新采购退货
+      parameters:
+      - description: 采购退货信息
+        in: body
+        name: return
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建采购退货
+      tags:
+      - 采购-采购退货
+  /api/purchase/returns/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除采购退货
+      parameters:
+      - description: 采购退货ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除采购退货
+      tags:
+      - 采购-采购退货
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取采购退货详情
+      parameters:
+      - description: 采购退货ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取采购退货详情
+      tags:
+      - 采购-采购退货
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新采购退货
+      parameters:
+      - description: 采购退货ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 采购退货信息
+        in: body
+        name: return
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新采购退货
+      tags:
+      - 采购-采购退货
+  /api/purchase/returns/{id}/complete:
+    post:
+      consumes:
+      - application/json
+      description: 完成采购退货
+      parameters:
+      - description: 采购退货ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 完成采购退货
+      tags:
+      - 采购-采购退货
+  /api/purchase/suppliers:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有供应商的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取供应商列表
+      tags:
+      - 采购-供应商管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新供应商
+      parameters:
+      - description: 供应商信息
+        in: body
+        name: supplier
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建供应商
+      tags:
+      - 采购-供应商管理
+  /api/purchase/suppliers/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除供应商
+      parameters:
+      - description: 供应商ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除供应商
+      tags:
+      - 采购-供应商管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取供应商详情
+      parameters:
+      - description: 供应商ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取供应商详情
+      tags:
+      - 采购-供应商管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新供应商信息
+      parameters:
+      - description: 供应商ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 供应商信息
+        in: body
+        name: supplier
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新供应商
+      tags:
+      - 采购-供应商管理
+  /api/purchase/suppliers/{id}/contacts:
+    get:
+      consumes:
+      - application/json
+      description: 获取供应商的联系人列表
+      parameters:
+      - description: 供应商ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取供应商联系人列表
+      tags:
+      - 采购-供应商管理
+    post:
+      consumes:
+      - application/json
+      description: 为供应商添加联系人
+      parameters:
+      - description: 供应商ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 联系人信息
+        in: body
+        name: contact
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 添加供应商联系人
+      tags:
+      - 采购-供应商管理
+  /api/sales/customers:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有客户的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取客户列表
+      tags:
+      - 销售-客户管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新客户
+      parameters:
+      - description: 客户信息
+        in: body
+        name: customer
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建客户
+      tags:
+      - 销售-客户管理
+  /api/sales/customers/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除客户
+      parameters:
+      - description: 客户ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除客户
+      tags:
+      - 销售-客户管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取客户详情
+      parameters:
+      - description: 客户ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取客户详情
+      tags:
+      - 销售-客户管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新客户信息
+      parameters:
+      - description: 客户ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 客户信息
+        in: body
+        name: customer
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新客户
+      tags:
+      - 销售-客户管理
+  /api/sales/customers/{id}/credit-evaluate:
+    post:
+      consumes:
+      - application/json
+      description: 评估客户信用
+      parameters:
+      - description: 客户ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 客户信用评估
+      tags:
+      - 销售-客户管理
+  /api/sales/deliveries:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有发货单的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取发货单列表
+      tags:
+      - 销售-发货管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新发货单
+      parameters:
+      - description: 发货单信息
+        in: body
+        name: delivery
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建发货单
+      tags:
+      - 销售-发货管理
+  /api/sales/deliveries/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除发货单
+      parameters:
+      - description: 发货单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除发货单
+      tags:
+      - 销售-发货管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取发货单详情
+      parameters:
+      - description: 发货单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取发货单详情
+      tags:
+      - 销售-发货管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新发货单
+      parameters:
+      - description: 发货单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 发货单信息
+        in: body
+        name: delivery
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新发货单
+      tags:
+      - 销售-发货管理
+  /api/sales/invoices:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有销售发票的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取发票列表
+      tags:
+      - 销售-发票管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新销售发票
+      parameters:
+      - description: 发票信息
+        in: body
+        name: invoice
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建发票
+      tags:
+      - 销售-发票管理
+  /api/sales/invoices/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除销售发票
+      parameters:
+      - description: 发票ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除发票
+      tags:
+      - 销售-发票管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取销售发票详情
+      parameters:
+      - description: 发票ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取发票详情
+      tags:
+      - 销售-发票管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新销售发票
+      parameters:
+      - description: 发票ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 发票信息
+        in: body
+        name: invoice
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新发票
+      tags:
+      - 销售-发票管理
+  /api/sales/invoices/{id}/receive-payment:
+    post:
+      consumes:
+      - application/json
+      description: 接收销售发票的付款
+      parameters:
+      - description: 发票ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 接收发票付款
+      tags:
+      - 销售-发票管理
+  /api/sales/orders:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有销售订单的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取订单列表
+      tags:
+      - 销售-订单管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新销售订单
+      parameters:
+      - description: 订单信息
+        in: body
+        name: order
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建订单
+      tags:
+      - 销售-订单管理
+  /api/sales/orders/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除销售订单
+      parameters:
+      - description: 订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除订单
+      tags:
+      - 销售-订单管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取销售订单详情
+      parameters:
+      - description: 订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取订单详情
+      tags:
+      - 销售-订单管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新销售订单
+      parameters:
+      - description: 订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 订单信息
+        in: body
+        name: order
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新订单
+      tags:
+      - 销售-订单管理
+  /api/sales/orders/{id}/approve:
+    post:
+      consumes:
+      - application/json
+      description: 审批销售订单
+      parameters:
+      - description: 订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 审批订单
+      tags:
+      - 销售-订单管理
+  /api/sales/orders/{id}/cancel:
+    post:
+      consumes:
+      - application/json
+      description: 取消销售订单
+      parameters:
+      - description: 订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 取消订单
+      tags:
+      - 销售-订单管理
+  /api/sales/orders/{id}/generate-delivery:
+    post:
+      consumes:
+      - application/json
+      description: 根据订单ID生成发货单
+      parameters:
+      - description: 订单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 从订单生成发货单
+      tags:
+      - 销售-订单管理
+  /api/sales/quotations:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有报价单的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取报价单列表
+      tags:
+      - 销售-报价管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新报价单
+      parameters:
+      - description: 报价单信息
+        in: body
+        name: quotation
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建报价单
+      tags:
+      - 销售-报价管理
+  /api/sales/quotations/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除报价单
+      parameters:
+      - description: 报价单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除报价单
+      tags:
+      - 销售-报价管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取报价单详情
+      parameters:
+      - description: 报价单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取报价单详情
+      tags:
+      - 销售-报价管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新报价单
+      parameters:
+      - description: 报价单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 报价单信息
+        in: body
+        name: quotation
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新报价单
+      tags:
+      - 销售-报价管理
+  /api/sales/quotations/{id}/approve:
+    post:
+      consumes:
+      - application/json
+      description: 审批报价单
+      parameters:
+      - description: 报价单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 审批报价单
+      tags:
+      - 销售-报价管理
+  /api/sales/quotations/{id}/generate-order:
+    post:
+      consumes:
+      - application/json
+      description: 根据报价单ID生成销售订单
+      parameters:
+      - description: 报价单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 从报价单生成订单
+      tags:
+      - 销售-报价管理
+  /api/sales/reports/customer-analysis:
+    get:
+      consumes:
+      - application/json
+      description: 获取客户分析的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取客户分析报表
+      tags:
+      - 销售-报表管理
+  /api/sales/reports/export:
+    get:
+      consumes:
+      - application/json
+      description: 导出销售相关的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 导出销售报表
+      tags:
+      - 销售-报表管理
+  /api/sales/reports/order-execution:
+    get:
+      consumes:
+      - application/json
+      description: 获取订单执行情况的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取订单执行报表
+      tags:
+      - 销售-报表管理
+  /api/sales/reports/product-trend:
+    get:
+      consumes:
+      - application/json
+      description: 获取产品销售趋势的报表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取产品趋势报表
+      tags:
+      - 销售-报表管理
+  /api/sales/returns:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有销售退货单的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取退货单列表
+      tags:
+      - 销售-退货管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新销售退货单
+      parameters:
+      - description: 退货单信息
+        in: body
+        name: return
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建退货单
+      tags:
+      - 销售-退货管理
+  /api/sales/returns/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除销售退货单
+      parameters:
+      - description: 退货单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除退货单
+      tags:
+      - 销售-退货管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取销售退货单详情
+      parameters:
+      - description: 退货单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取退货单详情
+      tags:
+      - 销售-退货管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新销售退货单
+      parameters:
+      - description: 退货单ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 退货单信息
+        in: body
+        name: return
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新退货单
+      tags:
+      - 销售-退货管理
+  /api/user:
+    post:
+      consumes:
+      - application/json
+      description: 创建新用户
+      parameters:
+      - description: 用户信息
+        in: body
+        name: user
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建用户
+      tags:
+      - 用户管理
+    put:
+      consumes:
+      - application/json
+      description: 更新用户信息
+      parameters:
+      - description: 用户信息
+        in: body
+        name: user
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新用户
+      tags:
+      - 用户管理
+  /api/user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 删除用户
+      parameters:
+      - description: 用户ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除用户
+      tags:
+      - 用户管理
+  /api/user/info:
+    get:
+      consumes:
+      - application/json
+      description: 获取当前登录用户的详细信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取用户信息
+      tags:
+      - 用户管理
+  /api/v1/hr/attendance:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有考勤记录的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取考勤列表
+      tags:
+      - 人力资源-考勤管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新的考勤记录
+      parameters:
+      - description: 考勤记录信息
+        in: body
+        name: attendance
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建考勤记录
+      tags:
+      - 人力资源-考勤管理
+  /api/v1/hr/attendance/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除考勤记录
+      parameters:
+      - description: 考勤记录ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除考勤记录
+      tags:
+      - 人力资源-考勤管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取考勤记录的详细信息
+      parameters:
+      - description: 考勤记录ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取考勤详情
+      tags:
+      - 人力资源-考勤管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新考勤记录信息
+      parameters:
+      - description: 考勤记录ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 考勤记录信息
+        in: body
+        name: attendance
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新考勤记录
+      tags:
+      - 人力资源-考勤管理
+  /api/v1/hr/departments:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有部门的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取部门列表
+      tags:
+      - 人力资源-部门管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新的部门
+      parameters:
+      - description: 部门信息
+        in: body
+        name: department
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建部门
+      tags:
+      - 人力资源-部门管理
+  /api/v1/hr/departments/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除部门
+      parameters:
+      - description: 部门ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除部门
+      tags:
+      - 人力资源-部门管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取部门的详细信息
+      parameters:
+      - description: 部门ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取部门详情
+      tags:
+      - 人力资源-部门管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新部门信息
+      parameters:
+      - description: 部门ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 部门信息
+        in: body
+        name: department
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新部门
+      tags:
+      - 人力资源-部门管理
+  /api/v1/hr/employees:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有员工的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取员工列表
+      tags:
+      - 人力资源-员工管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新的员工
+      parameters:
+      - description: 员工信息
+        in: body
+        name: employee
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建员工
+      tags:
+      - 人力资源-员工管理
+  /api/v1/hr/employees/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除员工
+      parameters:
+      - description: 员工ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除员工
+      tags:
+      - 人力资源-员工管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取员工的详细信息
+      parameters:
+      - description: 员工ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取员工详情
+      tags:
+      - 人力资源-员工管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新员工信息
+      parameters:
+      - description: 员工ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 员工信息
+        in: body
+        name: employee
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新员工
+      tags:
+      - 人力资源-员工管理
+  /api/v1/hr/performance:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有绩效评估记录的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取绩效评估列表
+      tags:
+      - 人力资源-绩效评估管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新的绩效评估记录
+      parameters:
+      - description: 绩效评估记录信息
+        in: body
+        name: performance
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建绩效评估记录
+      tags:
+      - 人力资源-绩效评估管理
+  /api/v1/hr/performance/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除绩效评估记录
+      parameters:
+      - description: 绩效评估记录ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除绩效评估记录
+      tags:
+      - 人力资源-绩效评估管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取绩效评估记录的详细信息
+      parameters:
+      - description: 绩效评估记录ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取绩效评估详情
+      tags:
+      - 人力资源-绩效评估管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新绩效评估记录信息
+      parameters:
+      - description: 绩效评估记录ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 绩效评估记录信息
+        in: body
+        name: performance
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新绩效评估记录
+      tags:
+      - 人力资源-绩效评估管理
+  /api/v1/hr/positions:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有职位的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取职位列表
+      tags:
+      - 人力资源-职位管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新的职位
+      parameters:
+      - description: 职位信息
+        in: body
+        name: position
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建职位
+      tags:
+      - 人力资源-职位管理
+  /api/v1/hr/positions/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除职位
+      parameters:
+      - description: 职位ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除职位
+      tags:
+      - 人力资源-职位管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取职位的详细信息
+      parameters:
+      - description: 职位ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取职位详情
+      tags:
+      - 人力资源-职位管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新职位信息
+      parameters:
+      - description: 职位ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 职位信息
+        in: body
+        name: position
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新职位
+      tags:
+      - 人力资源-职位管理
+  /api/v1/hr/recruitment:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有招聘记录的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取招聘列表
+      tags:
+      - 人力资源-招聘管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新的招聘记录
+      parameters:
+      - description: 招聘记录信息
+        in: body
+        name: recruitment
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建招聘记录
+      tags:
+      - 人力资源-招聘管理
+  /api/v1/hr/recruitment/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除招聘记录
+      parameters:
+      - description: 招聘记录ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除招聘记录
+      tags:
+      - 人力资源-招聘管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取招聘记录的详细信息
+      parameters:
+      - description: 招聘记录ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取招聘详情
+      tags:
+      - 人力资源-招聘管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新招聘记录信息
+      parameters:
+      - description: 招聘记录ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 招聘记录信息
+        in: body
+        name: recruitment
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新招聘记录
+      tags:
+      - 人力资源-招聘管理
+  /api/v1/hr/salary:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有薪资记录的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取薪资列表
+      tags:
+      - 人力资源-薪资管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新的薪资记录
+      parameters:
+      - description: 薪资记录信息
+        in: body
+        name: salary
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建薪资记录
+      tags:
+      - 人力资源-薪资管理
+  /api/v1/hr/salary/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除薪资记录
+      parameters:
+      - description: 薪资记录ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除薪资记录
+      tags:
+      - 人力资源-薪资管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取薪资记录的详细信息
+      parameters:
+      - description: 薪资记录ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取薪资详情
+      tags:
+      - 人力资源-薪资管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新薪资记录信息
+      parameters:
+      - description: 薪资记录ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 薪资记录信息
+        in: body
+        name: salary
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新薪资记录
+      tags:
+      - 人力资源-薪资管理
+  /api/v1/hr/training:
+    get:
+      consumes:
+      - application/json
+      description: 获取所有培训记录的列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取培训列表
+      tags:
+      - 人力资源-培训管理
+    post:
+      consumes:
+      - application/json
+      description: 创建新的培训记录
+      parameters:
+      - description: 培训记录信息
+        in: body
+        name: training
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 创建培训记录
+      tags:
+      - 人力资源-培训管理
+  /api/v1/hr/training/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: 根据ID删除培训记录
+      parameters:
+      - description: 培训记录ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 删除培训记录
+      tags:
+      - 人力资源-培训管理
+    get:
+      consumes:
+      - application/json
+      description: 根据ID获取培训记录的详细信息
+      parameters:
+      - description: 培训记录ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 获取培训详情
+      tags:
+      - 人力资源-培训管理
+    put:
+      consumes:
+      - application/json
+      description: 根据ID更新培训记录信息
+      parameters:
+      - description: 培训记录ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 培训记录信息
+        in: body
+        name: training
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 成功
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: 更新培训记录
+      tags:
+      - 人力资源-培训管理
+schemes:
+- http
+- https
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

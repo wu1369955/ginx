@@ -9,7 +9,8 @@ func SetupMiddlewares(router *gin.Engine) {
 	router.Use(Cors())
 	router.Use(Session())
 	router.Use(HTTPSRedirect())
-	router.Use(Compress())
+	// 暂时禁用压缩中间件，避免 "incorrect header check" 错误
+	// router.Use(Compress())
 	router.Use(RateLimit())
 	router.Use(ErrorHandler())
 }

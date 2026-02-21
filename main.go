@@ -33,6 +33,9 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/wu136995/ginx/docs"
 	"github.com/wu136995/ginx/internal/api/handlers"
 	"github.com/wu136995/ginx/internal/api/middlewares"
 	"github.com/wu136995/ginx/internal/api/routes"
@@ -43,7 +46,6 @@ import (
 	"github.com/wu136995/ginx/internal/database"
 	"github.com/wu136995/ginx/internal/models"
 	"github.com/wu136995/ginx/internal/services"
-	// _ "github.com/wu136995/ginx/docs"
 )
 
 func main() {
@@ -219,6 +221,10 @@ func setupRoutesByModule(router *gin.Engine, module string, userHandler *handler
 	{
 		// 健康检查
 		public.GET("/health", handlers.HealthCheck)
+
+		// Swagger 文档
+		docs.SwaggerInfo.BasePath = "/"
+		public.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
 	// 需要认证的路由组

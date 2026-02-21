@@ -2,6 +2,9 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/wu136995/ginx/docs"
 	"github.com/wu136995/ginx/internal/api/handlers"
 	"github.com/wu136995/ginx/internal/api/middlewares"
 )
@@ -9,14 +12,18 @@ import (
 // SetupRoutes 设置路由
 func SetupRoutes(router *gin.Engine, userHandler *handlers.UserHandler, salesHandler *handlers.SalesHandler, inventoryHandler *handlers.InventoryHandler, purchaseHandler *handlers.PurchaseHandler, financeHandler *handlers.FinanceHandler, productionHandler *handlers.ProductionHandler, hrHandler *handlers.HRHandler, crmHandler *handlers.CRMHandler) {
 	// 公共路由组
-	public := router.Group("/")
+	public := router.Group("")
 	{
 		// 健康检查
 		public.GET("/health", handlers.HealthCheck)
+
+		// Swagger 文档（暂时注释，待依赖问题解决后启用）
+		docs.SwaggerInfo.BasePath = "/"
+		public.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	}
 
 	// 需要认证的路由组
-	protected := router.Group("/")
+	protected := router.Group("")
 	protected.Use(middlewares.Auth())
 	{
 		// 用户信息
