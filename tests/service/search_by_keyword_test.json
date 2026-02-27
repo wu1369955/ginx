@@ -1,0 +1,238 @@
+{
+  "test_name": "TestSearchService_SearchByKeyword",
+  "test_results": [
+    {
+      "error": null,
+      "request": {
+        "keyword": "test",
+        "page": 1,
+        "page_size": 10,
+        "type": "customer"
+      },
+      "result": {
+        "page": 1,
+        "page_size": 10,
+        "results": [
+          {
+            "contact_person": "张三",
+            "customer_no": "C001",
+            "email": "test1@example.com",
+            "id": "1",
+            "name": "测试客户1",
+            "phone": "13800138001"
+          },
+          {
+            "contact_person": "李四",
+            "customer_no": "C002",
+            "email": "test2@example.com",
+            "id": "2",
+            "name": "测试客户2",
+            "phone": "13800138002"
+          }
+        ],
+        "total": 20,
+        "total_pages": 2
+      },
+      "test_case": "NormalSearch"
+    },
+    {
+      "error": null,
+      "request": {
+        "keyword": "test",
+        "page": 1,
+        "page_size": 10
+      },
+      "result": {
+        "page": 1,
+        "page_size": 10,
+        "results": [
+          {
+            "contact_person": "张三",
+            "customer_no": "C001",
+            "email": "test1@example.com",
+            "id": "1",
+            "name": "测试客户1",
+            "phone": "13800138001"
+          },
+          {
+            "contact_person": "李四",
+            "customer_no": "C002",
+            "email": "test2@example.com",
+            "id": "2",
+            "name": "测试客户2",
+            "phone": "13800138002"
+          }
+        ],
+        "total": 20,
+        "total_pages": 2
+      },
+      "test_case": "NoType"
+    },
+    {
+      "error": null,
+      "request": {
+        "keyword": "test",
+        "page_size": 10,
+        "type": "customer"
+      },
+      "result": {
+        "page": 1,
+        "page_size": 10,
+        "results": [
+          {
+            "contact_person": "张三",
+            "customer_no": "C001",
+            "email": "test1@example.com",
+            "id": "1",
+            "name": "测试客户1",
+            "phone": "13800138001"
+          },
+          {
+            "contact_person": "李四",
+            "customer_no": "C002",
+            "email": "test2@example.com",
+            "id": "2",
+            "name": "测试客户2",
+            "phone": "13800138002"
+          }
+        ],
+        "total": 20,
+        "total_pages": 2
+      },
+      "test_case": "NoPage"
+    },
+    {
+      "error": null,
+      "request": {
+        "keyword": "test",
+        "page": 1,
+        "type": "customer"
+      },
+      "result": {
+        "page": 1,
+        "page_size": 10,
+        "results": [
+          {
+            "contact_person": "张三",
+            "customer_no": "C001",
+            "email": "test1@example.com",
+            "id": "1",
+            "name": "测试客户1",
+            "phone": "13800138001"
+          },
+          {
+            "contact_person": "李四",
+            "customer_no": "C002",
+            "email": "test2@example.com",
+            "id": "2",
+            "name": "测试客户2",
+            "phone": "13800138002"
+          }
+        ],
+        "total": 20,
+        "total_pages": 2
+      },
+      "test_case": "NoPageSize"
+    },
+    {
+      "error": null,
+      "request": {
+        "keyword": "test",
+        "page": 1,
+        "page_size": 10,
+        "type": "product"
+      },
+      "result": {
+        "page": 1,
+        "page_size": 10,
+        "results": [
+          {
+            "description": "这是测试产品1",
+            "id": "1",
+            "name": "测试产品1",
+            "product_no": "P001",
+            "unit": "个"
+          },
+          {
+            "description": "这是测试产品2",
+            "id": "2",
+            "name": "测试产品2",
+            "product_no": "P002",
+            "unit": "个"
+          }
+        ],
+        "total": 20,
+        "total_pages": 2
+      },
+      "test_case": "ProductSearch"
+    },
+    {
+      "error": null,
+      "request": {
+        "keyword": "test",
+        "page": 1,
+        "page_size": 10,
+        "type": "order"
+      },
+      "result": {
+        "page": 1,
+        "page_size": 10,
+        "results": [
+          {
+            "customer_id": "1",
+            "id": "1",
+            "order_date": "2026-02-27",
+            "order_no": "O001",
+            "status": "pending",
+            "total_amount": 1000
+          },
+          {
+            "customer_id": "2",
+            "id": "2",
+            "order_date": "2026-02-26",
+            "order_no": "O002",
+            "status": "completed",
+            "total_amount": 2000
+          }
+        ],
+        "total": 20,
+        "total_pages": 2
+      },
+      "test_case": "OrderSearch"
+    },
+    {
+      "error": null,
+      "request": {
+        "keyword": "test",
+        "page": 1,
+        "page_size": 10,
+        "type": "all"
+      },
+      "result": {
+        "page": 1,
+        "page_size": 10,
+        "results": [
+          {
+            "contact_person": "张三",
+            "customer_no": "C001",
+            "email": "test1@example.com",
+            "id": "1",
+            "name": "测试客户1",
+            "phone": "13800138001"
+          },
+          {
+            "contact_person": "李四",
+            "customer_no": "C002",
+            "email": "test2@example.com",
+            "id": "2",
+            "name": "测试客户2",
+            "phone": "13800138002"
+          }
+        ],
+        "total": 20,
+        "total_pages": 2
+      },
+      "test_case": "AllSearch"
+    }
+  ]
+}

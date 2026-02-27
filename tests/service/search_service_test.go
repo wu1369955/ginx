@@ -1,4 +1,4 @@
-package services
+package test
 
 import (
 	"encoding/json"
@@ -6,15 +6,15 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/wu136995/ginx/internal/services"
 )
 
 func TestSearchService_SearchByKeyword(t *testing.T) {
 	// 创建搜索服务实例
-	service := NewSearchService()
+	service := services.NewSearchService()
 
 	// 测试结果集合
 	var testResults []map[string]interface{}
-
 
 	// 测试用例1：正常的关键词搜索
 	t.Run("NormalSearch", func(t *testing.T) {
@@ -174,11 +174,11 @@ func TestSearchService_SearchByKeyword(t *testing.T) {
 
 	// 将测试结果输出到文件
 	testOutput := map[string]interface{}{
-		"test_name":   "TestSearchService_SearchByKeyword",
+		"test_name":    "TestSearchService_SearchByKeyword",
 		"test_results": testResults,
 	}
 
-	outputFile, err := os.Create("../../test_output/search_by_keyword_test.json")
+	outputFile, err := os.Create("./search_by_keyword_test.json")
 	if err != nil {
 		t.Errorf("创建测试输出文件失败: %v", err)
 		return
@@ -192,16 +192,15 @@ func TestSearchService_SearchByKeyword(t *testing.T) {
 		t.Errorf("编码测试结果失败: %v", err)
 		return
 	}
-	t.Logf("测试结果已输出到 ../../test_output/search_by_keyword_test.json")
+	t.Logf("测试结果已输出到 ./search_by_keyword_test.json")
 }
 
 func TestSearchService_GetRankingData(t *testing.T) {
 	// 创建搜索服务实例
-	service := NewSearchService()
+	service := services.NewSearchService()
 
 	// 测试结果集合
 	var testResults []map[string]interface{}
-
 
 	// 测试用例1：客户订单数量排行（降序）
 	t.Run("CustomerOrderCountDesc", func(t *testing.T) {
@@ -386,11 +385,11 @@ func TestSearchService_GetRankingData(t *testing.T) {
 
 	// 将测试结果输出到文件
 	testOutput := map[string]interface{}{
-		"test_name":   "TestSearchService_GetRankingData",
+		"test_name":    "TestSearchService_GetRankingData",
 		"test_results": testResults,
 	}
 
-	outputFile, err := os.Create("../../test_output/get_ranking_data_test.json")
+	outputFile, err := os.Create("./get_ranking_data_test.json")
 	if err != nil {
 		t.Errorf("创建测试输出文件失败: %v", err)
 		return
@@ -404,5 +403,5 @@ func TestSearchService_GetRankingData(t *testing.T) {
 		t.Errorf("编码测试结果失败: %v", err)
 		return
 	}
-	t.Logf("测试结果已输出到 ../../test_output/get_ranking_data_test.json")
+	t.Logf("测试结果已输出到 ./get_ranking_data_test.json")
 }
